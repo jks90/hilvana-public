@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.0.1
+  juankanh/hilvana:6.1.0
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -63,7 +63,8 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 
 | Versión | Qué trae |
 |---------|----------|
-| **6.0.0** (recomendada) | 🧵 Versión de mantenimiento: marca Hilvana en el código y la documentación y base para «Iniciar sesión con Google» (aún inactiva). Sin cambios de comportamiento en la app |
+| **6.1.0** (recomendada) | 🐳 **AgentOffice con un clic**: Config ▸ Plugins ▸ Instalar descarga la imagen `juankanh/agentoffice`, crea su contenedor y lo conecta solo (sin descargar paquetes ni recrear Hilvana; necesita montar el socket de Docker). Si al Guía de AgentOffice le falta `claude`, usa otro proveedor configurado o avisa claro ([AgentOffice](docs/agentoffice.md)) |
+| **6.0.0** | 🧵 Versión de mantenimiento: marca Hilvana en el código y la documentación y base para «Iniciar sesión con Google» (aún inactiva). Sin cambios de comportamiento en la app |
 | **5.39.0** | 📖 Versión de mantenimiento del manual: prepara la ampliación del [manual](docs/manual/README.md) pantalla a pantalla y su revisión de calidad. Sin cambios de comportamiento en la app |
 | **5.38.3** | 🧠 AgentOffice 0.3.3: cada agente con su **recuerdo** (conversaciones a través de todas sus tareas, «que siga con…» desde su ficha, burbuja a demanda), **sesión viva** que se retoma entre tareas y un Blender por lado ([manual 15](docs/manual/15-agentoffice.md)) |
 | **5.38.2** | 📖 **Manual pantalla a pantalla** (capítulos 01/09/10/12 ampliados, capítulo [15 AgentOffice](docs/manual/15-agentoffice.md), [PDF](docs/manual/hilvana-manual.pdf)) y AgentOffice 0.3.2: el chat de la burbuja responde a las preguntas con capturas y bocetos, dictado y voz, nueva ronda tras terminar, modo web completo |
@@ -107,7 +108,7 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 Las versiones anteriores (5.12 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.0.1
+docker pull juankanh/hilvana:6.1.0
 ```
 
 ## Documentación

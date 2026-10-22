@@ -6,7 +6,7 @@
 
 ```bash
 docker run -d --add-host=host.docker.internal:host-gateway \
-  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.0.1
+  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.1.0
 # web + API + MCP en http://localhost:9998 · 1025 = SMTP de prueba (Config ▸ Correo, 4.36)
 ```
 
@@ -135,7 +135,7 @@ docker run -d … \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e FLOW_SELF_UPDATE=on \
   -v /ruta/a/tus/flows:/app/flows \
-  juankanh/hilvana:6.0.1
+  juankanh/hilvana:6.1.0
 ```
 
 - Descarga la versión nueva y **recrea el contenedor con la misma configuración** (puertos, carpetas, variables, redes y reinicio). Tus flows y ajustes no se tocan.
@@ -163,7 +163,8 @@ docker run -d … \
 | 4.23.0 | Scripts JS de las notas ejecutados al Run Flow (web, MCP y CLI; `--skip-info-scripts`), 📌 fijar cajas, Variables usadas en cada caja, tool MCP `tab_close` |
 | 4.24.0 | **Pizarra** estilo Excalidraw sobre el lienzo (`drawings` en el flow), barra lateral de iconos con un panel a la vez, **Guía de nodos**, Ocultar conectores, Maximizar Mermaid, tool MCP `node_add_info` (20 tools) |
 | **5.15.1** | 🛡️ **Sandbox de los scripts de nota en el navegador** + flows de confianza (pregunta antes de ejecutar, chip 🔒/🛡️ en la barra) — [04](04-notas-mermaid-capturas.md#sandbox-y-flows-de-confianza--515); imagen con parches de Alpine y sin `npm` |
-| **6.0.0** (recomendada) | 🧵 Versión de mantenimiento: marca Hilvana y base para «Iniciar sesión con Google» (aún inactiva); sin cambios de comportamiento en la app |
+| **6.1.0** (recomendada) | 🐳 **AgentOffice con un clic**: Config ▸ Plugins ▸ Instalar descarga la imagen `juankanh/agentoffice`, crea su contenedor y lo conecta solo (sin descargar paquetes ni recrear Hilvana; necesita montar el socket de Docker). Si al Guía de AgentOffice le falta `claude`, usa otro proveedor configurado o avisa claro ([AgentOffice](../agentoffice.md)) |
+| **6.0.0** | 🧵 Versión de mantenimiento: marca Hilvana y base para «Iniciar sesión con Google» (aún inactiva); sin cambios de comportamiento en la app |
 | **5.39.0** | 📖 Versión de mantenimiento del manual (ampliación pantalla a pantalla y su revisión); sin cambios de comportamiento en la app |
 | **5.38.3** | 🧠 AgentOffice 0.3.3: recuerdo por agente, «que siga con…», burbuja a demanda, sesión viva entre tareas, un Blender por lado ([15](15-agentoffice.md)) |
 | **5.38.2** | 📖 Manual pantalla a pantalla con PDF y capítulo 15 AgentOffice; AgentOffice 0.3.2 (chat como respuesta, dictado, voz, nueva ronda, modo web) ([15](15-agentoffice.md)) |
