@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "hilvana": {
+      "type": "http",
+      "url": "http://localhost:9998/mcp"
+    }
+  }
+}

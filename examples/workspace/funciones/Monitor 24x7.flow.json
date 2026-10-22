@@ -1,0 +1,389 @@
+{
+  "version": "1.0",
+  "name": "Monitor 24x7",
+  "nodes": [
+    {
+      "id": "monitor-divisas-latest",
+      "name": "1 · Divisas — GET latest (Frankfurter)",
+      "curl": "curl \"https://api.frankfurter.dev/v1/latest\"",
+      "position": {
+        "x": 80,
+        "y": 682
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "monitor-divisas-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "monitor-divisas-base",
+          "kind": "jsonpath",
+          "path": "$.base",
+          "op": "equals",
+          "value": "EUR"
+        },
+        {
+          "id": "monitor-divisas-tiempo",
+          "kind": "time",
+          "maxMs": 5000
+        }
+      ]
+    },
+    {
+      "id": "monitor-tiempo-madrid",
+      "name": "2 · Tiempo Madrid — GET open-meteo",
+      "curl": "curl \"https://api.open-meteo.com/v1/forecast?latitude=40.42&longitude=-3.70&current=temperature_2m\"",
+      "position": {
+        "x": 660,
+        "y": 682
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "monitor-tiempo-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "monitor-tiempo-dato",
+          "kind": "jsonpath",
+          "path": "$.current.temperature_2m",
+          "op": "exists"
+        },
+        {
+          "id": "monitor-tiempo-tiempo",
+          "kind": "time",
+          "maxMs": 8000
+        }
+      ]
+    }
+  ],
+  "infoNodes": [
+    {
+      "id": "monitor-nota",
+      "name": "Monitor 24×7 sin navegador",
+      "content": "Healthcheck de manual: dos GET a APIs públicas con asserts de status, de contenido (jsonpath $.base = EUR) y de tiempo de respuesta. La gracia está en settings.monitor: al GUARDAR este flow en flows/, el propio SERVIDOR lo ejecuta solo cada 15 minutos con el runner del CLI — sin navegador ni pestaña abierta.\n\n· Ponle notifyUrl (la URL de un webhook de Slack o n8n) y te llega un POST cuando falle o cambie de estado (notify: \"fail\"; con \"always\", en cada run).\n· Historial rodante de los últimos 100 runs en GET /monitors (y /monitors/history).\n· Todo se configura también desde el modal «Automatización…» del menú del logo, con el estado del monitor en vivo.\n\nEjecutar a mano: ▶ Run Flow en la web · flow-run --flow \"funciones/Monitor 24x7.flow.json\" en el CLI.",
+      "position": {
+        "x": 80,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": []
+    },
+    {
+      "id": "cap-doc-docs-funciones",
+      "name": "📸 El capítulo de monitores del manual",
+      "content": "https://hilvana.cloud/docs/08-paneles-y-utilidades.html · capturada con el POST /capture del propio producto (Chromium del servidor), 2026-09-03.",
+      "position": {
+        "x": 540,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "image",
+      "imageSrc": "/flow-assets/captures/docs-funciones.png"
+    }
+  ],
+  "sqlNodes": [],
+  "webNodes": [],
+  "connections": [
+    {
+      "id": "monitor-con-1-2",
+      "sourceId": "monitor-divisas-latest",
+      "targetId": "monitor-tiempo-madrid",
+      "behavior": "next"
+    }
+  ],
+  "envVariables": {},
+  "settings": {
+    "monitor": {
+      "intervalMin": 15,
+      "notify": "fail"
+    }
+  },
+  "drawings": [
+    {
+      "id": "wb-titulo",
+      "type": "text",
+      "x": 80,
+      "y": 18,
+      "w": 700,
+      "h": 48,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "text": "Monitor 24×7 — el servidor vigila por ti",
+      "fontSize": 32,
+      "font": "excali"
+    },
+    {
+      "id": "wb-marco-healthcheck",
+      "type": "rect",
+      "x": 30,
+      "y": 632,
+      "w": 1100,
+      "h": 620,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "fill": "transparent",
+      "opacity": 0.9,
+      "sketchy": true,
+      "seed": 2407
+    },
+    {
+      "id": "wb-nota-monitor",
+      "type": "text",
+      "x": 1180,
+      "y": 662,
+      "w": 380,
+      "h": 76,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "text": "este grupo corre solo cada 15 min\n(settings.monitor · POST al fallar)",
+      "fontSize": 18,
+      "font": "sketch"
+    },
+    {
+      "id": "wb-flecha-monitor",
+      "type": "arrow",
+      "x": 1240,
+      "y": 762,
+      "w": -100,
+      "h": -5,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 2409
+    },
+    {
+      "id": "wb-nota-asserts",
+      "type": "text",
+      "x": 80,
+      "y": 1302,
+      "w": 560,
+      "h": 30,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "text": "asserts de status, contenido y tiempo — exit ≠ 0 en el CLI si alguno falla",
+      "fontSize": 18,
+      "font": "sketch"
+    },
+    {
+      "id": "chart-7109-71",
+      "type": "arrow",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7180,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1670,
+      "y": 470,
+      "w": 480,
+      "h": 0
+    },
+    {
+      "id": "chart-7110-72",
+      "type": "arrow",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7182,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1670,
+      "y": 470,
+      "w": 0,
+      "h": -280
+    },
+    {
+      "id": "chart-7109-line",
+      "type": "pen",
+      "points": [
+        {
+          "x": 1681.7,
+          "y": 202.5
+        },
+        {
+          "x": 1747.9,
+          "y": 199.9
+        },
+        {
+          "x": 1812.4,
+          "y": 204.2
+        },
+        {
+          "x": 1879.2,
+          "y": 448.8
+        },
+        {
+          "x": 1941.0,
+          "y": 202.8
+        },
+        {
+          "x": 2006.5,
+          "y": 200.3
+        },
+        {
+          "x": 2073.1,
+          "y": 200.9
+        },
+        {
+          "x": 2134.0,
+          "y": 204.1
+        }
+      ],
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7109
+    },
+    {
+      "id": "chart-7209-73",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7282,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1679.0,
+      "y": 197.0,
+      "w": 10,
+      "h": 10,
+      "fill": "#34d39955"
+    },
+    {
+      "id": "chart-7210-74",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7284,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1743.5714285714287,
+      "y": 197.0,
+      "w": 10,
+      "h": 10,
+      "fill": "#34d39955"
+    },
+    {
+      "id": "chart-7211-75",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7286,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1808.142857142857,
+      "y": 197.0,
+      "w": 10,
+      "h": 10,
+      "fill": "#34d39955"
+    },
+    {
+      "id": "chart-7212-76",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7288,
+      "stroke": "#f87171",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1872.7142857142858,
+      "y": 443.0,
+      "w": 10,
+      "h": 10,
+      "fill": "#f8717155"
+    },
+    {
+      "id": "chart-7213-77",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7290,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1937.2857142857142,
+      "y": 197.0,
+      "w": 10,
+      "h": 10,
+      "fill": "#34d39955"
+    },
+    {
+      "id": "chart-7214-78",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7292,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 2001.857142857143,
+      "y": 197.0,
+      "w": 10,
+      "h": 10,
+      "fill": "#34d39955"
+    },
+    {
+      "id": "chart-7215-79",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7294,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 2066.4285714285716,
+      "y": 197.0,
+      "w": 10,
+      "h": 10,
+      "fill": "#34d39955"
+    },
+    {
+      "id": "chart-7216-80",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7296,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 2131.0,
+      "y": 197.0,
+      "w": 10,
+      "h": 10,
+      "fill": "#34d39955"
+    },
+    {
+      "id": "chart-7170-81",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7251,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1670,
+      "y": 160,
+      "w": 316.2,
+      "h": 27,
+      "text": "uptime — y el aviso cuando cae",
+      "font": "marker",
+      "fontSize": 17
+    }
+  ]
+}

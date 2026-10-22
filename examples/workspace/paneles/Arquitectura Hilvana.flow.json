@@ -1,0 +1,553 @@
+{
+  "version": "1.0",
+  "name": "Arquitectura Hilvana",
+  "nodes": [
+    {
+      "id": "req-salud-cloud",
+      "name": "Salud cloud",
+      "curl": "curl \"{{cloudBase}}/health\"",
+      "position": {
+        "x": 80,
+        "y": 860
+      },
+      "status": "idle",
+      "extractions": [
+        {
+          "id": "x-servicio-cloud",
+          "varName": "servicioCloud",
+          "jsonPath": "$.service"
+        },
+        {
+          "id": "x-orgs-activas",
+          "varName": "orgsActivas",
+          "jsonPath": "$.orgs"
+        }
+      ],
+      "asserts": [
+        {
+          "id": "a-salud-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "a-salud-ok",
+          "kind": "jsonpath",
+          "path": "$.ok",
+          "op": "equals",
+          "value": "true"
+        },
+        {
+          "id": "a-salud-time",
+          "kind": "time",
+          "maxMs": 8000
+        }
+      ],
+      "collapsed": true,
+      "cell": {
+        "col": 1,
+        "row": 2
+      }
+    },
+    {
+      "id": "req-validar-licencia",
+      "name": "Validación de licencias",
+      "curl": "curl -X POST \"{{cloudBase}}/api/license/validate\" \\\n\n-H \"Content-Type: application/json\" \\\n\n-d '{\"token\":\"{{tokenLicencia}}\"}'",
+      "position": {
+        "x": 500,
+        "y": 860
+      },
+      "status": "idle",
+      "extractions": [
+        {
+          "id": "x-motivo-licencia",
+          "varName": "motivoLicencia",
+          "jsonPath": "$.reason"
+        }
+      ],
+      "asserts": [
+        {
+          "id": "a-lic-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "a-lic-valid-false",
+          "kind": "jsonpath",
+          "path": "$.valid",
+          "op": "equals",
+          "value": "false"
+        }
+      ],
+      "collapsed": true,
+      "cell": {
+        "col": 2,
+        "row": 2
+      }
+    },
+    {
+      "id": "req-plan-org",
+      "name": "Plan de una org",
+      "curl": "curl \"{{cloudBase}}/api/org-plan/{{orgSlug}}\"",
+      "position": {
+        "x": 920,
+        "y": 860
+      },
+      "status": "idle",
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "as-orgplan-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "as-orgplan-plan",
+          "kind": "jsonpath",
+          "path": "$.plan",
+          "op": "exists"
+        }
+      ],
+      "collapsed": true,
+      "cell": {
+        "col": 3,
+        "row": 2
+      }
+    },
+    {
+      "id": "req-web-publica",
+      "name": "Web pública",
+      "curl": "curl \"{{webBase}}/\"",
+      "position": {
+        "x": 1340,
+        "y": 860
+      },
+      "status": "idle",
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "a-web-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "a-web-time",
+          "kind": "time",
+          "maxMs": 8000
+        }
+      ],
+      "collapsed": true,
+      "cell": {
+        "col": 4,
+        "row": 2
+      }
+    }
+  ],
+  "infoNodes": [
+    {
+      "id": "nota-arquitectura",
+      "name": "Arquitectura Hilvana — el panel técnico",
+      "content": "Qué enseña: el sistema Hilvana completo de una pasada — el canvas web dispara todo a través del servidor Node (/proxy y /sql-proxy, así el navegador no pelea con CORS) contra tus APIs y BBDD; el mismo motor corre como CLI (flow-run) y empaquetado en la imagen Docker juankanh/hilvana; los agentes IA entran por el MCP embebido (/mcp) y construyen flows en el canvas en vivo; los monitores y webhooks corren server-side sin navegador; y el cloud app.hilvana.cloud gobierna cuentas, licencias RS256 y pagos (Lemon Squeezy).\n\nLas 4 cajitas de abajo no son decoración: tocan los endpoints reales del cloud, ahora mismo, cada una con sus asserts. En vivo tras ejecutar: servicio={{servicioCloud}} · orgs={{orgsActivas}} · licencia vacía → {{motivoLicencia}}.\n\n▶ Ejecútalo con «Run Flow» en la web, o desde CLI:\nflow-run --flow \"flows/paneles/Arquitectura Hilvana.flow.json\"\nSi algún assert falla, exit 1 — listo para CI.",
+      "position": {
+        "x": 80,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "cell": {
+        "col": 1,
+        "row": 1
+      }
+    },
+    {
+      "id": "nota-esquema-sistema",
+      "name": "Esquema del sistema",
+      "content": "graph TB\n  IA[\"🤖 Agentes IA\"] -- \"MCP /mcp\" --> UI[\"🖥 Canvas web (React)\"]\n  UI --> SRV[\"Servidor Node · /proxy y /sql-proxy\"]\n  SRV --> API[\"APIs del usuario\"]\n  SRV --> DB[(\"BBDD · pg / mysql / oracle\")]\n  CLI[\"⌨ CLI flow-run — CI/CD\"] --> API\n  AUTO[\"⏱ Monitores y webhooks server-side\"] --> CLI\n  DOCKER[\"🐳 Imagen Docker juankanh/hilvana\"] -. contiene .- SRV\n  SRV -. \"licencia · phone-home 12 h\" .-> CLOUD\n  subgraph CLOUD[\"☁ Cloud — app.hilvana.cloud\"]\n    ACC[\"Cuentas y orgs\"] --> LIC[\"Licencias RS256\"]\n    ACC --> PAY[\"Pagos — Lemon Squeezy\"]\n  end",
+      "position": {
+        "x": 520,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "mermaid",
+      "cell": {
+        "col": 2,
+        "row": 1
+      }
+    },
+    {
+      "id": "cap-doc-hilvana-app",
+      "name": "📸 El producto entero, en una captura suya",
+      "content": "http://localhost:9998 · capturada con el POST /capture del propio producto (Chromium del servidor), 2026-09-03.",
+      "position": {
+        "x": 980,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "image",
+      "imageSrc": "/flow-assets/captures/hilvana-app.png"
+    }
+  ],
+  "sqlNodes": [],
+  "webNodes": [],
+  "connections": [
+    {
+      "id": "c-esquema-salud",
+      "sourceId": "nota-esquema-sistema",
+      "targetId": "req-salud-cloud",
+      "sourcePort": "bottom",
+      "targetPort": "top",
+      "behavior": "none"
+    },
+    {
+      "id": "c-esquema-licencia",
+      "sourceId": "nota-esquema-sistema",
+      "targetId": "req-validar-licencia",
+      "sourcePort": "bottom",
+      "targetPort": "top",
+      "behavior": "none"
+    },
+    {
+      "id": "c-esquema-org",
+      "sourceId": "nota-esquema-sistema",
+      "targetId": "req-plan-org",
+      "sourcePort": "bottom",
+      "targetPort": "top",
+      "behavior": "none"
+    },
+    {
+      "id": "c-esquema-web",
+      "sourceId": "nota-esquema-sistema",
+      "targetId": "req-web-publica",
+      "sourcePort": "bottom",
+      "targetPort": "top",
+      "behavior": "none"
+    }
+  ],
+  "envVariables": {
+    "cloudBase": "https://app.hilvana.cloud",
+    "webBase": "https://hilvana.cloud",
+    "orgSlug": "demo-pro",
+    "tokenLicencia": ""
+  },
+  "drawings": [
+    {
+      "id": "d-titulo-arquitectura",
+      "type": "text",
+      "x": 80,
+      "y": 18,
+      "w": 700,
+      "h": 48,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 515151001,
+      "text": "Arquitectura Hilvana — el mapa del sistema",
+      "font": "excali",
+      "fontSize": 32
+    },
+    {
+      "id": "d-marco-endpoints",
+      "type": "rect",
+      "x": 35,
+      "y": 815,
+      "w": 1610,
+      "h": 200,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "fill": "transparent",
+      "opacity": 0.9,
+      "sketchy": true,
+      "seed": 515151002
+    },
+    {
+      "id": "d-texto-endpoints",
+      "type": "text",
+      "x": 80,
+      "y": 1035,
+      "w": 360,
+      "h": 31,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 0.9,
+      "sketchy": true,
+      "seed": 515151003,
+      "text": "endpoints reales, ahora mismo",
+      "font": "excali",
+      "fontSize": 20
+    },
+    {
+      "id": "chart-7136-146",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7282,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1960,
+      "y": 320,
+      "w": 110,
+      "h": 60,
+      "fill": "#34d39922"
+    },
+    {
+      "id": "chart-7137-147",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7284,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1975,
+      "y": 339,
+      "w": 74.4,
+      "h": 25,
+      "text": "Hilvana",
+      "font": "marker",
+      "fontSize": 15
+    },
+    {
+      "id": "chart-7146-148",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7294,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 2015.0,
+      "y": 320.0,
+      "w": -5.3884459162483544e-15,
+      "h": -68.0
+    },
+    {
+      "id": "chart-7156-149",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7305,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1963.0,
+      "y": 208.0,
+      "w": 104,
+      "h": 44,
+      "fill": "#60a5fa22"
+    },
+    {
+      "id": "chart-7176-150",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7326,
+      "stroke": "#60a5fa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1973.0,
+      "y": 221.0,
+      "w": 80.6,
+      "h": 23,
+      "text": "canvas web",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7147-151",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7298,
+      "stroke": "#fb923c",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 2067.3081083962334,
+      "y": 340.72949016875157,
+      "w": 97.00776466210552,
+      "h": -21.01315561749641
+    },
+    {
+      "id": "chart-7157-152",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7309,
+      "stroke": "#fb923c",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 2143.700738096079,
+      "y": 290.9179606750063,
+      "w": 104,
+      "h": 44,
+      "fill": "#fb923c22"
+    },
+    {
+      "id": "chart-7177-153",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7330,
+      "stroke": "#fb923c",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 2153.700738096079,
+      "y": 303.9179606750063,
+      "w": 96.72,
+      "h": 23,
+      "text": "CLI flow-run",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7148-154",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7302,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 2047.328188876086,
+      "y": 374.27050983124843,
+      "w": 59.95409573383221,
+      "h": 55.013155617496466
+    },
+    {
+      "id": "chart-7158-155",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7313,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 2074.67919793557,
+      "y": 425.08203932499373,
+      "w": 104,
+      "h": 44,
+      "fill": "#a78bfa22"
+    },
+    {
+      "id": "chart-7178-156",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7334,
+      "stroke": "#a78bfa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 2084.67919793557,
+      "y": 438.08203932499373,
+      "w": 128.96,
+      "h": 23,
+      "text": "MCP · agentes IA",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7149-157",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7306,
+      "stroke": "#f472b6",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 1982.671811123914,
+      "y": 374.27050983124843,
+      "w": -59.95409573383222,
+      "h": 55.013155617496466
+    },
+    {
+      "id": "chart-7159-158",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7317,
+      "stroke": "#f472b6",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1851.3208020644302,
+      "y": 425.08203932499373,
+      "w": 104,
+      "h": 44,
+      "fill": "#f472b622"
+    },
+    {
+      "id": "chart-7179-159",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7338,
+      "stroke": "#f472b6",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1861.3208020644302,
+      "y": 438.08203932499373,
+      "w": 137.02,
+      "h": 23,
+      "text": "cloud · licencias",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7150-160",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7310,
+      "stroke": "#fbbf24",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 1962.6918916037666,
+      "y": 340.72949016875157,
+      "w": -97.00776466210573,
+      "h": -21.013155617496412
+    },
+    {
+      "id": "chart-7160-161",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7321,
+      "stroke": "#fbbf24",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1782.2992619039208,
+      "y": 290.9179606750063,
+      "w": 104,
+      "h": 44,
+      "fill": "#fbbf2422"
+    },
+    {
+      "id": "chart-7180-162",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7342,
+      "stroke": "#fbbf24",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1792.2992619039208,
+      "y": 303.9179606750063,
+      "w": 112.84,
+      "h": 23,
+      "text": "monitores 24x7",
+      "font": "sketch",
+      "fontSize": 13
+    }
+  ],
+  "settings": {
+    "viewport": {
+      "zoom": 1,
+      "scrollLeft": 0,
+      "scrollTop": 0
+    }
+  }
+}

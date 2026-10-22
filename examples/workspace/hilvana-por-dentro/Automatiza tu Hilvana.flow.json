@@ -1,0 +1,394 @@
+{
+  "version": "1.0",
+  "name": "Automatiza tu Hilvana",
+  "nodes": [
+    {
+      "id": "monitores-activos",
+      "name": "1 · Monitores activos",
+      "curl": "curl \"{{flowBase}}/monitors\"",
+      "position": {
+        "x": 80,
+        "y": 701
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "as-monitores-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "as-monitores-lista",
+          "kind": "jsonpath",
+          "path": "$.monitors",
+          "op": "exists"
+        },
+        {
+          "id": "as-monitores-tiempo",
+          "kind": "time",
+          "maxMs": 5000
+        }
+      ]
+    },
+    {
+      "id": "estado-acceso",
+      "name": "2 · Estado del acceso",
+      "curl": "curl \"{{flowBase}}/access\"",
+      "position": {
+        "x": 660,
+        "y": 701
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "as-acceso-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "as-acceso-modo",
+          "kind": "jsonpath",
+          "path": "$.mode",
+          "op": "exists"
+        }
+      ]
+    }
+  ],
+  "infoNodes": [
+    {
+      "id": "leeme-automatiza",
+      "name": "Léeme · Vigila tu Hilvana CON Hilvana",
+      "content": "Tu instalación local de Hilvana también tiene API — y este flow la usa para vigilarse a sí misma:\n\n· GET /monitors — los flows con monitor programado (settings.monitor) y el resultado de sus últimas ejecuciones.\n· GET /access — el estado de tu acceso: modo (trial, licencia, cloud…) y días restantes.\n· POST /hook/<token> — webhook entrante: cualquier sistema externo puede ejecutar un flow tuyo con una simple petición HTTP.\n\nTodo esto se configura desde el modal «Automatización…» del menú del logo: ahí publicas el webhook de un flow y su monitor programado (intervalo, aviso por POST al fallar o cambiar de estado).\n\n▶ Ejecutar: botón «Run Flow» en la web · flow-run en CLI. La variable {{flowBase}} apunta a tu instalación (http://localhost:9998 con el contenedor Docker).",
+      "position": {
+        "x": 80,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": []
+    },
+    {
+      "id": "cap-doc-hilvana-app",
+      "name": "📸 Tu Hilvana, vigilado por tu Hilvana",
+      "content": "http://localhost:9998 · capturada con el POST /capture del propio producto (Chromium del servidor), 2026-09-03.",
+      "position": {
+        "x": 540,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "image",
+      "imageSrc": "/flow-assets/captures/hilvana-app.png"
+    }
+  ],
+  "sqlNodes": [],
+  "webNodes": [],
+  "connections": [
+    {
+      "id": "con-monitores-acceso",
+      "sourceId": "monitores-activos",
+      "targetId": "estado-acceso",
+      "behavior": "next"
+    }
+  ],
+  "envVariables": {
+    "flowBase": "http://localhost:9998"
+  },
+  "drawings": [
+    {
+      "id": "wb-titulo-automatiza",
+      "type": "text",
+      "x": 80,
+      "y": 18,
+      "w": 700,
+      "h": 48,
+      "text": "Automatiza tu Hilvana",
+      "font": "excali",
+      "fontSize": 32,
+      "stroke": "#f59e0b",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7401
+    },
+    {
+      "id": "wb-marco-automatiza",
+      "type": "rect",
+      "x": 30,
+      "y": 651,
+      "w": 1100,
+      "h": 620,
+      "stroke": "#f59e0b",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "fill": "transparent",
+      "opacity": 0.85,
+      "sketchy": true,
+      "seed": 7402
+    },
+    {
+      "id": "wb-etiqueta-automatiza",
+      "type": "text",
+      "x": 50,
+      "y": 657,
+      "w": 380,
+      "h": 24,
+      "text": "la API de tu propia instalación",
+      "font": "hand",
+      "fontSize": 16,
+      "stroke": "#f59e0b",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 0.9,
+      "sketchy": true,
+      "seed": 7403
+    },
+    {
+      "id": "chart-7123-w0",
+      "type": "pen",
+      "points": [
+        {
+          "x": 1440.0,
+          "y": 351.6
+        },
+        {
+          "x": 1439.7,
+          "y": 240.2
+        },
+        {
+          "x": 1477.6,
+          "y": 246.7
+        },
+        {
+          "x": 1507.9,
+          "y": 266.0
+        },
+        {
+          "x": 1531.3,
+          "y": 292.8
+        },
+        {
+          "x": 1547.8,
+          "y": 325.1
+        },
+        {
+          "x": 1549.6,
+          "y": 361.4
+        },
+        {
+          "x": 1537.2,
+          "y": 397.2
+        },
+        {
+          "x": 1517.5,
+          "y": 428.0
+        },
+        {
+          "x": 1484.0,
+          "y": 451.5
+        },
+        {
+          "x": 1450.6,
+          "y": 459.2
+        },
+        {
+          "x": 1414.1,
+          "y": 455.8
+        },
+        {
+          "x": 1381.4,
+          "y": 441.2
+        },
+        {
+          "x": 1352.9,
+          "y": 417.7
+        },
+        {
+          "x": 1335.8,
+          "y": 382.0
+        },
+        {
+          "x": 1330.1,
+          "y": 346.3
+        },
+        {
+          "x": 1338.1,
+          "y": 310.4
+        },
+        {
+          "x": 1357.9,
+          "y": 276.5
+        },
+        {
+          "x": 1383.5,
+          "y": 255.4
+        },
+        {
+          "x": 1421.1,
+          "y": 243.5
+        },
+        {
+          "x": 1441.7,
+          "y": 349.5
+        }
+      ],
+      "stroke": "#34d399",
+      "strokeWidth": 2.8,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7123
+    },
+    {
+      "id": "chart-7153-132",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7285,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1451.8576474781328,
+      "y": 465.4496836107819,
+      "w": 60,
+      "h": 24,
+      "text": "97% OK",
+      "font": "sketch",
+      "fontSize": 14
+    },
+    {
+      "id": "chart-7123-w1",
+      "type": "pen",
+      "points": [
+        {
+          "x": 1440.7,
+          "y": 352.0
+        },
+        {
+          "x": 1421.3,
+          "y": 240.0
+        },
+        {
+          "x": 1421.4,
+          "y": 243.9
+        },
+        {
+          "x": 1422.1,
+          "y": 243.0
+        },
+        {
+          "x": 1424.8,
+          "y": 240.8
+        },
+        {
+          "x": 1426.1,
+          "y": 241.3
+        },
+        {
+          "x": 1424.1,
+          "y": 241.0
+        },
+        {
+          "x": 1427.8,
+          "y": 242.5
+        },
+        {
+          "x": 1426.7,
+          "y": 242.6
+        },
+        {
+          "x": 1427.4,
+          "y": 242.6
+        },
+        {
+          "x": 1431.1,
+          "y": 240.6
+        },
+        {
+          "x": 1430.6,
+          "y": 240.8
+        },
+        {
+          "x": 1430.5,
+          "y": 238.3
+        },
+        {
+          "x": 1434.1,
+          "y": 242.2
+        },
+        {
+          "x": 1434.8,
+          "y": 238.8
+        },
+        {
+          "x": 1434.3,
+          "y": 241.4
+        },
+        {
+          "x": 1436.8,
+          "y": 238.8
+        },
+        {
+          "x": 1435.9,
+          "y": 240.4
+        },
+        {
+          "x": 1438.3,
+          "y": 238.0
+        },
+        {
+          "x": 1438.4,
+          "y": 240.0
+        },
+        {
+          "x": 1437.9,
+          "y": 349.4
+        }
+      ],
+      "stroke": "#f87171",
+      "strokeWidth": 2.8,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7124
+    },
+    {
+      "id": "chart-7154-133",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7287,
+      "stroke": "#f87171",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1394.1423525218672,
+      "y": 218.5503163892181,
+      "w": 60,
+      "h": 24,
+      "text": "fallos",
+      "font": "sketch",
+      "fontSize": 14
+    },
+    {
+      "id": "chart-7124-134",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7258,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1270,
+      "y": 170,
+      "w": 242.42,
+      "h": 27,
+      "text": "okRate de tus monitores",
+      "font": "marker",
+      "fontSize": 17
+    }
+  ]
+}

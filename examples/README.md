@@ -1,0 +1,48 @@
+# Ejemplos
+
+## 🗂️ La galería (`workspace/`) — móntala y ejecuta
+
+Un **workspace completo** listo para usar como tu carpeta `flows/`: 16 flows organizados por
+carpetas, con un tour guiado («00 EMPIEZA AQUÍ.md») cuyos enlaces ejecutan cada flow con un ▶.
+
+```bash
+docker run -d --add-host=host.docker.internal:host-gateway \
+  -p 9998:3001 --name hilvana \
+  -v "$(pwd)/workspace:/app/flows" \
+  juankanh/hilvana:latest
+# http://localhost:9998 → icono «Proyecto» → «00 EMPIEZA AQUÍ.md»
+```
+
+| Carpeta | Qué hay dentro |
+|---------|----------------|
+| `aprende/` | Un concepto por flow, en orden: **variables y cadenas**, **asserts** (tu primer test), **entornos** pre/prod, **notas con scripts JS**, **SQL + HTTP**, **data-driven** con CSV |
+| `funciones/` | Las que trabajan solas: **Monitor 24x7** (el servidor lo ejecuta cada 15 min y avisa al fallar), **Webhook desde CI** (`POST /hook/<token>` desde GitHub Actions), **Correo OTP** (el SMTP embebido captura el email y extrae el código), **Puente a local** |
+| `hilvana-por-dentro/` | Nuestra plataforma probada con nuestra herramienta, contra los endpoints reales de app.hilvana.cloud: **Solicitar espacio cloud** (⚠️ crea cuentas de verdad — lee su LEEME), **Login y sesión**, **Comprar licencia** (nuestro funnel de venta, como flow) y **Salud de la plataforma** |
+| `paneles/` | Los de enseñar en pantalla grande: **Crypto portfolio** (Ethplorer + Blockscout + CoinGecko encadenados) y **Mapa mundial** (nodos sobre una imagen de fondo) |
+| `scripts/` | 🆕 5.14 — **Lo que puede hacer un script de nota**, sin tocar la app: **Cripto** (CoinGecko → SMA/RSI y señal calculada en el flow + gráfico Mermaid generado por script), **Tiempo** (Open-Meteo → semáforo por día, aviso y gráfico; umbrales en Variables), **Pedido** (scripts «antes» que fabrican datos de prueba, POST con asserts y scripts «después» que verifican la respuesta y calculan el IVA), **Divisas** (el script dibuja una barra de botones, una página con pestañas, un informe en pestaña nueva, CSV y ▶ que reejecuta el flow por el MCP) y **Tiempo con botones** (botones que cambian Variables y relanzan el flow) |
+
+Todos los flows llevan asserts y los ejecutables se verificaron con el CLI (exit 0) antes de
+publicarse. El tour `.md` se abre en la app desde la **5.5.0** (en versiones anteriores, léelo aquí
+en GitHub). El ejemplo XXL sigue siendo [`economia-global-bundle/`](economia-global-bundle/).
+
+## Ficheros sueltos
+
+| Fichero | Qué demuestra |
+|---------|---------------|
+| `api-login-cadena.flow.json` | Cadena HTTP clásica: login → extraer `{{token}}` → llamada autenticada → detalle con id extraído |
+| `sql-verificacion.flow.json` | Nodo SQL que extrae `userId`/`email` de la BBDD y alimenta una verificación HTTP |
+| `sql-connections.example.json` | Perfiles de conexión SQL (cópialo como `sql-connections.json` junto a tus flows) |
+| `nota-mermaid.flow.json` | Flow documentado con un **diagrama Mermaid** en el canvas (`infoNodes` con `renderMode: "mermaid"`, desde la 4.3.0): el esquema de qué llama a qué se renderiza en vivo junto al flow. Con el botón **Maximizar** (4.24) se ve a pantalla completa |
+| `pizarra-anotada.flow.json` | 🆕 4.24 — La cadena de login **anotada con la pizarra** (`drawings`: marco, título, flecha de aviso y elipse destacada), una caja **📌 fijada**, nº de **orden** en cada nodo y una nota con **script JS** que genera un email único en cada Run Flow (4.23). Ábrelo con *Abrir* en la web |
+
+## Probarlos
+
+```bash
+# Copiar al contenedor y ejecutar (ajusta variables con --var)
+docker cp api-login-cadena.flow.json flow:/tmp/
+docker exec flow node cli/run-flow.js --flow /tmp/api-login-cadena.flow.json \
+  --var apiBase=http://host.docker.internal:8080 --no-report
+```
+
+O cárgalos en el canvas vía MCP: `flow_file_read` + `flow_overwrite` (si están en `flows/`),
+o pídele a tu agente que los recree con `node_add_request`/`nodes_connect`.

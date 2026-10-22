@@ -1,0 +1,287 @@
+# 🐳 11 · Docker y despliegue
+
+> Revisado para Hilvana **5.38.1** · capturas: [117](assets/hilvana-117-config-actualizaciones.png).
+
+## Ejecutar
+
+```bash
+docker run -d --add-host=host.docker.internal:host-gateway \
+  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.0.1
+# web + API + MCP en http://localhost:9998 · 1025 = SMTP de prueba (Config ▸ Correo, 4.36)
+```
+
+
+## Desde el móvil
+
+La misma instalación sirve una **vista móvil** en `http://tu-servidor:9998/m` (5.11): ejecutar flows,
+ver el resultado y leerlos como documentación, sin descargar el editor. Ver [12 La vista móvil](12-movil.md).
+
+## Construir
+
+```bash
+cd hilvana   # repo con código fuente
+docker build -t juankanh/hilvana:<version> .
+```
+
+## Peculiaridades dentro del contenedor
+
+- **localhost se reescribe** a `host.docker.internal` automáticamente (flows que apuntan a APIs de tu máquina siguen funcionando). Desactivable con `FLOW_REWRITE_LOCALHOST=false` o `--no-localhost-rewrite` en el CLI.
+- El **CLI va dentro**: `docker exec flow node cli/run-flow.js --dir flows`.
+- El **MCP va dentro**: `claude mcp add --transport http hilvana http://localhost:9998/mcp`.
+- **`flows/` es el proyecto** (4.25): con `-v /tu/carpeta:/app/flows` (o `FLOW_FLOWS_DIR` para otra ruta), lo que guardas con Ctrl+S desde la web queda en tu disco, con tu usuario como dueño, listo para git y para el CLI.
+
+## Chrome dentro de la imagen (desde la 4.5.0)
+
+La imagen trae **Chromium + puppeteer-core**: el botón **Capturar** del nodo Captura, el
+**modo Live** del nodo Web y el crawl de `flow-explore`
+(`docker exec flow node cli/explore-web.js https://mi-web.com`) funcionan dentro del
+contenedor sin instalar nada. La única excepción es `flow-explore --manual`/`--headful`,
+que abre un Chrome visible → necesita pantalla, así que se ejecuta desde el repo local.
+
+### Webs detrás de un login/SSO (Cloudflare Access, etc.)
+
+El modo directo (iframe) no puede renderizar webs que responden `X-Frame-Options: DENY` —
+eso es el navegador, no Hilvana. El modo Captura/Live sí, pero el Chrome del server necesita
+tus credenciales; pásalas por entorno:
+
+```yaml
+    environment:
+      # Cookie de sesión (p. ej. CF_Authorization de Cloudflare Access)
+      - FLOW_CAPTURE_COOKIES=CF_Authorization=<valor>
+      # O cabeceras (p. ej. un service token de Cloudflare Access)
+      - FLOW_CAPTURE_HEADERS={"CF-Access-Client-Id":"<id>","CF-Access-Client-Secret":"<secreto>"}
+```
+
+También se aceptan por petición (`POST /capture` y `POST /capture-session/start` admiten
+`{ "headers": {...}, "cookies": "k=v" }`). Las llamadas registradas en los flows siguen
+enmascarando `authorization`/`cookie`: las credenciales nunca se escriben. Extras:
+`FLOW_CHROME` (ruta del binario) y `FLOW_CHROME_ARGS` (flags).
+
+**Escape hatch sin montar CAs** (ya desde la 4.5.0): `FLOW_CHROME_ARGS=--ignore-certificate-errors`
+desactiva la validación TLS de **todas** las capturas — aceptable en un entorno de INT contra un
+MITM corporativo conocido, no como default. Nota técnica: `update-ca-certificates` a secas NO
+arregla Chromium (usa su BBDD NSS, no el store del sistema); por eso el entrypoint carga `/certs`
+en ambos y loguea `[certs] CA corporativa cargada (system + NSS): <CN>`.
+
+Desde la **4.6.0** suele bastar con loguearte una vez en el propio Live (OTP incluido): el
+**perfil de Chromium persiste** en `flows/.chrome-profile` y el login sobrevive al cierre por
+inactividad y a restarts. `FLOW_CHROME_PROFILE=off` lo desactiva; `FLOW_SESSION_IDLE_MS` ajusta el cierre por inactividad
+(el perfil no se borra al expirar) y `POST /capture-session/logout` lo borra del todo — el
+logout real del SSO. ⚠ Con el volumen
+`./flows:/app/flows`, ese perfil (cookies vivas) queda en tu disco: no lo compartas.
+
+### Dominios internos y Local Network Access (desde la 4.9.0)
+
+Dos trampas de red corporativa que producían **fallos mudos**:
+
+- **Local Network Access (Chromium ≥138)**: una web pública que llama a su API en la red
+  privada (p. ej. `app.empresa.es` → `api.internal.empresa.es`) queda bloqueada **sin prompt**
+  en headless: la app carga, el click llega, y el fetch muere con
+  `net::ERR_BLOCKED_BY_LOCAL_NETWORK_ACCESS_CHECKS` (visible en la pestaña Network). Desde la
+  4.9.0 esos checks van **desactivados** en el navegador de captura; `FLOW_CHROME_LNA_CHECKS=on`
+  restaura el comportamiento estándar de Chromium.
+- **DNS interno**: si el DNS corporativo vive en la VPN del host (resolv.conf apuntando a
+  127.0.0.x), Docker cae a DNS público y los dominios internos no resuelven dentro del
+  contenedor. Solución:
+
+```yaml
+    dns:
+      - 10.0.0.53   # el DNS corporativo que resuelve *.internal.empresa.es
+```
+
+### CAs corporativas (desde la 4.6.0)
+
+Si tu red intercepta TLS con una CA propia (Zscaler, WARP…), monta tus certificados:
+
+```yaml
+    volumes:
+      - /usr/local/share/ca-certificates:/certs:ro
+```
+
+Al arrancar, el contenedor los carga en el store del sistema, en `NODE_EXTRA_CA_CERTS`
+(peticiones del server/CLI y drivers SQL) y en la BBDD NSS de Chromium (captura/Live).
+Monta con volumen, **no** con `docker cp`: los `.crt` que son symlinks (p. ej.
+`managed-warp.crt → managed-warp.pem`) llegarían rotos — se ignoran con un aviso en los logs.
+
+## Licencia y prueba de 14 días 🆕 5.1
+
+Hilvana se prueba **14 días gratis con todas las funciones** desde el primer arranque de la instalación. Pasado ese periodo, **ejecutar flows** (los nodos Request y SQL, en la web y en el CLI) requiere una **licencia de pago** o una **cuenta en la nube** — se consiguen en [hilvana.cloud](https://hilvana.cloud). Ver y editar tus flows nunca se bloquea.
+
+- **Activar una licencia**: en la app, **Config ▸ Licencia**, pega tu clave (o arranca el contenedor con `-e FLOW_LICENSE=<clave>`, o deja el fichero `<flows>/.license`).
+- **Validación online**: con una licencia activa, la instalación la comprueba periódicamente contra el servidor del autor (firma + estado de la licencia); una licencia revocada deja de funcionar. Necesita salida a Internet, con **7 días de gracia** sin conexión.
+- **Variables**: `FLOW_TRIAL_DAYS` (14 por defecto), `FLOW_LICENSE_SERVER` (por defecto el servicio del autor), `FLOW_LICENSE_GRACE_DAYS` (7).
+
+> Las imágenes **≤ 5.0.1** mantienen su licencia anterior (uso personal gratuito). El cambio aplica desde la **5.1.0**.
+
+## Actualizaciones 🆕 5.22
+
+Cuando hay una versión publicada más nueva que la tuya, aparece **«⬆ x.y.z»** junto a **Config**. Al pulsarlo se abre
+**Config ▸ Actualizaciones** con las novedades y el comando para actualizar:
+
+```bash
+docker pull juankanh/hilvana:<versión>
+docker stop flow && docker rm flow
+docker run … juankanh/hilvana:<versión>   # con los MISMOS -p, -v y -e de siempre
+```
+
+![Config ▸ Actualizaciones: novedades y cómo actualizar](assets/hilvana-89-actualizaciones.png)
+
+### Actualizar con un clic (opcional)
+
+Si quieres que el botón **«Actualizar a x.y.z ahora»** haga todo solo, arranca el contenedor con **las dos** cosas:
+
+```bash
+docker run -d … \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e FLOW_SELF_UPDATE=on \
+  -v /ruta/a/tus/flows:/app/flows \
+  juankanh/hilvana:6.0.1
+```
+
+- Descarga la versión nueva y **recrea el contenedor con la misma configuración** (puertos, carpetas, variables, redes y reinicio). Tus flows y ajustes no se tocan.
+- Si la versión nueva **no arranca en 2 minutos, vuelve sola a la anterior**. La anterior queda guardada (parada) como `<nombre>-anterior` por si quieres volver a mano: `docker rm -f flow && docker rename flow-anterior flow && docker start flow`.
+- Solo instala versiones estables publicadas y más nuevas que la tuya.
+- ⚠️ El socket de Docker da a Hilvana control de tu Docker: actívalo solo en máquinas tuyas. Sin `/app/flows` montado el botón no aparece (perderías los flows).
+- La comprobación consulta Docker Hub cada 6 h; sin Internet simplemente no avisa. Para apagarla: `-e FLOW_UPDATE_CHECK=off`.
+- En **Hilvana en la nube** no aparece: las versiones las instala el equipo de Hilvana.
+
+## Versiones
+
+| Versión | Qué trae |
+|---------|----------|
+| 4.2.0 | MCP embebido (18 tools) |
+| 4.3.0 | Nodo Mermaid |
+| 4.4.0 | Documentar webs: nodo Captura, modo Live del nodo Web, CLI flow-explore, Auto Layout para todos los nodos, maximizar el nodo Web (Chrome solo desde el código fuente) |
+| 4.5.0 | Chromium dentro de la imagen: Captura, Live y flow-explore (crawl) funcionan en Docker; credenciales para webs tras SSO con `FLOW_CAPTURE_COOKIES`/`FLOW_CAPTURE_HEADERS` |
+| 4.6.0 | Perfil de Chromium persistente (el login del Live sobrevive a idle/restart), CAs corporativas desde `/certs`, fallos de navegación visibles en el canvas, sonda de iframes que nombra al host bloqueante y ofrece Live, barra de URL + pegar en Live |
+| 4.7.0 | Teclado directo sobre la vista Live (Ctrl+V pega el OTP), errores de certificado explicados en pantalla, sesiones de perfil concurrentes, `FLOW_SESSION_IDLE_MS`, `POST /capture-session/logout` borra el perfil |
+| 4.8.0 | Pestañas **Consola** y **Network** en el nodo Web: la sesión Live enseña los `console.*`/errores de la página y todo su tráfico (sin headers ni cuerpos) |
+| 4.9.0 | Local Network Access desactivado en el navegador de captura (apps internas: el fetch a la API privada ya no muere mudo), aviso LNA/PNA en pantalla y pista de DNS corporativo |
+| 4.12.1 | Webcam falsa y generación de videomock de DNI para QA; viewport Live configurable y sincronizado con la vista y los clics |
+| 4.13 – 4.21 | Toolbar compacta (Add Node ▾, Layout ▾, modal Config), Expand All, cajas colapsadas compactas, Collapse All sin reordenar, anti-solapes, Vista previa/Texto en notas, minimapa oculto por defecto |
+| 4.22.0 | Nº de orden por nodo + Alinear en fila/columna |
+| 4.23.0 | Scripts JS de las notas ejecutados al Run Flow (web, MCP y CLI; `--skip-info-scripts`), 📌 fijar cajas, Variables usadas en cada caja, tool MCP `tab_close` |
+| 4.24.0 | **Pizarra** estilo Excalidraw sobre el lienzo (`drawings` en el flow), barra lateral de iconos con un panel a la vez, **Guía de nodos**, Ocultar conectores, Maximizar Mermaid, tool MCP `node_add_info` (20 tools) |
+| **5.15.1** | 🛡️ **Sandbox de los scripts de nota en el navegador** + flows de confianza (pregunta antes de ejecutar, chip 🔒/🛡️ en la barra) — [04](04-notas-mermaid-capturas.md#sandbox-y-flows-de-confianza--515); imagen con parches de Alpine y sin `npm` |
+| **6.0.0** (recomendada) | 🧵 Versión de mantenimiento: marca Hilvana y base para «Iniciar sesión con Google» (aún inactiva); sin cambios de comportamiento en la app |
+| **5.39.0** | 📖 Versión de mantenimiento del manual (ampliación pantalla a pantalla y su revisión); sin cambios de comportamiento en la app |
+| **5.38.3** | 🧠 AgentOffice 0.3.3: recuerdo por agente, «que siga con…», burbuja a demanda, sesión viva entre tareas, un Blender por lado ([15](15-agentoffice.md)) |
+| **5.38.2** | 📖 Manual pantalla a pantalla con PDF y capítulo 15 AgentOffice; AgentOffice 0.3.2 (chat como respuesta, dictado, voz, nueva ronda, modo web) ([15](15-agentoffice.md)) |
+| **5.38.1** | 🛠 AgentOffice 0.3.1: burbuja que se queda al terminar (aprobar/devolver), plegado mínimo, Blender reabierto, fusión autosuficiente ([08](08-paneles.md#modos-de-desarrollo-y-chat-con-el-agente-agentoffice--5380)) |
+| **5.38.0** | 🛠 Modos de desarrollo de AgentOffice (burbuja por lado, Blender) y burbuja-chat con capturas y boceto ([08](08-paneles.md#modos-de-desarrollo-y-chat-con-el-agente-agentoffice--5380)) |
+| **5.37.0** | 📱 App móvil: adjuntos al crear tareas, ficha de «Equipo» y atrás de la hoja de detalle ([12](12-movil.md)) |
+| **5.36.0** | 📦 Paquete firmado de AgentOffice verificado de punta a punta ([08](08-paneles.md#instalar-y-actualizar-agentoffice--525)) y admin del cloud en el móvil ([12](12-movil.md)) |
+| **5.35.0** | 🤖 AgentOffice: opciones de entrega ([08](08-paneles.md#opciones-de-entrega-de-agentoffice--5350)) y app Android de administración versionCode 9 ([12](12-movil.md)) |
+| **5.34.0** | 📦 AgentOffice por **paquete firmado** (sin `git clone`) ([08](08-paneles.md#instalar-y-actualizar-agentoffice--525)) |
+| **5.33.0** | 🏢 La guía **⬇ Instalar** de AgentOffice avisa del **acceso anticipado** (repo privado) ([08](08-paneles.md#instalar-y-actualizar-agentoffice--525)) |
+| **5.32.0** | 📱 App Android **de administración** (variante `admin`, se instala junto a la normal) ([12](12-movil.md)) |
+| **5.31.1** | 🖌️ la pizarra pinta los dibujos sin `id` (flows escritos a mano) |
+| **5.31.0** | ➕ botón «Nuevo proyecto» en AgentOffice, también en móvil ([12](12-movil.md)) |
+| **5.30.4** | 📄 documentos (`.md`, `.pdf`, scripts, `.csv`) en `/m` y 🎤 dictado en AgentOffice desde la app Android ([12](12-movil.md)) |
+| **5.30.3** | 🙈 carpetas ocultas del panel Proyecto guardadas en el servidor y respetadas en `/m` ([12](12-movil.md)) |
+| **5.30.2** | 📱 app Android con botón 🤖 hacia AgentOffice (vista móvil) y lista de `/m` en árbol de carpetas ([12](12-movil.md)) |
+| **5.30.1** | ⏹ botón Parar para Run Flow y la cadena del ▶; Reset también para la ejecución |
+| **5.30.0** | 💬 chat de cada flow en la colaboración en vivo (Business), guardado con el flow; usuario del login en el cloud |
+| **5.29.0** | 🗒️ sticky notes en la pizarra: fecha de creación y 6 colores a elegir |
+| **5.28.0** | 📊 los `.csv`/`.tsv` del proyecto se abren como tabla (o texto) en el panel Proyecto |
+| **5.27.1** | ⚙️ Ajustes de AgentOffice casi a pantalla completa, por grupos, con punto en las secciones con cambios y **Guardar** fijo; arregla «Proyecto» pegada debajo de todas |
+| **5.27.0** | 🔑 estado de la conexión del asistente de IA (probar, reconfigurar, desconectar); panel de AgentOffice abierto al recargar; CLI `-F ;type=` |
+| **5.26.0** | 🔌 conexiones en vivo por WebSocket: sin bloqueos con varias ventanas abiertas |
+| **5.25.1** | 🔌 menos conexiones por pestaña (el Guía no se queda colgado con varias pestañas) · proxy de Agentes robusto a reinicios |
+| **5.25.0** | 🧩 Instalar / actualizar AgentOffice desde Config ▸ Plugins · 🛒 Marketplace con pestaña Privado |
+| **5.24.1** | ☁️ espera automática mientras despierta el espacio del cloud · 🛒 marketplace de AgentOffice con Hilvana en Docker |
+| **5.24.0** | 🔐 Aviso y conversión de credenciales en claro al subir al cloud o compartir · ☁️ gestión de ficheros del cloud desde el panel Proyecto |
+| **5.23.0** | 🛒 Marketplace Hilvana (puerta `/account-link/marketplace/*` hacia tu cuenta) · tests unitarios del servidor |
+| **5.22.0** | ⬆️ Aviso de versión nueva y actualizar con un clic (opcional) · Configuración con menú lateral |
+| **5.21.3** | 🖥️ Funciona abierto por la IP de un servidor sin https (antes, página en blanco) |
+| **5.21.2** | 📬 Mejoras internas del correo de prueba |
+| **5.21.1** | 💾 Botón Guardar siempre visible en la barra; «Guardar como…» con pie fijo y lista de carpetas con scroll |
+| **5.21.0** | 🗂️ Panel Proyecto a medida: scripts visibles como código, destino de las carpetas enlazadas, ancho ajustable y ocultar carpetas |
+| **5.20.2** | 🗑️ Borrado de documentos por `DELETE /workspace/file`; la pestaña se cierra solo si era del disco local |
+| **5.20.1** | 🗂️ Ordenar el proyecto: carpetas nuevas, arrastrar y soltar, mover/renombrar, borrar carpetas vacías y documentos `.md`/`.pdf` — [08](08-paneles.md#ordenar-el-proyecto--520) |
+| **5.19.4** | 🗂️ El workspace no lista los git worktrees enlazados (copias de los agentes): sin flows repetidos en el panel Proyecto ni en `flow_files_list` — [08](08-paneles.md#carpetas-enlazadas-y-copias-de-los-agentes--5194) |
+| **5.19.0–5.19.3** | ✅ Asserts de status 4xx/5xx esperados y con `{{variables}}` ([02](02-nodo-request.md#errores-esperados-y-variables--519)); plugin Agentes con contexto, Ajustes y voz; `flow_open`/`flow_save` respetan el disco |
+| **5.18.0** | 🧩 Gestor de plugins con AgentOffice (Pro) y workspace con enlaces simbólicos — [08](08-paneles.md#plugins-y-agentoffice--518) |
+| **5.17.0** | 🔔 **Vigilancia en el servidor**: reglas sobre las variables del run en el monitor programado, aviso solo al dispararse o recuperarse, `{{secret:X}}` en `notifyUrl`, tool MCP `flow_monitor` — [08](08-paneles.md#vigilancia-reglas-y-avisos--517) |
+| **5.16.0** | 🔎 **Notas a pantalla completa**: botón Maximizar junto a «Copiar» y «Maximizar nota» en el menú de la caja — [04](04-notas-mermaid-capturas.md#nota-a-pantalla-completa--516). El panel Proyecto recuerda el entorno 💻 Local / ☁️ Cloud entre recargas (fix 5.15.2) |
+| **5.15.0** | 🛡️ Primera versión del sandbox en el navegador y del modelo de confianza por fichero |
+| **5.14.3** | 🔒 `npm audit` a cero y tope de memoria de los runners (`FLOW_RUNNER_HEAP_MB`) |
+| **5.14.2** | 🖼️ Imágenes de cualquier ruta del proyecto en el visor de documentos `.md` (`GET /workspace/image`) — [08](08-paneles.md#documentos-markdown-en-el-panel--438) |
+| **5.14.1** | 🔒 **Endurecimiento de seguridad**: sandbox de los scripts de nota en el servidor + cortafuegos de salida (SSRF) en el cloud — ver [docs/seguridad.md](../seguridad.md) |
+| **5.14.0** | 📮 **Reportar un problema** desde la app (escritorio y móvil): error/idea/pregunta con captura y datos técnicos → bandeja del equipo, respuesta por email y «Mis reportes» (Pro/Business); el asistente de IA lleva la **skill de flows de serie**; galería `scripts/` |
+| **5.13.1** | 🤖 IA en el **móvil** (pestaña ✨ IA en `/m`), «Entrar con Anthropic», conexión desde el navegador, Ctrl+V de capturas, «Guardar como…» ▸ ☁️ Cloud ([12](12-movil.md), [13](13-asistente-ia.md)) |
+| **5.13.0** | 🤖 **Asistente de IA** embebido con tu clave de Claude u OpenAI: construye, explica, prueba y arregla flows en el canvas en directo, con confirmaciones, parar, deshacer turno, comandos, adjuntos y coste ([13](13-asistente-ia.md)) |
+| **5.12.0** | 🔗 **Compartir enlace**: foto pública del canvas en `GET /share/<id>` (se ve como el PDF, sin app ni cuenta); con el Docker vinculado se publica en el cloud; caducidad opcional, visitas, cuota y gestión desde el modal, la cuenta y el admin ([01](01-pantalla-principal.md#compartir-enlace-público--512)) |
+| **5.11.0** | 📱 **Vista móvil** en `/m`: ejecutar flows, ver resultados y leerlos como documentación desde el teléfono ([12](12-movil.md)) |
+| **5.10.0** | 🗂️ **El panel Proyecto apunta al entorno que gobierna** (disco local o tu espacio del cloud) |
+| **5.9.1** | 🔧 **Modo vinculado más limpio**: chip «☁️ org ● plan» en la barra superior (sin franja de aviso) y refresco inmediato del panel Proyecto / chips PRO al conmutar licencia ↔ cuenta cloud |
+| **5.9.0** | ☁️ **Sincronizar flows local ↔ cloud** (Docker vinculado): traer/subir flows entre tu disco y tu espacio del cloud desde el botón ☁️ del panel Proyecto |
+| **5.8.1** | 🔁 **Interruptor licencia ↔ cuenta cloud** (elige cuál gobierna cuando tienes las dos, sin mezclar) |
+| **5.8.0** | 🤖 Token MCP por usuario (conecta tu IA al cloud) · 🐳 vincular Docker a la cuenta (hereda el plan) · credenciales con ámbito 🔒 privado / 👥 equipo |
+| **5.5.0 – 5.7.0** | 👥 Colaboración en vivo (Business) + Ctrl+Z del canvas · credenciales cifradas `{{secret:X}}` · carpetas privadas por miembro · Business = 1.000 flows |
+| **5.4.0** | **Monitores programados** server-side con historial y notifyUrl (modal Automatización) |
+| **5.3.0** | **Asserts + entornos + webhook + data-driven + OpenAPI** — CI con exit ≠ 0, `--env`/`--data`, `POST /hook/<token>` y spec → flow |
+| **5.1.0** | **Prueba 14 días + licencia validada online** — tras la prueba, ejecutar flows requiere licencia o cuenta cloud (hilvana.cloud); revocable en remoto. Ver/editar nunca se bloquea |
+| 5.0.1 | **Fix de seguridad** — la imagen deja de incluir flows del proyecto; solo trae `bienvenida.flow.json` (onboarding limpio). Usa siempre ≥ 5.0.1 |
+| 5.0.0 | **Licencias por token (JWT)** — Config ▸ Licencia: plan Free/Commercial/Team/Business, activación de la clave, verificación offline RS256 |
+| **4.51.3** | **Licencia propietaria** (uso personal gratis, comercial de pago; `LICENSE` en la imagen) |
+| **4.51.2** | **Scripts «después» con `vars`** · 4.51.2: el PDF exportado incluye la imagen de fondo y las imágenes de la pizarra también desde Docker (4.51.1: el MCP conserva `when` al crear notas con `node_add_info`) (conmutador antes/después por script, corren al acabar Run Flow con todas las extracciones; `{{variables}}` en textos e imágenes de la pizarra; MCP `when`) |
+| **4.50.0** | **Imágenes y GIF en la pizarra** (panel Imagen / GIF, Ctrl+V; `flows/assets/whiteboard/`; MCP `whiteboard_update` type `image`) |
+| **4.49.1** | **Imagen de fondo del flow** (Config ▸ Vista): mapa/plano/diagrama detrás del lienzo, en coordenadas de los nodos, guardado en `settings.background`; tool MCP `flow_background` (38 tools) |
+| **4.48.0** | **Configuración por flow**: Vista, ocultar conectores, estilo de pizarra y zoom/posición del lienzo guardados en el `.flow.json` (`settings`), distintos en cada pestaña |
+| **4.47.0** | **Copiar/cortar/pegar en la pizarra** (Ctrl+C/X/V + botones en el panel, pegado con desplazamiento acumulado) y **mover el grupo arrastrando desde el hueco dentro de la selección** (ya no se pierde la selección al coger una figura por dentro) |
+| **4.46.0** | **Selección múltiple en la pizarra**: rectángulo de selección arrastrando sobre el fondo (Shift acumula) para mover o retocar varios dibujos a la vez |
+| **4.45.0** | **Los PDF de `flows/` en el panel Proyecto**, abiertos como pestañas de documento con el visor nativo (chip PDF) |
+| **4.44.0** | **Exportar el canvas a PDF** desde el menú del logo (una página del tamaño exacto del flujo, con la pizarra, aunque no quepa en pantalla) |
+| **4.43.0** | **Panel de Correo con secciones plegables** (cabeceras con chevron y resumen; estado recordado) |
+| **4.42.0** | **El correo extrae el código** (`$.code`/`$.codeSource`: keyword · fallback · regex propia; texto plano con HTML limpiado; longitud configurable) y **proveedor remoto mail.tm** junto al SMTP (buzones por API para correo desde Internet, dominio activo visible, auto-creación, tokens renovados, sondeo con throttle solo bajo demanda) |
+| **4.41.0** | **Árbol de carpetas en el panel Proyecto**: subcarpetas anidadas dentro de su padre (nombre corto, indentación), plegar oculta todo el subárbol, contador = ficheros del subárbol, plegado recordado |
+| **4.40.0** | **Los `.md` se abren como pestañas** (no en modal): el documento ocupa el área del canvas como un flow más, chip **MD** en la pestaña, solo lectura (Ctrl+S nunca lo pisa), filas del panel con ir-a/cerrar |
+| **4.39.0** | **▶ Ejecutar un flow desde un documento**: cada enlace `[[flow]]` del visor Markdown lleva un botón verde ▶ que abre ese flow y lanza su Run Flow completo, cerrando el visor para ver la ejecución en el canvas |
+| **4.38.0** | **Documentos Markdown en el panel Proyecto**: los `.md` de `flows/` (notas e informes de `flow-explore`) se listan con título y chip **MD** y se abren en un visor de solo lectura (tablas, código, `<details>`, imágenes de `assets/`, enlaces `[[flow]]` al canvas); `GET /workspace/file`; MCP y CLI sin cambios |
+| **4.37.0** | **El MCP controla el correo de prueba (37 tools)**: `mail_state`, `mail_server`, `mail_address`, `mail_messages` — arrancar el SMTP, buzones y verificar correos (OTP/enlace) sin pestaña web; guía de red cuando el servicio que envía corre en otra máquina (LAN, red Docker, túnel `ssh -R`) |
+| 4.36.0 | **Correo de prueba (Config → Correo)**: SMTP embebido en el puerto `1025` (sin TLS, auth opcional) con buzones `@midominiotest.com` para capturar los correos que envían tus servicios sin cuentas reales; panel tipo Consola con HTML/texto/origen/adjuntos, búsqueda y filtro por buzón; persistencia en `flows/.mail/`; `GET /mail/messages/latest?to=` para verificarlo desde un flow. `-p 1025:1025`, `FLOW_MAIL_PORT`, `FLOW_MAIL_AUTOSTART`, `FLOW_MAIL_DOMAIN` |
+| 4.35.0 | **10 fuentes para el texto de la pizarra** (8 manuscritas empaquetadas: Manuscrita, Boceto, **Excalidraw**/Excalifont, **Indie** Flower, Rotulador, Esbozo, Arquitecto, Nota + Normal y Código) con cuadrícula y vista previa; MCP `whiteboard_update` las acepta y mide los textos sin `w/h`. **Las filas bajan en bloque cuando una card crece** al ejecutarse (Vista ▸ «Evitar solapes al soltar o al crecer una caja») |
+| 4.34.0 | **Cadenas entre cualquier tipo de nodo** (▶ sigue next/on_error/parallel hacia request, SQL, nota o web), **Run Flow ejecuta también los SQL**, **pausa por conector** (`delayMs`, popover en la flecha; web, CLI y MCP); fix caja SQL colapsada |
+| 4.33.0 | **MCP con control total** (33 tools): `view_settings`, `global_variables_set`, `tab_rename`, `connection_update`, `sql_connections_list`, `canvas_layout separate`; `flow_state` con globales, perfiles SQL y vista |
+| 4.32.0 | **Variable extractions** plegables con el diseño de «Variables usadas», estado `n/n ✓` / `n sin valor` y botón **↻ re-extraer** de la última respuesta sin repetir la llamada |
+| 4.31.0 | **Activar / desactivar nodos** desde el menú del icono (se saltan en Run Flow, cadenas, cron, MCP y CLI; conexiones recorridas; `disabled` en el flow) |
+| 4.30.0 | **Cabecera de las cajas simplificada** (icono-menú · plegar · estado · título · ▶; el resto en el menú del icono); fix MCP `node_add_sql` (`order`/`pinned`/`cell`) |
+| 4.29.0 | Botón **Copiar** en la vista previa de las notas, **Layout ▸ Pin All / Unpin All**, **guía de nodos plegable** (MCP `canvas_layout pin_all|unpin_all`) |
+| 4.28.2 | Campo **`#` = `columna,fila`** (1,1 arriba a la izquierda) y **Layout ▸ Alinear en cuadrícula**; `cell` en el flow y en el MCP (`canvas_layout grid`); 4.28.1: **Auto Layout respeta las celdas**; 4.28.2: **fix Run Flow** (flechas `next` desde notas/SQL/web ya no bloquean el request destino, ciclos al final, scripts de notas en el Historial) |
+| 4.27.0 | **Config ▸ Vista**: tamaño de los nodos, **modo compacto** (caja con icono + título con estado + ▶, tooltip al pasar el ratón, clic abre la card) y **separación entre nodos** (mínima configurable, apartar vecinas al soltar, «Separar nodos solapados ahora») |
+| 4.26.0 | **`flows/` como proyecto**: panel Proyecto, abrir/guardar con **Ctrl+S** en el fichero, «Guardar como…», detección de cambios en disco, ficheros con el dueño del host desde Docker; **enlaces `[[flow#nodo]]`** entre flows en las notas; `FLOW_FLOWS_DIR` para apuntar el proyecto a otra carpeta |
+
+## Vincular esta instalación a tu cuenta cloud 🆕 (5.8)
+
+¿Tienes una **suscripción en app.hilvana.cloud** y también corres Hilvana self-hosted (Docker)? En
+vez de gestionar una clave de licencia, tu Docker puede **heredar el plan de tu cuenta**:
+
+1. En tu cuenta cloud → **🔌 Máquina local → 🐳 Vincular Docker** → **Generar token de vinculación**.
+2. En tu Docker: **Config ▸ Licencia ▸ «🐳 Vincular con mi cuenta cloud»** → pega el token. (O arranca
+   con `-e FLOW_ACCOUNT_TOKEN=flowlink_…`.)
+
+Tu instalación heredará el plan de la org (Pro o Business) sin claves RS256. El **workspace sigue en
+tu disco local** — esto solo hereda el plan, no mueve datos. Tope de instalaciones vinculadas:
+**Pro 2 · Business = asientos × 2**. Se desvincula desde el mismo panel; el admin lista las
+instalaciones vinculadas de cada cuenta.
+
+Mientras la vinculación gobierna, la barra superior muestra un **chip discreto** «☁️ *org* ● PLAN» a la
+izquierda de **Config** (5.9.1) en lugar de la franja de aviso: verde con tu plan, ámbar con los días que
+quedan si la org está en prueba, rojo si la prueba terminó y «verificando…» hasta la primera validación.
+Clic en el chip → Config ▸ Licencia. Al conmutar entre licencia y cuenta cloud (o al vincular, desvincular,
+activar o quitar la licencia), el panel Proyecto (botón ☁️) y los chips PRO se actualizan al instante,
+sin recargar la página.
+
+![Chip de cuenta cloud en la barra superior (5.9.1)](assets/hilvana-68-chip-cloud.png)
+
+### Sincronizar flows local ↔ cloud 🆕 (5.9)
+
+> **5.13** — También desde **«Guardar como…»** (Ctrl+Shift+S): con el Docker vinculado, el modal ofrece **💻 Local / ☁️ Cloud · tu org**. Elige Cloud, nombre y carpeta (con 🔒 Privado si tu plan lo tiene) y el flow se guarda directamente en tu espacio del cloud; la pestaña queda enlazada a esa copia (el siguiente Ctrl+S va allí) y el fichero local no se toca. Si ya existe con ese nombre, avisa antes de sobrescribir.
+
+Con el Docker **vinculado**, el panel **Proyecto** muestra un botón **☁️**: ábrelo para **traer** flows de
+tu espacio del cloud a tu disco o **subir** los locales al cloud. Dos columnas (Local / En tu cloud) con
+⬆️ Subir y ⬇️ Traer por flow; si el destino ya existe te pregunta antes de sobrescribir. Respeta tus
+**carpetas privadas** (cada uno ve las suyas y las compartidas del equipo). El **token de vinculación se
+queda en el servidor** — el navegador nunca lo ve. La sincronización **copia** el fichero, no fusiona
+cambios (en la subida gana tu versión local).

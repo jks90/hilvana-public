@@ -1,0 +1,409 @@
+{
+  "version": "1.0",
+  "name": "Webhook desde CI",
+  "nodes": [
+    {
+      "id": "webhook-echo-version",
+      "name": "1 · Echo — GET httpbingo con version",
+      "curl": "curl \"https://httpbingo.org/get?version={{version}}\" \\\n\n-H \"User-Agent: hilvana\"",
+      "position": {
+        "x": 80,
+        "y": 855
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "webhook-echo-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "webhook-echo-version-existe",
+          "kind": "jsonpath",
+          "path": "$.args.version",
+          "op": "exists"
+        },
+        {
+          "id": "webhook-echo-tiempo",
+          "kind": "time",
+          "maxMs": 8000
+        }
+      ]
+    },
+    {
+      "id": "webhook-divisas-latest",
+      "name": "2 · Divisas — GET latest (Frankfurter)",
+      "curl": "curl \"https://api.frankfurter.dev/v1/latest\"",
+      "position": {
+        "x": 660,
+        "y": 855
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "webhook-divisas-status",
+          "kind": "status",
+          "expected": "2xx"
+        }
+      ]
+    }
+  ],
+  "infoNodes": [
+    {
+      "id": "webhook-nota",
+      "name": "Dispara este flow desde tu CI",
+      "content": "Smoke-test disparable por HTTP: al GUARDAR este flow en flows/, el servidor publica POST /hook/<token> y cualquier sistema (GitHub Actions, GitLab CI, n8n, un cron…) lo lanza sin abrir la web — se ejecuta con el runner del CLI, asserts incluidos. Los query params y el body JSON plano llegan como variables del flow: aquí la variable version vendrá del CI y el nodo 1 verifica con un assert que ha llegado de verdad ($.args.version exists).\n\nEjemplo para un step de GitHub Actions (cambia el token desde el modal «Automatización…» del menú del logo al guardar):\n\ncurl -sf -X POST \"http://tu-servidor:9998/hook/cambia-este-token-al-guardar\" -H \"Content-Type: application/json\" -d \"{\\\"version\\\": \\\"$GITHUB_SHA\\\"}\"\n\n· Respuesta 200 con el resumen verde por nodo y asserts si todo pasa; 422 con el detalle del nodo o assert que falló — con -f el curl devuelve exit ≠ 0 y rompe el pipeline.\n· También acepta query params (POST /hook/<token>?version=v1.2.3) y __env para elegir entorno.\n\nEjecutar a mano: ▶ Run Flow en la web · flow-run --flow \"funciones/Webhook desde CI.flow.json\" en el CLI (con --var version=v1.2.3 si quieres).",
+      "position": {
+        "x": 80,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": []
+    },
+    {
+      "id": "webhook-diagrama",
+      "name": "Diagrama del disparo",
+      "content": "graph LR\n  CI[\"CI / GitHub Actions\"] -- \"POST /hook/… + version\" --> HOOK[\"Servidor Hilvana\"]\n  HOOK --> RUN[\"Runner CLI (sin navegador)\"]\n  RUN --> N1[\"1 · Echo httpbingo\"]\n  N1 --> N2[\"2 · Divisas Frankfurter\"]\n  N2 --> CHK{\"Asserts\"}\n  CHK -- \"todo verde\" --> OK[\"HTTP 200\"]\n  CHK -- \"algún fallo\" --> KO[\"HTTP 422 + detalle\"]",
+      "position": {
+        "x": 520,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "mermaid"
+    },
+    {
+      "id": "cap-doc-docs-funciones",
+      "name": "📸 El capítulo del webhook del manual",
+      "content": "https://hilvana.cloud/docs/08-paneles-y-utilidades.html · capturada con el POST /capture del propio producto (Chromium del servidor), 2026-09-03.",
+      "position": {
+        "x": 980,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "image",
+      "imageSrc": "/flow-assets/captures/docs-funciones.png"
+    }
+  ],
+  "sqlNodes": [],
+  "webNodes": [],
+  "connections": [
+    {
+      "id": "webhook-con-1-2",
+      "sourceId": "webhook-echo-version",
+      "targetId": "webhook-divisas-latest",
+      "behavior": "next"
+    }
+  ],
+  "envVariables": {
+    "version": "local"
+  },
+  "settings": {
+    "webhook": {
+      "token": "cambia-este-token-al-guardar"
+    }
+  },
+  "drawings": [
+    {
+      "id": "wb-titulo",
+      "type": "text",
+      "x": 80,
+      "y": 18,
+      "w": 700,
+      "h": 48,
+      "text": "Webhook desde CI — tu pipeline dispara el flow",
+      "font": "excali",
+      "fontSize": 32,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 3401
+    },
+    {
+      "id": "wb-marco-nodos",
+      "type": "rect",
+      "x": 30,
+      "y": 805,
+      "w": 1100,
+      "h": 620,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "fill": "transparent",
+      "opacity": 0.9,
+      "sketchy": true,
+      "seed": 3402
+    },
+    {
+      "id": "wb-etiqueta-hook",
+      "type": "text",
+      "x": 60,
+      "y": 811,
+      "w": 470,
+      "h": 22,
+      "text": "este bloque corre entero con cada POST /hook/<token>",
+      "font": "hand",
+      "fontSize": 16,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 0.85,
+      "sketchy": true,
+      "seed": 3403
+    },
+    {
+      "id": "wb-flecha-version",
+      "type": "arrow",
+      "x": 360,
+      "y": 1493,
+      "w": -60,
+      "h": -83,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 3404
+    },
+    {
+      "id": "wb-nota-version",
+      "type": "text",
+      "x": 390,
+      "y": 1473,
+      "w": 460,
+      "h": 52,
+      "text": "aquí llega {{version}} desde el CI\n(assert $.args.version exists)",
+      "font": "sketch",
+      "fontSize": 20,
+      "stroke": "#34d399",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 3405
+    },
+    {
+      "id": "chart-7110-82",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7192,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1665,
+      "y": 310,
+      "w": 110,
+      "h": 60,
+      "fill": "#34d39922"
+    },
+    {
+      "id": "chart-7111-83",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7194,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1680,
+      "y": 329,
+      "w": 93.0,
+      "h": 25,
+      "text": "POST /hook",
+      "font": "marker",
+      "fontSize": 15
+    },
+    {
+      "id": "chart-7120-84",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7204,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 1720.0,
+      "y": 310.0,
+      "w": -5.3884459162483544e-15,
+      "h": -68.0
+    },
+    {
+      "id": "chart-7130-85",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7215,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1668.0,
+      "y": 198.0,
+      "w": 104,
+      "h": 44,
+      "fill": "#60a5fa22"
+    },
+    {
+      "id": "chart-7150-86",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7236,
+      "stroke": "#60a5fa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1678.0,
+      "y": 211.0,
+      "w": 112.84,
+      "h": 23,
+      "text": "GitHub Actions",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7121-87",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7208,
+      "stroke": "#fb923c",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 1775.0,
+      "y": 340.0,
+      "w": 102.0,
+      "h": 0.0
+    },
+    {
+      "id": "chart-7131-88",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7219,
+      "stroke": "#fb923c",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1858.0,
+      "y": 318.0,
+      "w": 104,
+      "h": 44,
+      "fill": "#fb923c22"
+    },
+    {
+      "id": "chart-7151-89",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7240,
+      "stroke": "#fb923c",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1868.0,
+      "y": 331.0,
+      "w": 60,
+      "h": 23,
+      "text": "Jenkins",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7122-90",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7212,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 1720.0,
+      "y": 370.0,
+      "w": -5.3884459162483544e-15,
+      "h": 68.0
+    },
+    {
+      "id": "chart-7132-91",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7223,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1668.0,
+      "y": 438.0,
+      "w": 104,
+      "h": 44,
+      "fill": "#a78bfa22"
+    },
+    {
+      "id": "chart-7152-92",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7244,
+      "stroke": "#a78bfa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1678.0,
+      "y": 451.0,
+      "w": 96.72,
+      "h": 23,
+      "text": "cron externo",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7123-93",
+      "type": "line",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7216,
+      "stroke": "#f472b6",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "x": 1665.0,
+      "y": 340.0,
+      "w": -102.0,
+      "h": -6.368163355566236e-15
+    },
+    {
+      "id": "chart-7133-94",
+      "type": "ellipse",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7227,
+      "stroke": "#f472b6",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1478.0,
+      "y": 318.0,
+      "w": 104,
+      "h": 44,
+      "fill": "#f472b622"
+    },
+    {
+      "id": "chart-7153-95",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7248,
+      "stroke": "#f472b6",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1488.0,
+      "y": 331.0,
+      "w": 72.54,
+      "h": 23,
+      "text": "otro flow",
+      "font": "sketch",
+      "fontSize": 13
+    }
+  ]
+}

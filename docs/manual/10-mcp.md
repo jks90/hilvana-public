@@ -1,0 +1,64 @@
+# 🤖 10 · El MCP embebido
+
+> **5.13** — Las mismas herramientas mueven el **asistente de IA embebido** ([13](13-asistente-ia.md)): un chat dentro de la app con tu clave de Claude u OpenAI que las llama en proceso, sin necesidad de Claude Code ni de configurar el MCP.
+
+Hilvana lleva un **servidor MCP dentro** (endpoint `/mcp`): cualquier cliente MCP —Claude Code, Claude Desktop— puede **construir, editar y ejecutar flows en tu canvas mientras miras**. La IA pinta las cajitas en directo en la última pestaña del navegador que esté conectada (la «controladora»).
+
+## Conectarlo a Claude Code
+
+```bash
+# contra el dev (npm run dev)
+claude mcp add --transport http hilvana http://localhost:3001/mcp
+
+# contra el contenedor Docker
+claude mcp add --transport http hilvana http://localhost:9998/mcp
+```
+
+Y en una conversación: *«créame un flow que haga login en mi API y liste los usuarios»* — verás aparecer las cajitas, conectarse y ejecutarse solas.
+
+## Las 39 tools, por grupos
+
+| Grupo | Tools | Para qué |
+|-------|-------|----------|
+| **Observar** | `bridge_status`, `flow_state`, `console_read`, `runs_read`, `sql_connections_list` | Ver pestañas, nodos (posición, orden, 📌, notas, web, dibujos, fichero enlazado, sin guardar, `settings` del flow 🆕 4.48), consola e historial |
+| **Pestañas** | `flow_create`, `tab_select`, `tab_rename`, `tab_close`, `flow_overwrite` | Crear, activar, renombrar, cerrar o reemplazar pestañas |
+| **Construir** | `node_add_request`, `node_add_sql`, `node_add_info`, `node_add_web`, `node_update`, `node_delete`, `nodes_connect`, `connection_update`, `connection_delete`, `variables_set`, `global_variables_set` | Crear/editar cualquier tipo de nodo (HTTP, SQL, nota/Mermaid/captura con scripts, web), conexiones y variables |
+| **Ejecutar** | `flow_run`, `node_run`, `flow_reset` | Como pulsar Run Flow / el ▶ de un nodo (devuelve resultados) / Reset. `flow_run` ejecuta antes los scripts JS de las notas |
+| **Lienzo** 🆕 4.26 | `node_focus`, `canvas_layout`, `whiteboard_update` | Centrar y resaltar un nodo, ordenar el lienzo (auto / fila / columna / **cuadrícula** por `cell {col,row}` 🆕 4.28 / separar solapes 🆕 4.33 / colapsar / expandir / fijar-liberar todas 🆕 4.29), **`view_settings`** (tamaño de nodos, modo compacto, separación 🆕 4.33), **`flow_background`** (imagen de fondo del flow 🆕 4.49) y dibujar en la pizarra |
+| **Proyecto `flows/`** | `flow_files_list`, `flow_open`, `flow_save`, `flow_file_delete`, `flow_file_read` | Lo mismo que el panel Proyecto: listar con metadatos, abrir enlazado al fichero, guardar como Ctrl+S (la pestaña queda enlazada), borrar, leer |
+| **Correo de prueba** 🆕 4.37 | `mail_state`, `mail_server`, `mail_address`, `mail_messages` | Arrancar/parar/configurar el SMTP de prueba ([08 Paneles](08-paneles.md#correo-de-prueba--smtp-embebido--436)), crear buzones y leer los correos recibidos (`latest` con filtros `to`/`subject`) para verificar que tu servicio los envió y sacar el OTP/enlace. No necesitan pestaña web |
+| **Vigilancia** 🆕 5.17 | `flow_monitor` | Programar un flow en el servidor (cada N min, sin navegador) con reglas sobre sus variables y aviso cuando una se dispara o se recupera ([08](08-paneles.md#vigilancia-reglas-y-avisos--517)) |
+
+> `flow_overwrite` acepta un `.flow.json` completo — también con nodos Captura y con los dibujos de la pizarra (`drawings`): una IA puede cargarte una documentación entera, anotada, en la pestaña.
+
+## Seguridad
+
+- Por defecto solo acepta clientes **locales** (localhost).
+- `FLOW_MCP_TOKEN=xxx` exige `Authorization: Bearer xxx`.
+- `FLOW_MCP_ALLOW_LAN=true` abre el acceso a la LAN (usa el token si lo haces).
+
+> [!WARNING]
+> **La pestaña controladora**
+> El puente controla **la última pestaña conectada**. Si tienes abiertas la web del dev (5173) y la del contenedor (9998), cada servidor tiene su propio puente — asegúrate de a cuál apunta tu cliente MCP, o la IA pintará «en la otra».
+
+## Conectar tu IA al espacio del cloud 🆕 (5.8)
+
+Además del MCP local (`localhost:9998/mcp`), si tienes cuenta en **app.hilvana.cloud** puedes conectar
+tu asistente a **tu espacio del cloud**:
+
+1. En tu cuenta → **🤖 MCP (IA)** → **Generar token MCP** (se muestra una vez).
+2. Copia el comando ya montado y pégalo en tu terminal:
+   `claude mcp add --transport http flow-cloud https://app.hilvana.cloud/mcp --header "Authorization: Bearer <tu-token>"`
+
+A partir de ahí la IA construye y ejecuta flows en tu org del cloud igual que en local — respetando
+tus **carpetas y credenciales privadas**. El token es personal (Pro o Business), se lista con su
+último uso en tu cuenta y en el admin, y se revoca cuando quieras. Máximo 5 por usuario.
+
+## Las tools, por grupos 🆕 (5.38.1)
+- Observar: `bridge_status`, `flow_state`, `console_read`, `runs_read`.
+- Pestañas/flows: `flow_create`, `flow_overwrite`, `flow_reset`, `tab_select`, `tab_rename`, `tab_close`, `flow_background`, `view_settings`.
+- Nodos: `node_add_request`, `node_add_sql`, `node_add_info`, `node_add_web`, `node_update`, `node_delete`, `node_focus`.
+- Conexiones y variables: `nodes_connect`, `connection_update`, `connection_delete`, `variables_set`, `global_variables_set`, `sql_connections_list`.
+- Ejecutar/canvas: `flow_run`, `node_run`, `canvas_layout`, `whiteboard_update` (pizarra y sticky), `flow_monitor` (vigilancia).
+- Ficheros de `flows/`: `flow_save` (409 salvo `force`), `flow_open`, `flow_files_list`, `flow_file_read`, `flow_file_delete`.
+- Correo: `mail_state`, `mail_server`, `mail_address`, `mail_messages`.

@@ -1,0 +1,300 @@
+{
+  "version": "1.0",
+  "name": "Puente cloud (flow-bridge)",
+  "nodes": [
+    {
+      "id": "poll-sin-token",
+      "name": "1 · Actívame: poll sin token → 401",
+      "curl": "curl \"{{accountsBase}}/api/bridge/poll?token={{tokenPuente}}\"",
+      "position": {
+        "x": 80,
+        "y": 857
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "as-poll-401",
+          "kind": "status",
+          "expected": "401"
+        },
+        {
+          "id": "as-poll-tiempo",
+          "kind": "time",
+          "maxMs": 8000
+        }
+      ],
+      "disabled": true
+    },
+    {
+      "id": "salud-puente",
+      "name": "2 · Salud del servicio",
+      "curl": "curl \"{{accountsBase}}/health\"",
+      "position": {
+        "x": 660,
+        "y": 857
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "as-salud-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "as-salud-ok",
+          "kind": "jsonpath",
+          "path": "$.ok",
+          "op": "exists"
+        }
+      ]
+    }
+  ],
+  "infoNodes": [
+    {
+      "id": "leeme-puente-cloud",
+      "name": "Léeme · El endpoint real del puente",
+      "content": "Qué enseña: el endpoint AUTÉNTICO del puente cloud→local. En app.hilvana.cloud tu navegador no ve tu localhost — el agente flow-bridge (paquete npm aún no publicado) hace long-poll de {{accountsBase}}/api/bridge/poll con TU token (se genera en account.html → Puente) y reenvía cada petición a tu máquina.\n\nAquí lo llamamos con un token falso ({{tokenPuente}}) y el servicio responde 401: exactamente lo que debe hacer. El assert «status 401» sale en verde — los asserts aceptan cualquier código esperado — aunque la caja quede en rojo, porque Hilvana exige 2xx para dar un nodo por bueno. La flecha on_error encadena hacia el nodo 2, que comprueba /health del mismo servicio.\n\nEl puente funcionando de verdad, con un eco público: [[Puente a local]].\n\n▶ Ejecutar: botón «Run Flow» en la web · flow-run en CLI (saldrá exit 1 por el 401 esperado: esto es una demo del endpoint, no un test verde).\n\nEl nodo 1 está desactivado a propósito: actívalo y ejecútalo — verás el 401 con el que el endpoint real rechaza un token falso. Queda en rojo porque 401 no es 2xx… y eso es exactamente lo que debe pasar.",
+      "position": {
+        "x": 80,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": []
+    },
+    {
+      "id": "diagrama-puente-cloud",
+      "name": "El viaje de una petición puenteada",
+      "content": "graph LR\n  Cloud --> Poll[bridge/poll]\n  Poll --> Agente[flow-bridge en tu PC]\n  Agente --> API[localhost]",
+      "position": {
+        "x": 520,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "mermaid"
+    },
+    {
+      "id": "cap-doc-cloud-login",
+      "name": "📸 app.hilvana.cloud — el otro extremo del puente",
+      "content": "https://app.hilvana.cloud · capturada con el POST /capture del propio producto (Chromium del servidor), 2026-09-03.",
+      "position": {
+        "x": 980,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "image",
+      "imageSrc": "/flow-assets/captures/cloud-login.png"
+    }
+  ],
+  "sqlNodes": [],
+  "webNodes": [],
+  "connections": [
+    {
+      "id": "con-poll-salud",
+      "sourceId": "poll-sin-token",
+      "targetId": "salud-puente",
+      "behavior": "on_error"
+    }
+  ],
+  "envVariables": {
+    "accountsBase": "https://app.hilvana.cloud",
+    "tokenPuente": "demo"
+  },
+  "drawings": [
+    {
+      "id": "wb-titulo-puente-cloud",
+      "type": "text",
+      "x": 80,
+      "y": 18,
+      "w": 700,
+      "h": 48,
+      "text": "Puente cloud — flow-bridge por dentro",
+      "font": "excali",
+      "fontSize": 32,
+      "stroke": "#f59e0b",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7401
+    },
+    {
+      "id": "wb-marco-puente-cloud",
+      "type": "rect",
+      "x": 30,
+      "y": 807,
+      "w": 1100,
+      "h": 620,
+      "stroke": "#f59e0b",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "fill": "transparent",
+      "opacity": 0.85,
+      "sketchy": true,
+      "seed": 7402
+    },
+    {
+      "id": "wb-etiqueta-puente-cloud",
+      "type": "text",
+      "x": 50,
+      "y": 813,
+      "w": 360,
+      "h": 24,
+      "text": "el endpoint real: /api/bridge/poll",
+      "font": "hand",
+      "fontSize": 16,
+      "stroke": "#f59e0b",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 0.9,
+      "sketchy": true,
+      "seed": 7403
+    },
+    {
+      "id": "wb-flecha-401",
+      "type": "arrow",
+      "x": 280,
+      "y": 1527,
+      "w": 0,
+      "h": -120,
+      "stroke": "#f59e0b",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7404
+    },
+    {
+      "id": "wb-nota-401",
+      "type": "text",
+      "x": 320,
+      "y": 1493,
+      "w": 520,
+      "h": 30,
+      "text": "el 401 es lo correcto: token falso → rechazado (assert en verde)",
+      "font": "hand",
+      "fontSize": 18,
+      "stroke": "#f59e0b",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7405
+    },
+    {
+      "id": "chart-7125-135",
+      "type": "arrow",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7260,
+      "stroke": "#60a5fa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1510,
+      "y": 270,
+      "w": 380,
+      "h": 0
+    },
+    {
+      "id": "chart-7126-136",
+      "type": "arrow",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7262,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1890,
+      "y": 330,
+      "w": -380,
+      "h": 0
+    },
+    {
+      "id": "chart-7127-137",
+      "type": "arrow",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7264,
+      "stroke": "#fb923c",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1510,
+      "y": 390,
+      "w": 380,
+      "h": 0
+    },
+    {
+      "id": "chart-7131-138",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7269,
+      "stroke": "#60a5fa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1590,
+      "y": 235,
+      "w": 156.24,
+      "h": 24,
+      "text": "long-poll (espera)",
+      "font": "sketch",
+      "fontSize": 14
+    },
+    {
+      "id": "chart-7132-139",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7271,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1600,
+      "y": 295,
+      "w": 138.88,
+      "h": 24,
+      "text": "petición para ti",
+      "font": "sketch",
+      "fontSize": 14
+    },
+    {
+      "id": "chart-7133-140",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7273,
+      "stroke": "#fb923c",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1620,
+      "y": 398,
+      "w": 78.12,
+      "h": 24,
+      "text": "respuesta",
+      "font": "sketch",
+      "fontSize": 14
+    },
+    {
+      "id": "chart-7134-141",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7275,
+      "stroke": "#a78bfa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1510,
+      "y": 170,
+      "w": 200.26,
+      "h": 27,
+      "text": "el baile del puente",
+      "font": "marker",
+      "fontSize": 17
+    }
+  ]
+}

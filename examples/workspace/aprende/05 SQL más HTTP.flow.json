@@ -1,0 +1,288 @@
+{
+  "version": "1.0",
+  "name": "05 · SQL más HTTP",
+  "nodes": [
+    {
+      "id": "http-eco-dbok",
+      "name": "2 · HTTP — eco con dbOk",
+      "curl": "curl \"https://httpbingo.org/get?db={{dbOk}}\" \\\n\n-H \"User-Agent: hilvana\"",
+      "position": {
+        "x": 700,
+        "y": 759
+      },
+      "status": "idle",
+      "collapsed": false,
+      "extractions": [],
+      "asserts": [
+        {
+          "id": "as-eco-status",
+          "kind": "status",
+          "expected": "2xx"
+        },
+        {
+          "id": "as-eco-arg-db",
+          "kind": "jsonpath",
+          "path": "$.args.db",
+          "op": "exists"
+        },
+        {
+          "id": "as-eco-tiempo",
+          "kind": "time",
+          "maxMs": 8000
+        }
+      ]
+    }
+  ],
+  "infoNodes": [
+    {
+      "id": "nota-sql-mas-http",
+      "name": "Qué enseña este flow",
+      "content": "Este flow enseña el nodo SQL junto al HTTP. El nodo «1 · SQL» lanza una consulta a Postgres usando el perfil «demo-postgres» de sql-connections.json (hay uno de ejemplo en la raíz del workspace; los perfiles se buscan desde la carpeta del flow hacia arriba) y extrae la celda columna «ok» + fila 0 a la variable {{dbOk}}. En el mismo Run Flow los nodos SQL y HTTP comparten capas topológicas: aquí no hay conexión entre ellos (dos islas), así que ambos forman la primera capa y corren en paralelo.\n\nEl nodo SQL viene DESACTIVADO para que el flow corra en verde aunque no tengas base de datos: mientras tanto {{dbOk}} usa el valor por defecto de envVariables. Para activarlo: menú del icono de la caja → «Nodo activo», y rellena host/usuario/contraseña reales en el sql-connections.json de la raíz del workspace (trae placeholders). Si además conectas SQL → HTTP con una flecha «next», la extracción llegará al GET antes de ejecutarse.\n\nEjecútalo con ▶ Run Flow en la web, o en CLI: flow-run --flow \"05 SQL más HTTP.flow.json\"",
+      "position": {
+        "x": 80,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": []
+    },
+    {
+      "id": "cap-doc-postgres",
+      "name": "📸 postgresql.org — el motor del nodo SQL",
+      "content": "https://www.postgresql.org · capturada con el POST /capture del propio producto (Chromium del servidor), 2026-09-03.",
+      "position": {
+        "x": 540,
+        "y": 110
+      },
+      "collapsed": false,
+      "scripts": [],
+      "renderMode": "image",
+      "imageSrc": "/flow-assets/captures/postgres.png"
+    }
+  ],
+  "sqlNodes": [
+    {
+      "id": "sql-ping-postgres",
+      "name": "1 · SQL — ping a Postgres",
+      "position": {
+        "x": 80,
+        "y": 759
+      },
+      "collapsed": false,
+      "disabled": true,
+      "dbType": "postgres",
+      "connectionProfileId": "demo-postgres",
+      "host": "",
+      "port": "",
+      "database": "",
+      "username": "",
+      "password": "",
+      "query": "SELECT 1 AS ok, NOW() AS ahora",
+      "displayMode": "table",
+      "status": "idle",
+      "extractions": [
+        {
+          "id": "ext-dbok",
+          "varName": "dbOk",
+          "column": "ok",
+          "rowIndex": 0
+        }
+      ]
+    }
+  ],
+  "webNodes": [],
+  "connections": [],
+  "drawings": [
+    {
+      "id": "wb-titulo",
+      "type": "text",
+      "x": 80,
+      "y": 18,
+      "w": 700,
+      "h": 48,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 4205,
+      "text": "05 · SQL más HTTP",
+      "font": "excali",
+      "fontSize": 32
+    },
+    {
+      "id": "wb-marco-ejecucion",
+      "type": "rect",
+      "x": 30,
+      "y": 709,
+      "w": 1140,
+      "h": 620,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "fill": "transparent",
+      "opacity": 0.85,
+      "sketchy": true,
+      "seed": 4206
+    },
+    {
+      "id": "wb-texto-dbok",
+      "type": "text",
+      "x": 560,
+      "y": 390,
+      "w": 250,
+      "h": 26,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 4207,
+      "text": "aquí se extrae {{dbOk}}",
+      "font": "hand",
+      "fontSize": 18
+    },
+    {
+      "id": "wb-flecha-dbok",
+      "type": "arrow",
+      "x": 660,
+      "y": 425,
+      "w": -190,
+      "h": 165,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 4208
+    },
+    {
+      "id": "wb-nota-paralelo",
+      "type": "text",
+      "x": 90,
+      "y": 1364,
+      "w": 400,
+      "h": 24,
+      "stroke": "#a78bfa",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "opacity": 0.85,
+      "sketchy": true,
+      "seed": 4209,
+      "text": "dos islas = misma capa: corren en paralelo",
+      "font": "hand",
+      "fontSize": 16
+    },
+    {
+      "id": "chart-7105-37",
+      "type": "arrow",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7142,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1280,
+      "y": 480,
+      "w": 430,
+      "h": 0
+    },
+    {
+      "id": "chart-7106-38",
+      "type": "arrow",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7144,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1280,
+      "y": 480,
+      "w": 0,
+      "h": -290
+    },
+    {
+      "id": "chart-7107-39",
+      "type": "rect",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7146,
+      "stroke": "#60a5fa",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1298.0,
+      "y": 233.5,
+      "w": 127.1,
+      "h": 246.5,
+      "fill": "#60a5fa33"
+    },
+    {
+      "id": "chart-7145-40",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7185,
+      "stroke": "#60a5fa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1294.0,
+      "y": 488,
+      "w": 60,
+      "h": 23,
+      "text": "SQL",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7108-41",
+      "type": "rect",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7149,
+      "stroke": "#34d399",
+      "strokeWidth": 2.5,
+      "strokeStyle": "solid",
+      "x": 1503.0,
+      "y": 332.1,
+      "w": 127.1,
+      "h": 147.9,
+      "fill": "#34d39933"
+    },
+    {
+      "id": "chart-7146-42",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7188,
+      "stroke": "#34d399",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1499.0,
+      "y": 488,
+      "w": 60,
+      "h": 23,
+      "text": "HTTP",
+      "font": "sketch",
+      "fontSize": 13
+    },
+    {
+      "id": "chart-7165-43",
+      "type": "text",
+      "opacity": 1,
+      "sketchy": true,
+      "seed": 7208,
+      "stroke": "#60a5fa",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "x": 1280,
+      "y": 160,
+      "w": 210.8,
+      "h": 27,
+      "text": "dos mundos, un grafo",
+      "font": "marker",
+      "fontSize": 17
+    }
+  ],
+  "envVariables": {
+    "dbOk": "sin-bbdd"
+  }
+}
