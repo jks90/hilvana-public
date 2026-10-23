@@ -3,7 +3,7 @@
 Manual completo de **Hilvana**: la herramienta visual para componer, ejecutar y **documentar** flujos de peticiones HTTP, SQL y navegación web. Todas las capturas son de la aplicación real.
 
 > [!NOTE]
-> Manual de **Hilvana v6.1.0** (imagen `juankanh/hilvana:6.1.0`). La 6.1.0 instala AgentOffice con un clic como contenedor Docker ([15 AgentOffice](15-agentoffice.md)). La 6.0.0 es de mantenimiento (marca Hilvana y preparativos internos; sin cambios de comportamiento en la app). La 5.39.0 amplió el manual pantalla a pantalla. La 5.38.3 añadió a AgentOffice el recuerdo de cada agente, la sesión viva entre tareas y «que siga con…» ([15 AgentOffice](15-agentoffice.md)). Manual en PDF: [hilvana-manual.pdf](hilvana-manual.pdf) y [agentoffice-manual.pdf](agentoffice-manual.pdf).
+> Manual de **Hilvana v6.2.0** (imagen `juankanh/hilvana:6.2.0`). La 6.2.0 instala AgentOffice en tu PC (nativo, por defecto) o en un servidor con Docker ([15 AgentOffice](15-agentoffice.md)). La 6.1.0 instala AgentOffice con un clic como contenedor Docker ([15 AgentOffice](15-agentoffice.md)). La 6.0.0 es de mantenimiento (marca Hilvana y preparativos internos; sin cambios de comportamiento en la app). La 5.39.0 amplió el manual pantalla a pantalla. La 5.38.3 añadió a AgentOffice el recuerdo de cada agente, la sesión viva entre tareas y «que siga con…» ([15 AgentOffice](15-agentoffice.md)). Manual en PDF: [hilvana-manual.pdf](hilvana-manual.pdf) y [agentoffice-manual.pdf](agentoffice-manual.pdf).
 
 ## Índice
 
@@ -36,7 +36,7 @@ npm run dev        # web en http://localhost:5173 + server en :3001
 
 ```bash
 docker run -d --add-host=host.docker.internal:host-gateway \
-  -p 9998:3001 --name hilvana juankanh/hilvana:6.1.0
+  -p 9998:3001 --name hilvana juankanh/hilvana:6.2.0
 # web en http://localhost:9998
 ```
 

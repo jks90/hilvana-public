@@ -11,16 +11,58 @@ una en su rama—, un revisor las revisa y, si pasan, se fusionan. Lo ves en dir
 ## Cómo encaja
 
 ```
-   tu navegador ──► Hilvana (Docker, :9998) ──/agents/──► AgentOffice (contenedor hilvana-agentoffice, :7420)
-                          │                                     │
-                          └── mismas carpetas montadas ─────────┤
-                                                                └─► claude / codex trabajan en tus repos
+   tu navegador ──► Hilvana (Docker, :9998) ──/agents/──► AgentOffice (:7420)
+                                                              │
+                                                              └─► claude / codex trabajan en tus repos
 ```
 
-AgentOffice se distribuye como **imagen Docker** (`juankanh/agentoffice`, código compilado y firmado,
-con git y las CLIs de Claude Code y Codex dentro). Hilvana lo instala, lo conecta y lo actualiza.
+AgentOffice se distribuye **compilado y firmado** (sin código fuente) y se descarga **desde tu Hilvana**,
+que lo empareja con él. Hay dos formas de instalarlo; Hilvana te ofrece las dos en
+**Config ▸ Plugins ▸ Agentes · AgentOffice ▸ Instalar**:
 
-## 1. Dar a Hilvana acceso a Docker (una vez)
+| | 💻 **En este PC** (recomendada) | 🖥 **En un servidor** (Docker) |
+|---|---|---|
+| Para quién | Trabajas en tu ordenador | Servidor sin escritorio (o Windows/macOS, por ahora) |
+| Escritorio: burbuja de chat, modo Blender, control de teclado/ratón | ✓ | ✗ |
+| Tus herramientas (git-lfs, compiladores, USB…) y tu sesión de `claude`/`codex` | ✓ las del PC | solo lo que trae la imagen; login dentro del contenedor |
+| Cómo se instala | una orden en la terminal | un clic (Hilvana con el socket de Docker) |
+| Se actualiza | solo, desde Hilvana | ⬆ Actualizar recrea el contenedor |
+
+La instalación de Hilvana debe estar **vinculada** a tu cuenta (Config ▸ Licencia): sin ello no se puede
+descargar AgentOffice ni verificarlo.
+
+## 1. En este PC (recomendada · Linux x64/arm64)
+
+En **Plugins ▸ Instalar ▸ 💻 En este PC** Hilvana te da una orden ya emparejada. Pégala en una terminal
+de tu PC (en tu sesión, sin `sudo`):
+
+```bash
+curl -fsSL http://localhost:9998/plugins/agent-office/native/install.sh | sh
+```
+
+El script:
+
+1. baja el **Node oficial** de nodejs.org (LTS 22) y comprueba su sha256,
+2. baja el **paquete firmado** de AgentOffice a través de tu Hilvana (su firma se comprueba al arrancar),
+3. lo deja en `~/.hilvana/agentoffice/` — `node/`, `app/` (el paquete) y `data/` (tus datos, fuera del
+   paquete para que las actualizaciones no los muevan),
+4. guarda el par con Hilvana en `agentoffice.env` (0600) y lo registra como **servicio de tu usuario**
+   (`hilvana-agentoffice`), que arranca con tu sesión.
+
+No necesitas Node instalado. Sí necesitas **Claude Code** (`claude`) y/o **Codex** con tu sesión iniciada:
+AgentOffice usa la de tu PC. Si Hilvana corre en Docker, su contenedor necesita
+`--add-host=host.docker.internal:host-gateway` (el panel avisa si falta).
+
+```bash
+systemctl --user status hilvana-agentoffice        # estado
+journalctl --user -u hilvana-agentoffice -f        # registro
+systemctl --user disable --now hilvana-agentoffice && rm -rf ~/.hilvana/agentoffice   # desinstalar
+```
+
+Volver a ejecutar la orden **reinstala sin perder datos**. Si el puerto 7420 está ocupado (otro
+AgentOffice), el script se para sin tocar nada.
+
+## 2. En un servidor (Docker)
 
 Para instalar con un clic, Hilvana necesita el socket de Docker. Si tu contenedor no lo monta,
 recréalo añadiendo `-v /var/run/docker.sock:/var/run/docker.sock`:
@@ -31,30 +73,25 @@ docker run -d --name hilvana --restart unless-stopped \
   -v /ruta/a/tu/workspace:/app/flows \
   -v $HOME/dev:$HOME/dev \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  juankanh/hilvana:6.1.0
+  juankanh/hilvana:6.2.0
 ```
 
-- `-v $HOME/dev:$HOME/dev`: AgentOffice recibe **las mismas carpetas que Hilvana** (salvo el socket);
-  si tu workspace usa **enlaces** a los repos (ver paso 5), móntalos en la misma ruta.
+- `-v $HOME/dev:$HOME/dev`: AgentOffice recibe **las mismas carpetas que Hilvana** (salvo el socket),
+  también los volúmenes con nombre; si tu workspace usa **enlaces** a los repos (ver paso 5), móntalos en
+  la misma ruta.
 - Ya no hacen falta `FLOW_AGENTS_URL` ni `FLOW_AGENTS_TOKEN`: los pone Hilvana.
 
-## 2. Instalar con un clic
+**Plugins ▸ Instalar ▸ 🖥 En un servidor ▸ Instalar con un clic.** Hilvana descarga `juankanh/agentoffice`
+(la última versión), crea la red `hilvana-agentoffice`, arranca el contenedor `hilvana-agentoffice` con su
+propio token, el volumen `hilvana-agentoffice-data` (datos y sesiones de las CLIs) y tus carpetas, y le dice
+dónde está el workspace. La imagen trae git (con git-lfs) y las CLIs de Claude Code y Codex.
 
-**Config ▸ Plugins ▸ Agentes · AgentOffice ▸ Instalar ▸ Instalar con un clic.** Hilvana:
+**Sin acceso a Docker** el panel muestra el `docker run` equivalente, con el token ya preparado; después
+pulsa **Comprobar**.
 
-1. descarga `juankanh/agentoffice` (la última versión),
-2. crea la red `hilvana-agentoffice` y se conecta a ella,
-3. arranca el contenedor `hilvana-agentoffice` con su propio token, el volumen
-   `hilvana-agentoffice-data` (datos y sesiones de las CLIs) y tus carpetas,
-4. espera a que responda y activa el plugin.
+## 3. Iniciar sesión en los agentes (solo en Docker, una vez)
 
-La instalación debe estar **vinculada** a tu cuenta Hilvana (Config ▸ Licencia): sin ello AgentOffice
-arranca pero se queda bloqueado.
-
-**Sin acceso a Docker** el panel muestra el `docker run` equivalente, con el token ya preparado,
-para que lo ejecutes tú; después pulsa **Comprobar**.
-
-## 3. Iniciar sesión en los agentes (una vez)
+Desde el panel de AgentOffice (Ajustes ▸ motores) o en una terminal:
 
 ```bash
 docker exec -it hilvana-agentoffice claude auth login
@@ -69,12 +106,10 @@ puedes poner una clave de API (Anthropic, OpenAI o IA local) en los Ajustes de A
 
 ## 4. Actualizar
 
-En **Config ▸ Plugins** aparece **⬆ Versión nueva X** cuando hay otra imagen publicada:
-**Actualizar** recrea el contenedor con ella (los datos y sesiones se quedan en el volumen).
-
-> Dentro del contenedor no hay escritorio: la burbuja de chat, el modo Blender y el control del
-> teclado/ratón necesitan la instalación en la máquina (`npm start` del paquete), que sigue
-> funcionando como antes.
+En **Config ▸ Plugins** aparece **⬆ Versión nueva X** cuando hay otra publicada. En tu PC, **Actualizar**
+baja el paquete firmado nuevo, lo prueba en un puerto aparte y cambia de versión (si la nueva no arranca,
+vuelve a la anterior; tus datos no se mueven). En Docker, recrea el contenedor con la imagen nueva (los
+datos y sesiones se quedan en el volumen).
 
 ## 5. Proyectos: salen de las carpetas del workspace
 
@@ -93,55 +128,10 @@ ln -s ~/docs/tienda          ~/workspace/tienda/docs    # documentación (no es 
 En el panel **Proyecto** de Hilvana cada enlace muestra a dónde apunta (`→ ~/dev/tienda-api/flows`).
 Las carpetas que empiezan por `.` o `_`, `assets/` y `privado/` no son proyectos.
 
-## 6. Alternativa: instalarlo en la máquina (sin contenedor)
-
-Solo si necesitas la burbuja, el modo Blender o el control del escritorio. Descarga el paquete firmado
-(con la cuenta vinculada), extráelo en `~/agent-office`, arráncalo con `AO_HOST=0.0.0.0 npm start` y pon en
-Hilvana `FLOW_AGENTS_URL=http://host.docker.internal:7420`, `--add-host=host.docker.internal:host-gateway`
-y `FLOW_AGENTS_TOKEN` (el de `~/agent-office/data/.token`). Requisitos: Node 20+, git y `claude`/`codex`.
-
-Como servicio de tu usuario, para que arranque con la máquina y se relance tras actualizarse:
-
-```bash
-mkdir -p ~/.config/systemd/user
-cat > ~/.config/systemd/user/agent-office.service <<'UNIT'
-[Unit]
-Description=AgentOffice
-After=network.target
-
-[Service]
-WorkingDirectory=%h/agent-office
-Environment=AO_HOST=0.0.0.0
-Environment=AO_PORT=7420
-# la carpeta bin de tu Node (con nvm: ~/.nvm/versions/node/v22.x.y/bin) debe ir la primera
-Environment=PATH=%h/.nvm/versions/node/v22.23.3/bin:/usr/local/bin:/usr/bin:/bin
-ExecStart=%h/.nvm/versions/node/v22.23.3/bin/node server/index.js
-Restart=on-failure
-RestartSec=3
-
-[Install]
-WantedBy=default.target
-UNIT
-systemctl --user daemon-reload && systemctl --user enable --now agent-office
-sudo loginctl enable-linger $USER    # que siga corriendo sin una sesión abierta
-```
-
-## 7. Se actualiza solo (instalación en la máquina)
-
-Cada 15 min AgentOffice mira su repo de GitHub; si hay versión nueva, **no hay ningún agente trabajando**
-y tu copia no tiene cambios propios, hace `git pull`, te avisa (si tienes Telegram) y se reinicia —con el
-servicio de systemd o con `npm start`, que usa un lanzador que lo relanza—. Estado:
-`curl localhost:7420/api/version`. Para apagarlo: `AO_AUTOUPDATE=off`.
-
-Desde **Hilvana 5.25**, en **Config ▸ Plugins** ves si va por detrás y lo actualizas con **⬆ Actualizar**,
-sin esperar a los 15 min. Si AgentOffice no está instalado, ese mismo panel te da la guía con los
-comandos. Si lo arrancaste con `node server/index.js` a secas, nadie lo relanzaría: se actualiza en disco
-y te avisa de que falta reiniciarlo, en vez de apagarse.
-
-## 8. Avisos al móvil (opcional)
+## 6. Avisos al móvil (opcional)
 
 Para enterarte de lo que te necesita (tarea esperando revisión, una pregunta de un agente, sin cuota,
-un atasco, un fallo) por **Telegram**, crea `~/agent-office/data/telegram.json`:
+un atasco, un fallo) por **Telegram**, crea `telegram.json` en la carpeta de datos de AgentOffice (en tu PC, `~/.hilvana/agentoffice/data/`; en Docker, `/data/` del contenedor):
 
 ```json
 { "enabled": true, "botToken": "123456:ABC…", "chatIds": ["tu_chat_id"] }
@@ -149,7 +139,7 @@ un atasco, un fallo) por **Telegram**, crea `~/agent-office/data/telegram.json`:
 
 Prueba: `curl -X POST localhost:7420/api/telegram/test`.
 
-## 9. Revisión de las tareas
+## 7. Revisión de las tareas
 
 Por proyecto (Ajustes ▸ Proyecto) o para todos:
 
@@ -163,21 +153,21 @@ Antes de revisar, la rama se pone al día con la principal; los choques en fiche
 (`CHANGELOG.md`…) se combinan solos. Lo que toque ficheros sensibles (Dockerfile, `package.json`,
 workflows) siempre te espera a ti.
 
-## 10. Qué pueden tocar los agentes
+## 8. Qué pueden tocar los agentes
 
 Los agentes trabajan en una **copia aislada de cada repo** (git worktree, una rama por tarea) y no
 hacen `push`. Aun así, ejecutan comandos con **tu usuario**: pueden leer otros ficheros de la máquina
 y, el QA, los flows de todo el workspace por el MCP de Hilvana. Úsalo en una máquina y un usuario en
 los que confíes, y revisa lo que se fusiona.
 
-## 11. Marketplace: compartir roles, skills y agentes
+## 9. Marketplace: compartir roles, skills y agentes
 
 La pestaña **🛒 Marketplace** de AgentOffice sirve para compartir lo que has montado (roles, skills y
 agentes) con tu organización de Hilvana o con todo el mundo, y para instalar lo que han publicado
 otros.
 
 **Requisitos:** que Hilvana esté **vinculado a tu cuenta cloud** (Config ▸ Licencia) y que
-AgentOffice esté conectado con su token (`FLOW_AGENTS_TOKEN`, paso 4). AgentOffice nunca habla con la
+AgentOffice esté instalado desde Hilvana (pasos 1 o 2: el token del par lo pone Hilvana). AgentOffice nunca habla con la
 nube directamente: pasa por Hilvana (`/account-link/marketplace/*`), y el token de vinculación no
 sale de Hilvana.
 
@@ -235,17 +225,17 @@ resumen, y enseña **qué ficheros se van a subir** antes de enviar nada.
 
 | Ves | Causa y solución |
 |-----|------------------|
-| «No hay un AgentOffice en http://host.docker.internal:7420 (fetch failed)» | AgentOffice no está arrancado, escucha solo en `localhost` (falta `AO_HOST=0.0.0.0`), o falta `--add-host=host.docker.internal:host-gateway` en el contenedor |
-| «AgentOffice pide token» | falta o no coincide `FLOW_AGENTS_TOKEN` con `~/agent-office/data/.token` |
+| «No hay un AgentOffice en http://host.docker.internal:7420 (fetch failed)» | AgentOffice no está arrancado (`systemctl --user status hilvana-agentoffice`) o falta `--add-host=host.docker.internal:host-gateway` en el contenedor de Hilvana |
+| «AgentOffice pide token» | el par con Hilvana no coincide: vuelve a ejecutar la orden de instalación (en tu PC) o **Reinstalar** (Docker); conserva los datos |
 | La oficina abre pero no sale ningún proyecto | el workspace no tiene carpetas de primer nivel, o el contenedor no monta las rutas de los enlaces |
+| `curl … install.sh | sh` dice «El puerto 7420 ya está en uso» | hay otro AgentOffice (el contenedor o una instalación antigua): páralo (`docker stop hilvana-agentoffice`) y repite la orden |
 | Una tarea vuelve una y otra vez «Tu rama choca con…» | el agente no consigue resolver el choque: a los 3 intentos se queda esperando que lo mires tú |
 | Página en blanco al abrir Hilvana por `http://<IP>` | actualiza Hilvana a 5.21.3 o posterior |
 | Los agentes no hacen nada y la oficina dice «sin cuota» | se acabó la ventana de tu suscripción de Claude/Codex: reanudan solos al reiniciarse |
-| El Marketplace dice «Esta instalación no está vinculada…» y Hilvana sí lo está | AgentOffice no manda su token a Hilvana (versiones anteriores a la del 9-oct-2026): actualiza AgentOffice y comprueba que `FLOW_AGENTS_TOKEN` coincide con `~/agent-office/data/.token` |
-| «Hilvana rechaza a AgentOffice…» en el Marketplace | el `FLOW_AGENTS_TOKEN` del contenedor de Hilvana no es el de `~/agent-office/data/.token` |
+| El Marketplace dice «Esta instalación no está vinculada…» y Hilvana sí lo está | AgentOffice no manda su token a Hilvana (versiones anteriores a la del 9-oct-2026): actualiza AgentOffice y reinstálalo desde Hilvana para rehacer el par |
+| «Hilvana rechaza a AgentOffice…» en el Marketplace | el par con Hilvana no coincide: reinstálalo desde Hilvana (conserva los datos) |
 | El Guía se queda en «trabajando…» o un botón (Sí de una 🛡) no responde | versiones anteriores a Hilvana 5.26: el navegador tenía agotadas sus 6 conexiones con Hilvana por tener varias ventanas abiertas. Actualiza a 5.26 (las conexiones en vivo van por WebSocket); mientras, cierra otras ventanas de Hilvana y pulsa ■ Parar. El Guía avisa a los 10 s si un mensaje no sale |
 | El navegador del agente abre una ventana aparte | AgentOffice anterior a oct-2026: ahora va oculto y se ve en 🌐 Navegador (`AO_BROWSER_HEADLESS=0` para la ventana) |
 | Un rol publicado en Público no aparece | está **⏳ pendiente de moderación**: hasta que se aprueba solo lo ve tu organización |
 
-Más detalle técnico en el README de AgentOffice (repositorio privado: solo con acceso anticipado, ver el
-aviso del paso 2).
+AgentOffice es un producto privado: solo se distribuye compilado y firmado a través de Hilvana.
