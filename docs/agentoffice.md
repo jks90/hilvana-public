@@ -73,7 +73,7 @@ docker run -d --name hilvana --restart unless-stopped \
   -v /ruta/a/tu/workspace:/app/flows \
   -v $HOME/dev:$HOME/dev \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  juankanh/hilvana:6.2.0
+  juankanh/hilvana:6.2.1
 ```
 
 - `-v $HOME/dev:$HOME/dev`: AgentOffice recibe **las mismas carpetas que Hilvana** (salvo el socket),
@@ -85,6 +85,11 @@ docker run -d --name hilvana --restart unless-stopped \
 (la última versión), crea la red `hilvana-agentoffice`, arranca el contenedor `hilvana-agentoffice` con su
 propio token, el volumen `hilvana-agentoffice-data` (datos y sesiones de las CLIs) y tus carpetas, y le dice
 dónde está el workspace. La imagen trae git (con git-lfs) y las CLIs de Claude Code y Codex.
+
+**Antes, vincula la instalación a tu cuenta** (Config ▸ Licencia): sin la vinculación AgentOffice no se
+verifica y arranca bloqueado. Si no lo está, el botón es **Vincular cuenta e instalar**: abre Licencia y, al
+cerrarla ya vinculado, vuelve a Plugins e instala solo. Si ya lo instalaste sin vincular, basta con vincular:
+AgentOffice se desbloquea solo en menos de un minuto.
 
 **Sin acceso a Docker** el panel muestra el `docker run` equivalente, con el token ya preparado; después
 pulsa **Comprobar**.

@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.2.0
+  juankanh/hilvana:6.2.1
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -63,7 +63,8 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 
 | Versión | Qué trae |
 |---------|----------|
-| **6.2.0** (recomendada) | 💻 **AgentOffice nativo en tu PC** (por defecto): Config ▸ Plugins ▸ Instalar ▸ En este PC da una orden de terminal que lo instala emparejado con Hilvana —Node oficial, paquete firmado sin fuentes, servicio de usuario— con escritorio (burbuja, modo Blender), tus herramientas y tu sesión de claude/codex; Linux por ahora. **En un servidor**, el contenedor de un clic (ahora con git-lfs y viendo el workspace de Hilvana) ([AgentOffice](docs/agentoffice.md)) |
+| **6.2.1** (recomendada) | 🔗 **AgentOffice en un servidor, sin quedarse bloqueado**: si la instalación no está vinculada a tu cuenta Hilvana, el botón de Docker pasa a **Vincular cuenta e instalar** y, al volver de Config ▸ Licencia ya vinculado, instala solo. Antes creaba un AgentOffice que no arrancaba («Vincula Hilvana a tu cuenta») |
+| **6.2.0** | 💻 **AgentOffice nativo en tu PC** (por defecto): Config ▸ Plugins ▸ Instalar ▸ En este PC da una orden de terminal que lo instala emparejado con Hilvana —Node oficial, paquete firmado sin fuentes, servicio de usuario— con escritorio (burbuja, modo Blender), tus herramientas y tu sesión de claude/codex; Linux por ahora. **En un servidor**, el contenedor de un clic (ahora con git-lfs y viendo el workspace de Hilvana) ([AgentOffice](docs/agentoffice.md)) |
 | **6.1.0** | 🐳 **AgentOffice con un clic**: Config ▸ Plugins ▸ Instalar descarga la imagen `juankanh/agentoffice`, crea su contenedor y lo conecta solo (sin descargar paquetes ni recrear Hilvana; necesita montar el socket de Docker). Si al Guía de AgentOffice le falta `claude`, usa otro proveedor configurado o avisa claro ([AgentOffice](docs/agentoffice.md)) |
 | **6.0.0** | 🧵 Versión de mantenimiento: marca Hilvana en el código y la documentación y base para «Iniciar sesión con Google» (aún inactiva). Sin cambios de comportamiento en la app |
 | **5.39.0** | 📖 Versión de mantenimiento del manual: prepara la ampliación del [manual](docs/manual/README.md) pantalla a pantalla y su revisión de calidad. Sin cambios de comportamiento en la app |
@@ -109,7 +110,7 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 Las versiones anteriores (5.12 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.2.0
+docker pull juankanh/hilvana:6.2.1
 ```
 
 ## Documentación
