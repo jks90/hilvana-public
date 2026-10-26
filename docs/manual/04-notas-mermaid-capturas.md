@@ -1,6 +1,6 @@
 # 📝 04 · Notas, Mermaid y Capturas
 
-> Revisado para Hilvana **5.38.1** · capturas: [99](assets/hilvana-99-menu-anadir-nodo.png).
+> Revisado para Hilvana **6.2.1** · capturas: [99](assets/hilvana-99-menu-anadir-nodo.png).
 
 Tres variantes del mismo nodo (la nota) para **documentar dentro del canvas**:
 

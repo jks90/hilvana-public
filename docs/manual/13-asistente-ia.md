@@ -1,6 +1,6 @@
 # 13 · El asistente de IA 🆕 (5.13)
 
-> Revisado para Hilvana **5.38.1** · capturas: [104](assets/hilvana-104-rail-asistente-de-ia.png).
+> Revisado para Hilvana **6.2.1** · capturas: [104](assets/hilvana-104-rail-asistente-de-ia.png).
 
 Un chat dentro de la app que **construye, explica, prueba y arregla flows en tu canvas en directo**, con tu propia clave de **Claude** (Anthropic) u **OpenAI**. No es un chat al lado del producto: cada cosa que la IA decide hacer pasa por las mismas herramientas que usa el MCP embebido, así que ves los nodos aparecer, las conexiones dibujarse y las respuestas llegar mientras habla. Tú puedes pararla, corregirla o deshacer su turno.
 

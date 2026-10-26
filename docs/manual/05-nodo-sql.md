@@ -1,6 +1,6 @@
 # 🗄 05 · El nodo SQL
 
-> Revisado para Hilvana **5.38.1** · capturas: [114](assets/hilvana-114-config-sql-conns.png).
+> Revisado para Hilvana **6.2.1** · capturas: [114](assets/hilvana-114-config-sql-conns.png).
 
 Consultas a base de datos **dentro del flujo**, en el mismo orden topológico que las cajitas HTTP: siembra datos antes de llamar a la API, o verifica después lo que la API escribió.
 
