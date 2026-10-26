@@ -1,6 +1,6 @@
 # 🟢 02 · El nodo Request (la cajita curl)
 
-> Revisado para Hilvana **5.38.1** · capturas: [97](assets/hilvana-97-barra-superior-y-canvas.png) · [112](assets/hilvana-112-config-variables.png) · [113](assets/hilvana-113-config-global.png).
+> Revisado para Hilvana **6.2.1** · capturas: [97](assets/hilvana-97-barra-superior-y-canvas.png) · [112](assets/hilvana-112-config-variables.png) · [113](assets/hilvana-113-config-global.png).
 
 La pieza central: cada cajita verde es **una petición HTTP definida como curl**. Puedes pegar cualquier curl copiado de la pestaña Network del navegador, de Postman o de una doc de API, y funciona.
 

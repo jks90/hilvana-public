@@ -1,6 +1,6 @@
 # 🌐 06 · El nodo Web y el modo Live
 
-> Revisado para Hilvana **5.38.1** · capturas: [99](assets/hilvana-99-menu-anadir-nodo.png).
+> Revisado para Hilvana **6.2.1** · capturas: [99](assets/hilvana-99-menu-anadir-nodo.png).
 
 El nodo azul muestra una web en el canvas. Tiene dos modos: **Preview** (un iframe de toda la vida) y el **modo Live** 🆕, que es la joya: navegas una web *de verdad* dentro de la cajita y documentas cada paso con un click.
 

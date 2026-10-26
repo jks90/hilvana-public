@@ -1,6 +1,6 @@
 # 🧰 08 · Paneles y utilidades
 
-> Revisado para Hilvana **5.38.1** · capturas: [101](assets/hilvana-101-rail-proyecto-flows.png) · [105](assets/hilvana-105-config-menu-lateral.png) · [109](assets/hilvana-109-config-plugins.png) · [117](assets/hilvana-117-config-actualizaciones.png).
+> Revisado para Hilvana **6.2.1** · capturas: [101](assets/hilvana-101-rail-proyecto-flows.png) · [105](assets/hilvana-105-config-menu-lateral.png) · [109](assets/hilvana-109-config-plugins.png) · [446](assets/hilvana-446-plugins-agentoffice-no-instalado.png) · [447](assets/hilvana-447-plugins-instalar-en-este-pc.png) · [448](assets/hilvana-448-plugins-instalar-docker-orden.png) · [449](assets/hilvana-449-plugins-instalar-docker-vincular.png) · [450](assets/hilvana-450-plugins-instalar-docker-un-clic.png) · [451](assets/hilvana-451-plugins-agentoffice-en-marcha.png) · [117](assets/hilvana-117-config-actualizaciones.png).
 
 > [!TIP]
 > **¿Dónde está cada cosa?** **Proyecto**, **Pizarra** y **Guía de nodos** viven en la **barra lateral de iconos**; Batch Run, Historial, Consola, **Vista**, GitHub, Variables, Global y SQL Conns se abren desde **Config** (los paneles laterales aparecen en la barra mientras están abiertos; un panel a la vez); y las utilidades de organización desde el desplegable **Layout**. Ver [01 La pantalla principal](01-pantalla-principal.md).
@@ -542,3 +542,31 @@ por pantalla.
 Aquí solo queda lo que pertenece al panel de plugins de Hilvana: **Config ▸ Plugins** lista los
 plugins instalados y permite activar o desactivar AgentOffice (con el plugin desactivado, `/agents`
 responde 403).
+
+### Instalar AgentOffice desde Plugins (6.1.0 – 6.2.1)
+
+La tarjeta **Agentes · AgentOffice** (etiquetas PRO y «proceso local») lleva un interruptor **Activado / Desactivado** a la derecha. Según el estado muestra una cosa u otra:
+
+![Tarjeta de AgentOffice sin instalar](assets/hilvana-446-plugins-agentoffice-no-instalado.png)
+
+Cuando AgentOffice está activado pero no instalado, su tarjeta dice **○ No está instalado en este PC (o no está arrancado)** y enseña la dirección donde lo busca (por defecto `http://127.0.0.1:7420`) y el botón verde **Instalar** (pasa a «Ocultar guía»). Si ya corre, la tarjeta muestra **● En marcha** con proyectos, agentes y cuántos trabajan, y el botón **Abrir**. La guía tiene dos pestañas y un botón **Comprobar** que vuelve a mirar si ya responde.
+
+![Instalar en este PC](assets/hilvana-447-plugins-instalar-en-este-pc.png)
+
+- **💻 En este PC (recomendado)** — es la pestaña por defecto en Linux. Enseña una orden `curl … | sh` con botón de copiar: pégala en una terminal de este PC. Instala el paquete firmado que da tu cuenta, lo deja en `~/.hilvana/agentoffice` como servicio de usuario `hilvana-agentoffice`, lo empareja con este Hilvana y se actualiza solo desde aquí. Al ser nativo ve tu escritorio (burbuja de los agentes, modo Blender), tus herramientas y tu sesión de Claude Code o Codex. Mientras espera aparece «⏳ Esperando a que arranque en …» y, al responder, «✓ Conectado». En Windows y macOS la pestaña avisa de que el instalador nativo es solo para Linux: usa Docker.
+- **🖥 En un servidor (Docker)** — para una máquina sin escritorio. Si este Hilvana tiene acceso a Docker, el botón **Instalar con un clic** descarga la imagen `juankanh/agentoffice`, crea el contenedor `hilvana-agentoffice` y se conecta solo; muestra el progreso («⏳ …», «✓ Instalado …» o «✗» con el motivo) y, si ya existe, el botón pasa a **Reinstalar**. Si Hilvana no ve Docker, explica que hay que recrear su contenedor con `-v /var/run/docker.sock:/var/run/docker.sock` y da el `docker run` completo para copiar, con el token ya preparado. Después hay que iniciar sesión en las CLIs dentro del contenedor, una sola vez: `docker exec -it hilvana-agentoffice claude auth login` (o `codex login`); también vale una clave de API en Ajustes ▸ Guía de AgentOffice. En Docker no hay escritorio: sin burbuja, modo Blender ni xdotool. En el cloud AgentOffice lo gestiona Hilvana y no hay instalación.
+
+![Docker: orden para copiar](assets/hilvana-448-plugins-instalar-docker-orden.png)
+
+![Docker con un clic](assets/hilvana-450-plugins-instalar-docker-un-clic.png)
+
+**Vincular la cuenta primero.**
+
+![Bloqueado sin vincular: Vincular cuenta e instalar](assets/hilvana-449-plugins-instalar-docker-vincular.png)
+ AgentOffice solo se descarga y se verifica con este Hilvana vinculado a tu cuenta. Si no lo está, la guía abre con un aviso ámbar («AgentOffice está bloqueado: falta vincular esta instalación a tu cuenta Hilvana») y botón **Vincular cuenta**; en la pestaña Docker el botón de instalar se convierte en **Vincular cuenta e instalar**. Te lleva a Config ▸ Licencia; al iniciar sesión y volver a Plugins, la instalación en Docker sigue sola, sin otro clic. Si AgentOffice ya está instalado y arrancado pero sin vincular, la tarjeta muestra el mismo aviso.
+
+**Ya instalado y en marcha.** La tarjeta pasa a «● En marcha · N proyectos · N agentes · N trabajando» con el botón **Abrir** (carga AgentOffice dentro de Hilvana) y, debajo, la línea de versión con **Buscar actualización**. Cuando hay una versión nueva aparece «⬆ Versión nueva …» y el botón pasa a **Actualizar** (la etiqueta «⬆ actualización» también se ve junto al nombre); si falta reiniciar tras actualizar, la tarjeta lo avisa.
+
+![AgentOffice en marcha](assets/hilvana-451-plugins-agentoffice-en-marcha.png)
+
+Errores típicos: «Comprobando…» largo (Hilvana no alcanza el puerto 7420), el motivo en rojo cuando el servicio no responde (comprueba que `hilvana-agentoffice` esté en marcha) y el aviso de Docker cuando falta el socket.

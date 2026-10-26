@@ -1,6 +1,6 @@
 # 14 · Reportar un problema 🆕 (5.14)
 
-> Revisado para Hilvana **5.38.1** · capturas: [118](assets/hilvana-118-config-reportar-un-problema.png).
+> Revisado para Hilvana **6.2.1** · capturas: [118](assets/hilvana-118-config-reportar-un-problema.png).
 
 Desde la app puedes mandar al equipo de Hilvana un **error, una idea o una pregunta**, con captura y datos técnicos, sin salir a ningún formulario externo. Es una función de los planes **Pro y Business**: en la prueba gratuita la entrada se ve con el chip `PRO` y explica cómo pasar a Pro.
 
