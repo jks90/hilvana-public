@@ -6,6 +6,12 @@ AgentOffice es la **oficina de agentes de IA** (Claude Code y Codex) de la suite
 
 **Instalar desde Config ▸ Plugins.** Activa el plugin AgentOffice y pulsa **Instalar** en su tarjeta: la guía ofrece **💻 En este PC (recomendado)** —copias una orden `curl … | sh` y la pegas en una terminal de este PC (Linux)— o **🖥 En un servidor (Docker)** —botón **Instalar con un clic**, o el `docker run` para copiar si Hilvana no ve Docker—. Si este Hilvana aún no está vinculado a tu cuenta, el botón es **Vincular cuenta e instalar**: te lleva a Config ▸ Licencia y, al volver ya vinculado, la instalación en Docker continúa sola. Una vez «● En marcha», **Abrir** carga esta pantalla; AgentOffice se actualiza solo y la tarjeta avisa con «⬆ actualización». El detalle campo a campo está en el [capítulo 8 · Paneles](08-paneles.md).
 
+![Instalar AgentOffice en este PC](assets/hilvana-447-plugins-instalar-en-este-pc.png)
+
+![Vincular cuenta e instalar](assets/hilvana-449-plugins-instalar-docker-vincular.png)
+
+![AgentOffice en marcha en Plugins](assets/hilvana-451-plugins-agentoffice-en-marcha.png)
+
 
 ## Mapa de la pantalla
 
