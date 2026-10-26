@@ -1,6 +1,6 @@
 # 🐳 11 · Docker y despliegue
 
-> Revisado para Hilvana **5.38.1** · capturas: [117](assets/hilvana-117-config-actualizaciones.png).
+> Revisado para Hilvana **6.2.1** · capturas: [117](assets/hilvana-117-config-actualizaciones.png).
 
 ## Ejecutar
 

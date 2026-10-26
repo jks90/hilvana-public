@@ -1,6 +1,6 @@
 # 🧰 08 · Paneles y utilidades
 
-> Revisado para Hilvana **5.38.1** · capturas: [101](assets/hilvana-101-rail-proyecto-flows.png) · [105](assets/hilvana-105-config-menu-lateral.png) · [109](assets/hilvana-109-config-plugins.png) · [117](assets/hilvana-117-config-actualizaciones.png).
+> Revisado para Hilvana **6.2.1** · capturas: [101](assets/hilvana-101-rail-proyecto-flows.png) · [105](assets/hilvana-105-config-menu-lateral.png) · [109](assets/hilvana-109-config-plugins.png) · [117](assets/hilvana-117-config-actualizaciones.png).
 
 > [!TIP]
 > **¿Dónde está cada cosa?** **Proyecto**, **Pizarra** y **Guía de nodos** viven en la **barra lateral de iconos**; Batch Run, Historial, Consola, **Vista**, GitHub, Variables, Global y SQL Conns se abren desde **Config** (los paneles laterales aparecen en la barra mientras están abiertos; un panel a la vez); y las utilidades de organización desde el desplegable **Layout**. Ver [01 La pantalla principal](01-pantalla-principal.md).
