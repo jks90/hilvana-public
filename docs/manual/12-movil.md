@@ -1,6 +1,6 @@
 # 📱 12 · La vista móvil
 
-> Revisado para Hilvana **6.2.1** (vista `/m`).
+> Revisado para Hilvana **6.3.0** (vista `/m`).
 
 Desde la **5.11**, Hilvana trae una segunda cara pensada para el teléfono: entra en
 **`http://tu-servidor:9998/m`** y tienes tus flows para **ejecutarlos, ver el resultado y leerlos como
@@ -67,6 +67,22 @@ La pestaña **Documentación** enseña el flow como se lee, no como se dibuja:
 
 Sirve para consultar en una reunión qué comprueba un flujo, o para enseñárselo a alguien sin abrir el
 portátil.
+
+## El flow en PDF 🆕 (6.3.0)
+
+En la ficha de un flow, bajo su ruta, el botón **Ver el flow en PDF** genera el mismo PDF que
+**Exportar a PDF** del escritorio: el canvas entero (nodos, conexiones y pizarra) en una sola página
+del tamaño exacto del contenido.
+
+- Lo genera el **servidor**: abre el flow con su Chromium, como si lo tuvieras en el escritorio, y lo
+  imprime. Tarda unos segundos; no hace falta tener el escritorio abierto.
+- El PDF se abre con el **visor del teléfono** (un navegador dentro de una app no pinta PDF), donde
+  puedes ampliarlo, guardarlo o compartirlo.
+- Solo para los flows de **esta instalación** (💻 Local); los del cloud se abren primero en el
+  escritorio o se traen al disco.
+- Es una función del plan **Pro**, como en el escritorio; en prueba el botón se cambia por un aviso.
+- Necesita la imagen Docker (o la app compilada con `npm run build`): en modo desarrollo responde
+  «PDF de un flow solo con la app compilada».
 
 ## Ejecutar y ver el resultado
 
@@ -145,6 +161,8 @@ Además de la app normal, `android/` compila una segunda variante de administrac
 - Solo navega por HTTPS a esos hosts; el login lo haces tú (autorrelleno desactivado).
 - Compilar: `./gradlew assembleAdminDebug` desde `android/`; instalar con `adb install -r`.
 - ⚠️ Sin compilar ni probar aún en dispositivo; el admin del cloud todavía no tiene diseño móvil propio.
+
+**Desde la 6.3.0** la app de administración solo abre el **admin del cloud** (entra directa en 📮 Reportes); los servidores de Hilvana (tu PC, tu servidor y el cloud) se abren con la app normal. El botón **☰** se queda con «🛡 Admin del cloud» y «🔑 Contraseñas guardadas…», y tras entrar con usuario y contraseña la app ofrece guardarlos cifrados para rellenarlos la próxima vez.
 
 **versionCode 9 (5.35.0):** la app puede **guardar la contraseña de cada panel** (🔑): se cifra en el teléfono con el Keystore de Android (AES-GCM), una por origen, se rellena el formulario **sin enviarlo** y se puede olvidar desde el menú ☰ o marcar «nunca» para un origen. ⚠️ No compilado ni probado en dispositivo en esta documentación.
 
