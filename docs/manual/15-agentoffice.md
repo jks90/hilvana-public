@@ -1,6 +1,6 @@
-# 15 · AgentOffice — pantalla a pantalla (0.3.14)
+# 15 · AgentOffice — pantalla a pantalla (0.3.15)
 
-> Revisado para Hilvana **6.3.1** · Manual de **AgentOffice 0.3.14**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1; la **Mesa de trabajo** es de la 0.3.13 (filtro y buscador, 0.3.14).
+> Revisado para Hilvana **6.3.1** · Manual de **AgentOffice 0.3.15**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1; la **Mesa de trabajo** es de la 0.3.13 (filtro y buscador, 0.3.14; en el móvil, 0.3.15).
 
 AgentOffice es la **oficina de agentes de IA** (Claude Code y Codex) de la suite: un equipo con roles que trabaja en tus repos, una **rama y una copia de trabajo (worktree) por tarea**, y **revisión humana** antes de fusionar. Corre aparte de Hilvana (puerto 7420). Desde la 6.2.0 se instala desde Config ▸ Plugins **en tu PC** (nativo, por defecto: una orden de terminal; servicio `hilvana-agentoffice` en `~/.hilvana/agentoffice`, con escritorio para la burbuja y el modo Blender) o **en un servidor** como contenedor `hilvana-agentoffice` de un clic (sin escritorio) y Hilvana lo sirve embebido en `/agents/` (escritorio) y `/agents/m.html` (móvil). Instalarlo y conectarlo: [nota 20 del manual](../agentoffice.md).
 
@@ -113,6 +113,9 @@ La pestaña **Mesa** es el puesto de control de una épica: ves **en vivo** lo q
 
 - **Todos**: una tarjeta por agente en marcha o en revisión, con lo que hace ahora, su último fichero en miniatura y su último paso. Pulsa una y entras en su mesa.
 - Desde la ficha de cualquier tarea empezada, el botón **🛠 Mesa** te lleva a su mesa.
+- **En el móvil** (pestaña 🛠 Mesa de la vista `/m` y de la app Android): la lista de tareas activas por épica con buscador, y al tocar una, su mesa a pantalla completa con tres pestañas: **📄 Ahora** (agente, lo que hace, ⏸ ■ y 🔍 Ficha, sus ficheros y el que está tocando: planos e imágenes a todo el ancho, textos maquetados), **📜 Rastro** (cada paso con hora, en vivo) y **💬 Hablar** (sus preguntas para responder ahí mismo y un mensaje en caliente, con dictado). El botón «atrás» del teléfono vuelve a la lista.
+
+![Mesa en el móvil: lista por épica](assets/hilvana-454-agentoffice-mesa-movil-lista.png) ![Mesa en el móvil: la tarea](assets/hilvana-455-agentoffice-mesa-movil-ahora.png)
 - Lo que ves está acotado al directorio de la tarea (su copia de trabajo, o la carpeta del proyecto si no hay repo): un fichero del agente nunca puede ejecutar nada en AgentOffice.
 
 ## Agentes y roles
