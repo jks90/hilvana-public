@@ -1,6 +1,6 @@
-# 15 · AgentOffice — pantalla a pantalla (0.3.8)
+# 15 · AgentOffice — pantalla a pantalla (0.3.9)
 
-> Revisado para Hilvana **6.2.1** · Manual de **AgentOffice 0.3.8**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1.
+> Revisado para Hilvana **6.2.1** · Manual de **AgentOffice 0.3.9**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1.
 
 AgentOffice es la **oficina de agentes de IA** (Claude Code y Codex) de la suite: un equipo con roles que trabaja en tus repos, una **rama y una copia de trabajo (worktree) por tarea**, y **revisión humana** antes de fusionar. Corre aparte de Hilvana (puerto 7420). Desde la 6.2.0 se instala desde Config ▸ Plugins **en tu PC** (nativo, por defecto: una orden de terminal; servicio `hilvana-agentoffice` en `~/.hilvana/agentoffice`, con escritorio para la burbuja y el modo Blender) o **en un servidor** como contenedor `hilvana-agentoffice` de un clic (sin escritorio) y Hilvana lo sirve embebido en `/agents/` (escritorio) y `/agents/m.html` (móvil). Instalarlo y conectarlo: [nota 20 del manual](../agentoffice.md).
 
@@ -162,7 +162,7 @@ El botón **⚙ Ajustes** abre un formulario único agrupado en **Empresa**, **P
 
 | Sección | Captura | Para qué |
 |---|---|---|
-| 🧭 Guía | ![](assets/hilvana-177-ao-ajustes-13-guia.png) | Motor y modelo del Guía |
+| 🧭 Guía | ![](assets/hilvana-177-ao-ajustes-13-guia.png) | Motor y modelo del Guía, y el modo con el que nacen los chats nuevos (🧭 Guía o 🛠 Taller) |
 | 🎤 Voz | ![](assets/hilvana-178-ao-ajustes-14-voz.png) | Dictado: STT local o del navegador, **Probar micrófono** |
 | 🔊 Voz del Guía | ![](assets/hilvana-179-ao-ajustes-15-voz-del-guia.png) | Proveedor y voz de lectura, **Probar voz** |
 
@@ -241,6 +241,15 @@ La conexión con el correo y la agenda de Google llegará en una versión próxi
 ## Guía y Marketplace
 
 ![Guía](assets/hilvana-163-ao-guia.png)
+
+La **🧭 Guía** (Ctrl+G, o el botón redondo) es un asistente con acceso a la app: crea tareas, mueve el tablero, consulta costes, abre flows de Hilvana, controla a los workers… Funciona como cajón lateral o a pantalla completa, con varios chats, adjuntos, dictado 🎤 y voz 🔊 (opcional, con «👂 escuchando» y palabra de activación). Qué puede hacer sin preguntarte se fija en Ajustes ▸ Seguridad.
+
+**Dos modos por chat**, con el botón junto a la caja de texto (🧭 ↔ 🛠; se puede cambiar a mitad de conversación):
+
+- **🧭 Guía**: conversa, supervisa, crea y revisa tareas, abre flows y navega. No ejecuta comandos ni edita ficheros. Es el modo de serie.
+- **🛠 Taller**: el mismo asistente que tienes en tu editor (Claude Code completo) pero dentro de AgentOffice: trabaja en el repo del proyecto que estás viendo, con sus instrucciones y su memoria (la misma que en el editor, porque es la misma carpeta), puede ejecutar comandos, editar ficheros y usar tus conectores, y además ve el equipo de AgentOffice. Cada comando o edición te pide permiso con 🛡 (**Sí** · **Sí, siempre** · **No**); «Sí, siempre» se puede retirar en Ajustes ▸ Seguridad ▸ Permitidas siempre. Necesita Claude Code instalado en ese equipo. Ojo: en Taller se trabaja sobre tu copia real del repo, sin rama aparte ni revisión, igual que en el editor.
+
+En **Resumen ▸ 💸 Costes**, el bloque «🧭 Guía vs 🛠 Taller» compara el gasto de los dos modos (chats, turnos, coste, $/turno, tokens, caché y herramientas por turno). Para comparar en igualdad, usa el mismo modelo en los dos y la misma petición en un chat de cada modo.
 
 
 ![Marketplace](assets/hilvana-164-ao-marketplace.png)
