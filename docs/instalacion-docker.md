@@ -13,7 +13,7 @@ docker run -d \
   --add-host=host.docker.internal:host-gateway \
   -p 9998:3001 \
   --name hilvana \
-  juankanh/hilvana:6.3.0
+  juankanh/hilvana:6.3.1
 ```
 
 | Pieza | Dónde queda |
@@ -38,7 +38,7 @@ docker run -d \
   --add-host=host.docker.internal:host-gateway \
   -p 9998:3001 \
   --name hilvana \
-  juankanh/hilvana:6.3.0
+  juankanh/hilvana:6.3.1
 ```
 
 ## Correo de prueba (SMTP, 4.36)
@@ -78,7 +78,7 @@ Ejemplo con MCP protegido por token:
 ```bash
 docker run -d --add-host=host.docker.internal:host-gateway \
   -p 9998:3001 -e FLOW_MCP_TOKEN=mi-secreto \
-  --name hilvana juankanh/hilvana:6.3.0
+  --name hilvana juankanh/hilvana:6.3.1
 ```
 
 ## Webcam falsa y videomock de DNI (solo QA)
@@ -91,7 +91,7 @@ docker run -d --add-host=host.docker.internal:host-gateway \
   -p 9998:3001 --name hilvana \
   -e FLOW_VIEWPORT=1920x1080 \
   -v "$(pwd)/flows:/app/flows" \
-  juankanh/hilvana:6.3.0
+  juankanh/hilvana:6.3.1
 ```
 
 Genera el vídeo antes de abrir la sesión Live:
@@ -127,7 +127,7 @@ El panel **Proyecto** de la web (4.25) trabaja sobre la carpeta `flows/` del ser
 ```bash
 docker run -d --add-host=host.docker.internal:host-gateway -p 9998:3001 \
   -v /home/yo/mis-flows:/app/flows \
-  --name hilvana juankanh/hilvana:6.3.0
+  --name hilvana juankanh/hilvana:6.3.1
 ```
 
 Si prefieres otra ruta dentro del contenedor, indícasela con `FLOW_FLOWS_DIR`:
@@ -150,7 +150,7 @@ mkdir -p ./flows
 docker run -d --add-host=host.docker.internal:host-gateway \
   -p 9998:3001 \
   -v "$(pwd)/flows:/app/flows" \
-  --name hilvana juankanh/hilvana:6.3.0
+  --name hilvana juankanh/hilvana:6.3.1
 ```
 
 > Con el volumen montado, los flows de ejemplo que trae la imagen quedan ocultos: tu carpeta
@@ -166,9 +166,9 @@ docker run -d --add-host=host.docker.internal:host-gateway \
 ## Actualizar de versión
 
 ```bash
-docker pull juankanh/hilvana:6.3.0
+docker pull juankanh/hilvana:6.3.1
 docker stop flow && docker rm flow
-docker run -d ... juankanh/hilvana:6.3.0   # mismo run de siempre
+docker run -d ... juankanh/hilvana:6.3.1   # mismo run de siempre
 ```
 
 Desde la 5.22 la app te avisa sola de las versiones nuevas («⬆ x.y.z» junto a Config) y, si lo activas, se actualiza con un clic: ver [Actualizaciones](manual/11-docker.md#actualizaciones--522).
