@@ -1,6 +1,6 @@
-# 15 · AgentOffice — pantalla a pantalla (0.3.13)
+# 15 · AgentOffice — pantalla a pantalla (0.3.14)
 
-> Revisado para Hilvana **6.3.1** · Manual de **AgentOffice 0.3.13**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1; la **Mesa de trabajo** es de la 0.3.13.
+> Revisado para Hilvana **6.3.1** · Manual de **AgentOffice 0.3.14**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1; la **Mesa de trabajo** es de la 0.3.13 (filtro y buscador, 0.3.14).
 
 AgentOffice es la **oficina de agentes de IA** (Claude Code y Codex) de la suite: un equipo con roles que trabaja en tus repos, una **rama y una copia de trabajo (worktree) por tarea**, y **revisión humana** antes de fusionar. Corre aparte de Hilvana (puerto 7420). Desde la 6.2.0 se instala desde Config ▸ Plugins **en tu PC** (nativo, por defecto: una orden de terminal; servicio `hilvana-agentoffice` en `~/.hilvana/agentoffice`, con escritorio para la burbuja y el modo Blender) o **en un servidor** como contenedor `hilvana-agentoffice` de un clic (sin escritorio) y Hilvana lo sirve embebido en `/agents/` (escritorio) y `/agents/m.html` (móvil). Instalarlo y conectarlo: [nota 20 del manual](../agentoffice.md).
 
@@ -105,7 +105,7 @@ Al terminar, el agente deja la tarea en **Revisión** (columna naranja, chip **�
 
 La pestaña **Mesa** es el puesto de control de una épica: ves **en vivo** lo que hace cada agente, el fichero en el que está y su rastro paso a paso, y le hablas sin salir de ahí. Sirve igual para las tareas ya hechas (queda todo guardado).
 
-- **Izquierda — la épica y sus tareas.** Las tareas del proyecto agrupadas por épica (el plan del PO y sus partes; el resto, «Sueltas»), cada una con su agente, su estado y lo que está haciendo en ese momento. Las tareas que van naciendo aparecen solas. Pulsa una para abrir su mesa.
+- **Izquierda — la épica y sus tareas.** Las tareas del proyecto agrupadas por épica (el plan del PO y sus partes; el resto, «Sueltas»), cada una con su chip de estado, su agente y lo que está haciendo en ese momento. Por defecto se ven solo las **Activas** (en curso, en revisión, por hacer, backlog y fallidas); **Todas** añade el histórico de hechas y descartadas, y el buscador filtra por código, título o agente. Cada épica se pliega por su cabecera. Las tareas que van naciendo aparecen solas. Pulsa una para abrir su mesa.
 - **Centro — la mesa de la tarea.** Cabecera con el estado, la rama y el agente, y los mismos mandos que en la ficha (⏸ Pausar, ✉ Mensaje, ⏹ Parar, 🫧 Burbuja si la tarea tiene modo de desarrollo, «Ver cambios», «🔍 Ver la tarea»). Debajo, los **ficheros que ha tocado** y el **artefacto vivo**: un plano SVG o una imagen se ven tal cual, un markdown o un csv maquetados, un PDF o un HTML en su marco, el resto como texto. Con **🧲 Seguir al agente** activo, la vista salta sola al último fichero que toca; elige un fichero a mano y se queda en él. **↗ Abrir** lo abre en una pestaña.
 - **Derecha — hablarle y seguirle.** Sus **preguntas abiertas** (se responden ahí mismo), un **mensaje en caliente** mientras trabaja (o una restricción que se guarda en la tarea) y el **rastro**: cada paso con su hora, de la primera herramienta a la entrega: lo que piensa, lo que ejecuta, los ficheros que escribe, los avisos, tus mensajes y la revisión.
 
