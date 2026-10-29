@@ -68,6 +68,22 @@ Arrastrar una tarjeta de columna cambia su estado; el menú **⋯** de la tarjet
 | *(ninguno)* | Tarea normal | — |
 | **web** | Abre la URL que el agente está construyendo en tu navegador y le pone su burbuja-chat | lado de la pantalla (izquierda/derecha), URL |
 | **blender** | Abre Blender en su mitad de la pantalla con **4 vistas** (perspectiva, trasera, lateral, planta) y lo recarga y encuadra solo cada vez que el agente guarda el `.blend` | lado, fichero `.blend` (ruta relativa al repo), ejecutable en Ajustes ▸ «🧊 Ejecutable de Blender» |
+| **🖥 Aplicación** | Abre **cualquier programa** (GIMP, LibreOffice, un editor…) en su mitad de la pantalla y el agente lo maneja por ti, con la misma burbuja-chat | lado, **qué abrir**: un fichero o URL (se abre con la aplicación asociada de tu sistema) o un comando (`gimp logo.xcf`, `libreoffice --calc`) |
+
+**Modo «Aplicación»**
+
+- La ventana nueva se coloca sola en la mitad de la pantalla del lado elegido (Linux con X11; en Wayland no se pueden mover ventanas ajenas y queda donde el sistema la ponga). Hay **una ventana por lado**: al empezar otra tarea en ese lado, se cierra la anterior. Se reabre si reinicias AgentOffice y se cierra al aprobar, devolver o borrar la tarea.
+- Es **un modo de escritorio**: sin pantalla (servidor, contenedor) no abre nada. Si el programa no llega a abrir ventana, queda sin colocar.
+- El agente recibe **herramientas de escritorio** solo en este modo: ver la ventana activa y la lista de ventanas, capturar la pantalla, leer y pulsar los controles de la aplicación, hacer clic, desplazar y escribir con el teclado. **Cada clic, tecla o pulsación de control te pide confirmación 🛡**, aunque tengas la Guía en ejecución automática; el clic o teclado «a ciegas» (sin controles localizables) además exige activarlo en Ajustes ▸ Guía. En los modos web y Blender, o sin modo, estas herramientas no existen.
+- La **burbuja** es la misma de los demás modos (chat con su recuerdo, voz, capturas, boceto, aprobar o devolver, nueva ronda); su cabecera muestra la aplicación que maneja («Trabajando en gimp»).
+- Ejemplo: tarea «Quita el fondo del logo» con modo Aplicación, lado derecho y `logo.xcf`. GIMP se abre a la derecha; el agente pide permiso 🛡 para cada acción, y desde la burbuja le escribes «hazlo más pequeño» o pulsas ↩ Devolver con tus comentarios.
+
+**Las dos memorias.** Los agentes aprenden entre tareas con dos memorias que puedes leer y corregir:
+
+- **Memoria del proyecto** (compartida por todo el equipo): Ajustes ▸ 📚 Memoria y contexto, o el apartado «De todo el proyecto» de la ficha de cualquier agente.
+- **Memoria del agente** (solo suya, más su «Estado de mi trabajo»): en el cajón del agente ▸ 🧠 Memoria, campo «Suya». Una línea por lección; borra las que no valgan y pulsa **Guardar memoria**.
+- **Promocionar**: en esa misma sección, una lección suya se puede subir a la memoria compartida para que la vean todos los agentes.
+- Su historial de conversaciones sigue en 💬 Conversaciones.
 
 
 ### Programadas, comprobación sin IA y webhook
