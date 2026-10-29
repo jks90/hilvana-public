@@ -17,6 +17,8 @@ AgentOffice es la **oficina de agentes de IA** (Claude Code y Codex) de la suite
 
 Barra superior: **selector de proyecto**, **＋ Nuevo proyecto**, **🫧** (volver a mostrar las burbujas de los agentes), **↻** (comprobar que las carpetas de los proyectos existen), chip **🔔 Para ti** (tareas esperando tu revisión), chip de **cuota** (cuando una suscripción se acerca al límite), estado de **Hilvana** y **▶ Poner a trabajar / ⏸ Parar** el equipo del proyecto. Menú lateral: **Oficina, Resumen, Tareas, Agentes, Herramientas, Ajustes** y **Plegar** (reduce el menú a iconos). El botón redondo **🧭** abre la Guía (Ctrl+G).
 
+<a id="oficina-3d"></a>
+
 ## Oficina 3D
 
 ![Oficina 3D](assets/hilvana-150-ao-oficina-3d.png)
@@ -27,11 +29,15 @@ La vista inicial: el **edificio** (una planta por proyecto), la **planta** con s
 - Se ajusta en Ajustes ▸ **🎨 Oficina 3D**: paneles, personajes de ambiente (decorativos) y si las burbujas están siempre o «al pasar el ratón».
 - En el móvil no hay escena 3D: la Oficina se sustituye por una lista de plantas.
 
+<a id="resumen"></a>
+
 ## Resumen
 
 ![Resumen](assets/hilvana-151-ao-resumen.png)
 
 Vista de **toda la empresa** de un vistazo: por proyecto, tareas por estado, agentes trabajando, gasto y avisos. Es la pestaña de entrada en el móvil.
+
+<a id="tareas"></a>
 
 ## Tareas
 
@@ -51,6 +57,8 @@ El **tablero** tiene seis columnas: *Backlog · Por hacer · En curso · Revisi�
 | **🔍 filtrar…** | Filtro de texto |
 
 Arrastrar una tarjeta de columna cambia su estado; el menú **⋯** de la tarjeta (y la ficha) permite editar, mover a otro proyecto (⇄, solo si no ha empezado), devolver, descartar…
+
+<a id="nueva-tarea-crear-con-ia-adjuntos-y-modos-de-desarrollo"></a>
 
 ### Nueva tarea: crear con IA, adjuntos y modos de desarrollo
 
@@ -96,6 +104,8 @@ Por proyecto: una **plantilla de tarea** (título, descripción, rol, revisión 
 - **🪝 Webhook** `POST /api/hooks/<token>` crea la tarea con el cuerpo del aviso (p. ej. el `notifyUrl` de un monitor de Hilvana). El token de la URL es la credencial.
 - Botones por programada: ▶ ejecutar ahora, ✎ editar, pausar, ⇄ mover y ⧉ copiar a otro proyecto (la copia queda pausada y sin webhook). Si la tarea anterior sigue pendiente, esa vuelta se salta.
 
+<a id="revision-aprobar-devolver-y-llevar-a-mi-checkout"></a>
+
 ## Revisión: aprobar, devolver y «Llevar a mi checkout»
 
 ![Ficha de una tarea en revisión](assets/hilvana-156-ao-revision.png)
@@ -114,6 +124,8 @@ Al terminar, el agente deja la tarea en **Revisión** (columna naranja, chip **�
 
 
 **Política de revisión** (Ajustes ▸ ✅ Revisión y por proyecto): *Manual* (la revisas tú), *Auto-QA* (aprueba sola si el QA da el visto bueno) o *Auto*. Nunca se aprueban solas las tareas con «revisión obligatoria», cortadas por tope o atasco, que toquen ficheros sensibles o que el revisor haya devuelto dos veces.
+
+<a id="mesa-de-trabajo"></a>
 
 ## 🛠 Mesa de trabajo
 
@@ -134,6 +146,8 @@ La pestaña **Mesa** es el puesto de control de una épica: ves **en vivo** lo q
 ![Mesa en el móvil: lista por épica](assets/hilvana-454-agentoffice-mesa-movil-lista.png) ![Mesa en el móvil: la tarea](assets/hilvana-455-agentoffice-mesa-movil-ahora.png)
 - Lo que ves está acotado al directorio de la tarea (su copia de trabajo, o la carpeta del proyecto si no hay repo): un fichero del agente nunca puede ejecutar nada en AgentOffice.
 
+<a id="agentes-y-roles"></a>
+
 ## Agentes y roles
 
 ![Equipo](assets/hilvana-158-ao-equipo.png)
@@ -145,6 +159,8 @@ La pestaña **Agentes** es la plantilla del proyecto: cada agente con su **rol**
 - **Roles**: definen el prompt base, el motor y las herramientas por defecto. Se editan, se crean propios y se comparten en el Marketplace.
 - Debajo: **repos** del proyecto (base de las tareas, tu rama actual, agentes en cada uno) y la **🧠 Memoria de Claude Code del repo**.
 - El **coordinador** del equipo reasigna tareas según puntuaciones, y el **supervisor de serie** vigila las tareas encadenadas.
+
+<a id="herramientas-skills-mcp-y-scripts"></a>
 
 ## Herramientas: skills, MCP y scripts
 
@@ -171,6 +187,8 @@ El botón **⚙ Ajustes** abre un formulario único agrupado en **Empresa**, **P
 - **Barra Guardar siempre a la vista**: «Sin cambios» o «● N cambios sin guardar», con **Descartar** y **Guardar**; Guardar no cierra el panel.
 - **Punto de cambios**: las secciones con cambios llevan un punto amarillo en el menú lateral. Si cierras (Esc, ✕, clic fuera) con cambios pendientes, pregunta antes. Un valor inválido en otra sección te lleva a ella y la marca.
 
+<a id="grupo-empresa"></a>
+
 ### Grupo Empresa
 
 | Sección | Captura | Para qué |
@@ -185,6 +203,8 @@ El botón **⚙ Ajustes** abre un formulario único agrupado en **Empresa**, **P
 | 🎨 Oficina 3D | ![](assets/hilvana-172-ao-ajustes-08-oficina-3d.png) | Paneles, personajes de ambiente y burbujas de la escena |
 | 🧪 Experimentos | ![](assets/hilvana-173-ao-ajustes-09-experimentos.png) | «Ponytail»: reglas de «construir lo mínimo» por rol |
 
+<a id="grupo-proyecto"></a>
+
 ### Grupo Proyecto
 
 | Sección | Captura | Para qué |
@@ -192,6 +212,8 @@ El botón **⚙ Ajustes** abre un formulario único agrupado en **Empresa**, **P
 | 📁 Proyecto | ![](assets/hilvana-174-ao-ajustes-10-proyecto.png) | Carpeta del workspace y repos, prefijo de códigos, coordinador, **📂 acceso a la carpeta del proyecto** y **📤 entregar sin commitear** (ambas desactivadas por defecto), revisión por proyecto |
 | 🔗 Tablero online | ![](assets/hilvana-175-ao-ajustes-11-tablero-online.png) | GitHub, Trello o Jira |
 | 👁 Proyectos visibles | ![](assets/hilvana-176-ao-ajustes-12-proyectos-visibles.png) | Ocultar proyectos de la UI (ocultar no para nada: un proyecto oculto en marcha sigue trabajando) |
+
+<a id="grupo-guia-y-voz"></a>
 
 ### Grupo Guía y voz
 
@@ -201,12 +223,16 @@ El botón **⚙ Ajustes** abre un formulario único agrupado en **Empresa**, **P
 | 🎤 Voz | ![](assets/hilvana-178-ao-ajustes-14-voz.png) | Dictado: STT local o del navegador, **Probar micrófono** |
 | 🔊 Voz del Guía | ![](assets/hilvana-179-ao-ajustes-15-voz-del-guia.png) | Proveedor y voz de lectura, **Probar voz** |
 
+<a id="grupo-seguridad"></a>
+
 ### Grupo Seguridad
 
 | Sección | Captura | Para qué |
 |---|---|---|
 | 🛡 Qué puede hacer el Guía | ![](assets/hilvana-180-ao-ajustes-16-que-puede-hacer-el-guia.png) | Acciones que el Guía hace sin preguntarte |
 | 🌐 Navegador de los agentes | ![](assets/hilvana-181-ao-ajustes-17-navegador-de-los-agentes.png) | Qué navegador usan los agentes (Playwright) y sus permisos |
+
+<a id="burbuja-del-agente"></a>
 
 ## Burbuja del agente
 
@@ -236,6 +262,8 @@ Antes, cada tarea abría una conversación nueva con el modelo y el agente volv�
 ### Un Blender por lado
 
 En modo Blender, al arrancar una tarea nueva en un lado se cierra el Blender de la tarea anterior de ese lado y se abre el de la nueva, así nunca se apilan ventanas. Los entornos de prueba y de demo de AgentOffice no abren nada en tu escritorio.
+
+<a id="gmail-calendar-y-telegram"></a>
 
 ## Telegram
 
@@ -273,6 +301,8 @@ Solo se atienden los chats autorizados. El resto se ignora y queda anotado en la
 
 La conexión con el correo y la agenda de Google llegará en una versión próxima.
 
+<a id="guia-y-marketplace"></a>
+
 ## Guía y Marketplace
 
 ![Guía](assets/hilvana-163-ao-guia.png)
@@ -291,11 +321,41 @@ En **Resumen ▸ 💸 Costes**, el bloque «🧭 Guía vs 🛠 Taller» compara 
 
 El **🛒 Marketplace** (botón dentro de Agentes) comparte **roles, skills y agentes** con tu organización o en público (con moderación) e instala los de otros. Pestañas: **Agentes · 🔒 Privado** (tu banquillo y tus roles) y las de la nube. *(En la captura sale un 404 porque el entorno de demo usa una instalación simulada de Hilvana sin cuenta vinculada: con la cuenta vinculada se ven los listados.)*
 
+<a id="nuevo-proyecto"></a>
+
 ## ＋ Nuevo proyecto
 
 ![Nuevo proyecto](assets/hilvana-162-ao-nuevo-proyecto.png)
 
 Un proyecto de AgentOffice es una **carpeta del workspace de Hilvana** (donde viven sus flows y su documentación). El diálogo pide el nombre, la carpeta (existente o nueva) y los **repos** (rutas git que el equipo modifica; puede haber varios y cada tarea trabaja en su propio worktree por repo). También se admiten **proyectos sin repo**: solo carpeta. ↻ comprueba que las carpetas siguen existiendo.
+
+<a id="ayuda-en-la-app-y-asistentes"></a>
+
+## Ayuda en la app y asistentes
+
+AgentOffice se explica solo: cada pantalla importante tiene su ayuda a mano y crear algo (agente, rol, proyecto, tarea) es una conversación guiada en vez de un formulario largo. Funciona igual en el ordenador y en el móvil.
+
+**Botón ⓘ.** Junto a las pestañas, secciones de Ajustes y campos difíciles aparece un pequeño ⓘ.
+- En el ordenador abre una burbuja junto al botón; en el móvil, una hoja desde abajo. Se cierra con ✕, con Esc, pulsando fuera o, en el móvil, con el botón «atrás».
+- Cada ayuda trae un título, un texto breve y tres salidas: **📖 Ver en el manual** (abre esta misma sección del manual), **🧭 Pedir al Guía que lo haga por mí** (solo en las ayudas que el Guía puede ejecutar: le manda tu duda por su propio chat) y **↺ Volver a ver la guía de esta pantalla** (en las ayudas de pestaña).
+- Ajustes ▸ Empresa guarda, solo en este navegador, un contador anónimo de las ayudas que has abierto (de la más a la menos consultada). No se envía a ningún sitio.
+- Preguntas al Guía del estilo «¿qué es el modo Taller?» las responde con ese mismo catálogo de ayudas, con su enlace al manual.
+
+**Guías de primer uso.** La primera vez que abres una pestaña (Oficina, Tareas…) un velo oscuro señala 3 o 4 elementos, uno a uno, con una frase cada uno («En “Tareas” encargas el trabajo…»). Avanza con **Siguiente**, el último paso dice **Entendido**; sal antes con **Saltar** o Esc; no vuelve a salir sola. Para repetirla: ⓘ de la pestaña ▸ **↺ Volver a ver la guía de esta pantalla**. En el móvil hay guías propias de cada pestaña. Si un elemento no está en pantalla, se salta ese paso.
+
+**Asistentes de creación.** Cada uno hace preguntas llanas, valida antes de dejarte avanzar y tiene siempre el botón **Formulario completo** para volver al formulario de siempre (con lo ya escrito). Escape cierra el asistente; en el móvil, «atrás» retrocede un paso.
+- **Contratar agente** (＋ Contratar): 3 pasos — qué quieres que haga, motor y modelo, y revisión antes de crear. Hay que ponerle nombre y elegir un rol que exista; si falta algo, el asistente te lo dice antes de seguir.
+- **Nuevo rol**: preguntas llanas a la izquierda y el fichero del rol (`.md`) generándose en vivo a la derecha; parte de una plantilla y te deja cambiar herramientas, skills y el texto de instrucciones.
+- **＋ Nuevo proyecto**: 6 pasos — Carpeta, Repositorios (una línea por repo: `clave = ruta @ roles`, `ruta @ roles` o solo `ruta`), Equipo, Motor, Revisión y Listo (con los primeros pasos a seguir, incluido **🎯 Encargar un objetivo** al PO).
+- **Nueva tarea**: lo básico a la vista (título, descripción, adjuntos, **✨ Redactar con IA**) y lo avanzado plegado en **⚙ Avanzado** (para quién, repo, estado inicial, modo de desarrollo, MCP). Si la descripción es muy grande, avisa de que conviene dividirla; hay ejemplos para empezar.
+
+**Estados vacíos.** Donde no hay nada todavía (equipo sin agentes, sin repositorios, nadie en el banquillo…) la pantalla lo dice y ofrece el botón para empezar (**＋ Contratar al primer agente**, **＋ Añadir repositorio**…) en vez de quedarse en blanco.
+
+**Para el Guía.** El Guía puede consultar el mismo catálogo de ayudas (herramienta de solo lectura): sin indicar cuál, lista los temas; indicando uno (p. ej. la pestaña Tareas o la sección Equipo), te da su explicación y el enlace al manual.
+
+**Errores típicos.** Si el ⓘ dice que no hay ayuda para esa pantalla, recarga la página (el catálogo no cargó). Si una guía de primer uso no sale, ya la viste: repítela desde el ⓘ de la pestaña.
+
+<a id="movil"></a>
 
 ## Móvil
 
