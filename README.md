@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.3.1
+  juankanh/hilvana:6.3.2
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -63,7 +63,8 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 
 | Versión | Qué trae |
 |---------|----------|
-| **6.3.1** (recomendada) | 🤝 **AgentOffice en Docker usa el MCP de Hilvana**: los agentes QA/documentalista y el modo 🛠 Taller del Guía entran en `/mcp` con el token de emparejamiento (antes, desde otro contenedor, 403); el Taller en Docker trabaja con tu sesión y tu memoria de Claude Code, como en el editor (AgentOffice 0.3.12) |
+| **6.3.2** (recomendada) | 📚 **Versión de documentación (HI-426), sin cambios de comportamiento en la app**: deja al día lo de AgentOffice 0.3.13–0.3.17 — Mesa de trabajo (también en el móvil, con filtro y buscador), modo «aplicación», burbuja única, dos memorias (proyecto y agente) y la revisión que ya no se queda parada tras un reinicio |
+| **6.3.1** | 🤝 **AgentOffice en Docker usa el MCP de Hilvana**: los agentes QA/documentalista y el modo 🛠 Taller del Guía entran en `/mcp` con el token de emparejamiento (antes, desde otro contenedor, 403); el Taller en Docker trabaja con tu sesión y tu memoria de Claude Code, como en el editor (AgentOffice 0.3.12) |
 | **6.3.0** | 📄 **El flow en PDF desde el móvil**: en la vista `/m` (y la app Android), la ficha de un flow trae **Ver el flow en PDF**, el mismo PDF del canvas que «Exportar a PDF» del escritorio, generado por el servidor y abierto con el visor del teléfono (Pro). La app **Hilvana Admin** se queda solo con el admin del cloud y sus contraseñas guardadas |
 | **6.2.1** | 🔗 **AgentOffice en un servidor, sin quedarse bloqueado**: si la instalación no está vinculada a tu cuenta Hilvana, el botón de Docker pasa a **Vincular cuenta e instalar** y, al volver de Config ▸ Licencia ya vinculado, instala solo. Antes creaba un AgentOffice que no arrancaba («Vincula Hilvana a tu cuenta») |
 | **6.2.0** | 💻 **AgentOffice nativo en tu PC** (por defecto): Config ▸ Plugins ▸ Instalar ▸ En este PC da una orden de terminal que lo instala emparejado con Hilvana —Node oficial, paquete firmado sin fuentes, servicio de usuario— con escritorio (burbuja, modo Blender), tus herramientas y tu sesión de claude/codex; Linux por ahora. **En un servidor**, el contenedor de un clic (ahora con git-lfs y viendo el workspace de Hilvana) ([AgentOffice](docs/agentoffice.md)) |
@@ -112,7 +113,7 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 Las versiones anteriores (5.12 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.3.1
+docker pull juankanh/hilvana:6.3.2
 ```
 
 ## Documentación

@@ -1,6 +1,6 @@
-# 15 · AgentOffice — pantalla a pantalla (0.3.15)
+# 15 · AgentOffice — pantalla a pantalla (0.3.17)
 
-> Revisado para Hilvana **6.3.1** · Manual de **AgentOffice 0.3.15**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1; la **Mesa de trabajo** es de la 0.3.13 (filtro y buscador, 0.3.14; en el móvil, 0.3.15).
+> Revisado para Hilvana **6.3.2** · Manual de **AgentOffice 0.3.17**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1; la **Mesa de trabajo** es de la 0.3.13 (filtro y buscador, 0.3.14; en el móvil, 0.3.15).
 
 AgentOffice es la **oficina de agentes de IA** (Claude Code y Codex) de la suite: un equipo con roles que trabaja en tus repos, una **rama y una copia de trabajo (worktree) por tarea**, y **revisión humana** antes de fusionar. Corre aparte de Hilvana (puerto 7420). Desde la 6.2.0 se instala desde Config ▸ Plugins **en tu PC** (nativo, por defecto: una orden de terminal; servicio `hilvana-agentoffice` en `~/.hilvana/agentoffice`, con escritorio para la burbuja y el modo Blender) o **en un servidor** como contenedor `hilvana-agentoffice` de un clic (sin escritorio) y Hilvana lo sirve embebido en `/agents/` (escritorio) y `/agents/m.html` (móvil). Instalarlo y conectarlo: [nota 20 del manual](../agentoffice.md).
 
@@ -117,6 +117,18 @@ La pestaña **Mesa** es el puesto de control de una épica: ves **en vivo** lo q
 
 ![Mesa en el móvil: lista por épica](assets/hilvana-454-agentoffice-mesa-movil-lista.png) ![Mesa en el móvil: la tarea](assets/hilvana-455-agentoffice-mesa-movil-ahora.png)
 - Lo que ves está acotado al directorio de la tarea (su copia de trabajo, o la carpeta del proyecto si no hay repo): un fichero del agente nunca puede ejecutar nada en AgentOffice.
+
+## 🖥 Modo «aplicación», burbuja única y dos memorias (0.3.16)
+
+- **Modo aplicación.** Además de web y Blender, una tarea puede abrir **cualquier aplicación o fichero** en su mitad de la pantalla: pon un fichero o una URL (se abre con el programa por defecto) o un comando sin comillas de shell, por ejemplo `gimp logo.xcf`. La ventana nueva se coloca en el lado de la tarea. Se elige en **Nueva tarea ▸ 🖥 Aplicación…**.
+- **Burbuja idéntica en todos los modos.** La de aplicación es la misma burbuja-chat que la de web y Blender; en la cabecera aparece el nombre de la aplicación que se abrió.
+- **Dos memorias visibles y editables.** En la ficha del agente ves y editas la **memoria compartida del proyecto** y la **propia del agente**. Una lección útil de la del agente se puede **promocionar a la compartida** para que la lean todos.
+
+## 🔁 La revisión no se queda parada (0.3.17)
+
+- Si AgentOffice se reinicia mientras una tarea estaba «en revisión», al arrancar **limpia esa marca y relanza la revisión** sola; antes la tarea quedaba bloqueada para siempre y arrastraba a las que dependían de ella.
+- Si un agente entrega diciendo que **no ha hecho el trabajo** («no he empezado», «sin empezar»…), la tarea **vuelve una vez** a «Por hacer» con la orden de hacerlo en su rama; solo si lo repite se retiene para que decidas tú.
+- Los agentes ya no esperan a otras tareas por su cuenta: las esperas las fija quien planifica en las dependencias de la tarea.
 
 ## Agentes y roles
 
