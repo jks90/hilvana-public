@@ -1,6 +1,6 @@
 # ⌨️ 09 · El CLI flow-run
 
-> Revisado para Hilvana **6.2.1** (herramienta de terminal, sin pantalla propia).
+> Revisado para Hilvana **6.4.0** (herramienta de terminal, sin pantalla propia).
 
 Los mismos `.flow.json` del canvas, ejecutados **desde terminal**: para CI, cron del sistema, o baterías de regresión. Sin navegador.
 
