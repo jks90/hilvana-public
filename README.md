@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.4.0
+  juankanh/hilvana:6.5.0
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -63,7 +63,8 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 
 | Versión | Qué trae |
 |---------|----------|
-| **6.4.0** (recomendada) | 🏢 **AgentOffice 0.3.13–0.3.18 documentado** (sin cambios en la app): 🛠 Mesa de trabajo (también en el móvil), modo «aplicación» con burbuja única, dos memorias (proyecto y agente), ayuda ⓘ y asistentes, y la revisión que ya no se queda parada tras un reinicio. Incluye scripts para preparar un entorno de demo con datos inventados |
+| **6.5.0** (recomendada) | 🧭 **La Guía de AgentOffice lee las imágenes que adjuntas** (sin cambios en la app): PNG, JPG, WebP y GIF, hasta 4 por mensaje y 5 MB cada una, y puede describir capturas subidas — [manual 15](docs/manual/15-agentoffice.md) |
+| **6.4.0** | 🏢 **AgentOffice 0.3.13–0.3.18 documentado** (sin cambios en la app): 🛠 Mesa de trabajo (también en el móvil), modo «aplicación» con burbuja única, dos memorias (proyecto y agente), ayuda ⓘ y asistentes, y la revisión que ya no se queda parada tras un reinicio. Incluye scripts para preparar un entorno de demo con datos inventados |
 | **6.3.1** | 🤝 **AgentOffice en Docker usa el MCP de Hilvana**: los agentes QA/documentalista y el modo 🛠 Taller del Guía entran en `/mcp` con el token de emparejamiento (antes, desde otro contenedor, 403); el Taller en Docker trabaja con tu sesión y tu memoria de Claude Code, como en el editor (AgentOffice 0.3.12) |
 | **6.3.0** | 📄 **El flow en PDF desde el móvil**: en la vista `/m` (y la app Android), la ficha de un flow trae **Ver el flow en PDF**, el mismo PDF del canvas que «Exportar a PDF» del escritorio, generado por el servidor y abierto con el visor del teléfono (Pro). La app **Hilvana Admin** se queda solo con el admin del cloud y sus contraseñas guardadas |
 | **6.2.1** | 🔗 **AgentOffice en un servidor, sin quedarse bloqueado**: si la instalación no está vinculada a tu cuenta Hilvana, el botón de Docker pasa a **Vincular cuenta e instalar** y, al volver de Config ▸ Licencia ya vinculado, instala solo. Antes creaba un AgentOffice que no arrancaba («Vincula Hilvana a tu cuenta») |
@@ -113,7 +114,7 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 Las versiones anteriores (5.12 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.4.0
+docker pull juankanh/hilvana:6.5.0
 ```
 
 ## Documentación
