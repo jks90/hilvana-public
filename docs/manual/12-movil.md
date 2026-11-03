@@ -1,6 +1,6 @@
 # 📱 12 · La vista móvil
 
-> Revisado para Hilvana **6.5.0** (vista `/m`).
+> Revisado para Hilvana **6.6.0** (vista `/m`).
 
 Desde la **5.11**, Hilvana trae una segunda cara pensada para el teléfono: entra en
 **`http://tu-servidor:9998/m`** y tienes tus flows para **ejecutarlos, ver el resultado y leerlos como

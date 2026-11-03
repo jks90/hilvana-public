@@ -1,6 +1,6 @@
 # 🕷 07 · Documentar una web — flow-explore
 
-> Revisado para Hilvana **6.5.0** (herramienta de terminal, sin pantalla propia).
+> Revisado para Hilvana **6.6.0** (herramienta de terminal, sin pantalla propia).
 
 
 `flow-explore` es el CLI que documenta una web **navegándola**: abre Chrome, hace screenshot de cada pantalla, captura las llamadas HTTP que se producen en cada una, y genera la documentación en dos formatos a la vez:
