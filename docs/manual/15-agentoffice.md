@@ -1,6 +1,6 @@
-# 15 · AgentOffice — pantalla a pantalla (0.3.18)
+# 15 · AgentOffice — pantalla a pantalla (0.3.24)
 
-> Revisado para Hilvana **6.6.0** · Manual de **AgentOffice 0.3.18**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1; la **Mesa de trabajo** es de la 0.3.13 (filtro y buscador, 0.3.14; en el móvil, 0.3.15).
+> Revisado para Hilvana **6.6.0** · Manual de **AgentOffice 0.3.24**, tal como lo sirve Hilvana en `/agents/`. Las pantallas de la oficina son las de la 0.3.3; el texto de instalación y actualización es el de la 6.2.1; la **Mesa de trabajo** es de la 0.3.13 (filtro y buscador, 0.3.14; en el móvil, 0.3.15).
 
 AgentOffice es la **oficina de agentes de IA** (Claude Code y Codex) de la suite: un equipo con roles que trabaja en tus repos, una **rama y una copia de trabajo (worktree) por tarea**, y **revisión humana** antes de fusionar. Corre aparte de Hilvana (puerto 7420). Desde la 6.2.0 se instala desde Config ▸ Plugins **en tu PC** (nativo, por defecto: una orden de terminal; servicio `hilvana-agentoffice` en `~/.hilvana/agentoffice`, con escritorio para la burbuja y el modo Blender) o **en un servidor** como contenedor `hilvana-agentoffice` de un clic (sin escritorio) y Hilvana lo sirve embebido en `/agents/` (escritorio) y `/agents/m.html` (móvil). Instalarlo y conectarlo: [nota 20 del manual](../agentoffice.md).
 
@@ -387,6 +387,10 @@ AgentOffice se explica solo: cada pantalla importante tiene su ayuda a mano y cr
 | 📥 Bandeja | ![](assets/hilvana-185-ao-movil-bandeja.png) | «Para ti»: revisiones, preguntas y avisos (insignia con el número) |
 | 🗂 Tareas | ![](assets/hilvana-186-ao-movil-tareas.png) | Filtros, tarjetas y **＋ Nueva tarea** |
 | 🧭 Guía | ![](assets/hilvana-188-ao-movil-guia.png) | Chat con la Guía: chats, ＋ Nuevo, 🎤 dictar |
+
+**La Guía del móvil es como la de la web**: los chats se agrupan por proyecto y en carpetas, y mantiene el dictado 🎤 y la voz 🔊. La voz lee las respuestas largas enteras (hasta 20 000 caracteres; antes se cortaban a 1 500).
+
+**Dos equipos con los mismos repos.** Si trabajas con AgentOffice en dos ordenadores que comparten repositorios, AgentOffice evita que se pisen: al **empezar una tarea** trae la rama base desde GitHub (solo si es avanzar) y al **aprobarla** sube la rama. Nunca fusiona ni fuerza: si hay cambios sin confirmar, las ramas han divergido o GitHub tiene algo nuevo, no toca nada y lo avisa en el registro y en el resumen de la tarea. Se apaga con el ajuste `gitSync` en falso. Las memorias de Claude Code y las lecciones de AgentOffice de los dos equipos también se pueden unir en los dos sentidos (gana la nota más reciente); se configura en `~/.config/agentoffice/equipos.json` y se lanza desde un monitor de Hilvana cada 6 h o a mano.
 
 **Hoja de Equipo**: tocar a una persona del Equipo abre su ficha (rol, motor, tarea actual, memoria…; lo que no tenga se oculta).
 

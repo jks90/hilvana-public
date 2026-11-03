@@ -164,6 +164,7 @@ docker run -d … \
 | 4.24.0 | **Pizarra** estilo Excalidraw sobre el lienzo (`drawings` en el flow), barra lateral de iconos con un panel a la vez, **Guía de nodos**, Ocultar conectores, Maximizar Mermaid, tool MCP `node_add_info` (20 tools) |
 | **5.15.1** | 🛡️ **Sandbox de los scripts de nota en el navegador** + flows de confianza (pregunta antes de ejecutar, chip 🔒/🛡️ en la barra) — [04](04-notas-mermaid-capturas.md#sandbox-y-flows-de-confianza--515); imagen con parches de Alpine y sin `npm` |
 | **6.6.0** (recomendada) | 🧭 Versión con las imágenes adjuntas de la Guía de AgentOffice al día en el manual (sin cambios en la app; ver 6.5.0) — [15](15-agentoffice.md) |
+| **6.6.0** · AgentOffice 0.3.24 | 📘 Manual al día: la Guía del móvil como la web, dos equipos sin pisarse (sincronización de repos y memorias) y voz con respuestas largas — [15](15-agentoffice.md) |
 | **6.5.0** | 🧭 **La Guía de AgentOffice lee las imágenes adjuntas** (PNG, JPG, WebP y GIF; hasta 4 y 5 MB cada una) — [15](15-agentoffice.md) |
 | **6.4.0** | 🏢 **AgentOffice 0.3.13–0.3.18 al día en el manual** (Mesa de trabajo, modo «aplicación», dos memorias, ayuda ⓘ y asistentes, revisión que no se queda parada) y scripts de datos de demo — [15](15-agentoffice.md) |
 | **6.3.1** | 🤝 **AgentOffice en Docker usa el MCP de Hilvana**: agentes QA/docs y modo 🛠 Taller entran en `/mcp` con el token de emparejamiento (antes 403); el Taller en Docker usa tu sesión y memoria de Claude Code — [15](15-agentoffice.md) |
