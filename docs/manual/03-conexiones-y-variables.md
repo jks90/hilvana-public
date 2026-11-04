@@ -1,6 +1,6 @@
 # 🔗 03 · Conexiones y variables
 
-> Revisado para Hilvana **6.6.0** · capturas: [97](assets/hilvana-97-barra-superior-y-canvas.png) · [112](assets/hilvana-112-config-variables.png) · [113](assets/hilvana-113-config-global.png).
+> Revisado para Hilvana **6.7.0** · capturas: [97](assets/hilvana-97-barra-superior-y-canvas.png) · [112](assets/hilvana-112-config-variables.png) · [113](assets/hilvana-113-config-global.png).
 
 Los dos mecanismos que convierten cajitas sueltas en un **flujo**.
 

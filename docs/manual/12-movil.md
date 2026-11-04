@@ -1,6 +1,6 @@
 # 📱 12 · La vista móvil
 
-> Revisado para Hilvana **6.6.0** (vista `/m`).
+> Revisado para Hilvana **6.7.0** (vista `/m`).
 
 Desde la **5.11**, Hilvana trae una segunda cara pensada para el teléfono: entra en
 **`http://tu-servidor:9998/m`** y tienes tus flows para **ejecutarlos, ver el resultado y leerlos como
@@ -67,6 +67,15 @@ La pestaña **Documentación** enseña el flow como se lee, no como se dibuja:
 
 Sirve para consultar en una reunión qué comprueba un flujo, o para enseñárselo a alguien sin abrir el
 portátil.
+
+<a id="escuchar-una-nota-en-el-movil"></a>
+
+### Escuchar una nota en el móvil 🆕 (6.7.0)
+
+Las notas de texto traen un botón **Escuchar** que las lee en voz alta con la voz del navegador del
+teléfono (qué se lee y qué no, en [04 Notas](04-notas-mermaid-capturas.md#escuchar-una-nota)). Si el
+navegador no tiene síntesis de voz —lo normal en la app Android (WebView)— el botón sale deshabilitado
+con un aviso.
 
 ## El flow en PDF 🆕 (6.3.0)
 

@@ -1,6 +1,6 @@
 # 📝 04 · Notas, Mermaid y Capturas
 
-> Revisado para Hilvana **6.6.0** · capturas: [99](assets/hilvana-99-menu-anadir-nodo.png).
+> Revisado para Hilvana **6.7.0** · capturas: [99](assets/hilvana-99-menu-anadir-nodo.png).
 
 Tres variantes del mismo nodo (la nota) para **documentar dentro del canvas**:
 
@@ -11,6 +11,37 @@ Tres variantes del mismo nodo (la nota) para **documentar dentro del canvas**:
 Texto libre. Si escribes `{{variables}}`, la **vista previa** resuelve los valores en verde (y en ámbar las que aún no existen). Un conmutador **Vista previa / Texto** (arriba a la derecha de la pestaña) muestra uno u otro — vista previa por defecto; en los nodos Mermaid alterna entre el diagrama y el código. Desde la 4.29 la vista previa tiene un botón **Copiar** que lleva al portapapeles **toda la vista**: texto plano con las `{{variables}}` resueltas y, a la vez, HTML con los enlaces (al pegar en Slack/Word/Obsidian se conservan).
 
 ![](assets/hilvana-39-nota-copiar.png)
+
+<a id="escuchar-una-nota"></a>
+
+### Escuchar una nota 🆕 (6.7.0)
+
+Hilvana puede leer una nota en voz alta con la voz del navegador (sin servicios externos ni cambios en el flow).
+
+**Dónde está**
+
+- Barra de la vista previa de la nota: botón **Escuchar**; mientras suena pasa a **Pausar**, y en pausa a **Reanudar**. Junto a él aparece **Detener**.
+- Menú de la card (⋯): entrada **Escuchar nota** / **Detener lectura**.
+- Nota a pantalla completa: el mismo botón en su barra.
+- Vista móvil `/m`: botón Escuchar en las notas de texto.
+
+Los estados que verás son «Leyendo…», «En pausa» y «Lectura terminada».
+
+**Qué se lee**
+
+- El texto de la nota sin formato: cabeceras, listas, tablas, negritas y cursivas se leen como texto; de los enlaces solo el texto y de las imágenes su texto alternativo.
+- No se leen: bloques de código y diagramas Mermaid, comentarios HTML, scripts ni URLs sueltas.
+- `{{variables}}` se sustituyen por su valor actual; si no tienen valor se omiten. `{{secret:NOMBRE}}` nunca se lee.
+
+**Idioma:** se detecta solo (español o inglés) por el contenido; si hay duda se usa el idioma del navegador, y se elige una voz de ese idioma si el sistema la tiene.
+
+**Reglas**
+
+- Solo suena una nota a la vez: al pulsar Escuchar en otra, la anterior se corta.
+- La lectura se detiene al cerrar la nota o su pestaña, al salir de la pantalla completa o al editar el contenido.
+- Una nota vacía no suena.
+
+**Límites:** las voces dependen del navegador y del sistema operativo. Si el navegador no admite síntesis de voz, el botón queda deshabilitado con un aviso; en la app Android (WebView) normalmente no hay voz. El visor de documentos `.md` no tiene botón Escuchar.
 
 ### Nota a pantalla completa 🆕 (5.16)
 
