@@ -1,6 +1,6 @@
 # 🤖 10 · El MCP embebido
 
-> Revisado para Hilvana **6.7.0** (servidor MCP en `/mcp`, sin pantalla propia).
+> Revisado para Hilvana **6.7.1** (servidor MCP en `/mcp`, sin pantalla propia).
 
 > **5.13** — Las mismas herramientas mueven el **asistente de IA embebido** ([13](13-asistente-ia.md)): un chat dentro de la app con tu clave de Claude u OpenAI que las llama en proceso, sin necesidad de Claude Code ni de configurar el MCP.
 
