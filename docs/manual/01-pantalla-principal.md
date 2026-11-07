@@ -1,6 +1,6 @@
 # 🖥 01 · La pantalla principal
 
-> Revisado para Hilvana **6.7.0** · capturas: [30](assets/hilvana-30-pizarra.png).
+> Revisado para Hilvana **6.7.1** · capturas: [30](assets/hilvana-30-pizarra.png).
 
 ![](assets/hilvana-30-pizarra.png)
 
