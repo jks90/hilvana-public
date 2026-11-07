@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.7.0
+  juankanh/hilvana:6.7.1
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -63,7 +63,8 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 
 | Versión | Qué trae |
 |---------|----------|
-| **6.7.0** (recomendada) | 🔊 **Escuchar las notas**: botón para que Hilvana lea una nota en voz alta (Escuchar/Pausar/Reanudar/Detener; también en pantalla completa y en la vista móvil), con la voz del navegador. Sin cambios en el flow. |
+| **6.7.1** (recomendada) | 🤖 **Actualizar AgentOffice sin perder nada**: en Docker, «⬆ Actualizar» conserva lo que tu contenedor tuviera de más (voz, centralita, ejecutor del host, carpetas, puertos), también si lo creaste a mano; si la versión nueva no arranca vuelve sola a la anterior. Con AgentOffice 0.3.26 la voz (Piper y Whisper) viene de serie en Docker — [manual 15](docs/manual/15-agentoffice.md#actualizar-agentoffice-en-docker) |
+| **6.7.0** | 🔊 **Escuchar las notas**: botón para que Hilvana lea una nota en voz alta (Escuchar/Pausar/Reanudar/Detener; también en pantalla completa y en la vista móvil), con la voz del navegador. Sin cambios en el flow. |
 | **6.6.0** | 🧭 Versión con la épica de imágenes adjuntas de la Guía de AgentOffice al día en el manual (sin cambios en la app; ver 6.5.0) — [manual 15](docs/manual/15-agentoffice.md) |
 | **6.5.0** | 🧭 **La Guía de AgentOffice lee las imágenes que adjuntas** (sin cambios en la app): PNG, JPG, WebP y GIF, hasta 4 por mensaje y 5 MB cada una, y puede describir capturas subidas — [manual 15](docs/manual/15-agentoffice.md) |
 | **6.4.0** | 🏢 **AgentOffice 0.3.13–0.3.18 documentado** (sin cambios en la app): 🛠 Mesa de trabajo (también en el móvil), modo «aplicación» con burbuja única, dos memorias (proyecto y agente), ayuda ⓘ y asistentes, y la revisión que ya no se queda parada tras un reinicio. Incluye scripts para preparar un entorno de demo con datos inventados |
@@ -110,13 +111,11 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 | **5.20.1** | 🗂️ **Ordenar el proyecto desde el panel**: crear carpetas, **arrastrar** flows, documentos y carpetas a otra carpeta, ✏️ mover o renombrar, borrar carpetas vacías y **borrar documentos `.md` y `.pdf`** (un enlace se quita sin tocar el original). Las pestañas abiertas siguen a su fichero — [08](https://github.com/jks90/hilvana-public/blob/main/docs/manual/08-paneles.md#ordenar-el-proyecto--520) |
 | **5.19.4** | Incluye lo de las 5.19.0–5.19.3 (no publicadas sueltas): **asserts de errores esperados** (`404`/`4xx` en verde si se cumplen) y con `{{variables}}`, **contexto para el plugin Agentes** (AgentOffice sabe qué flow y nodo miras) y sus **Ajustes tipo Cmd** · 🗂️ El panel Proyecto y `flow_files_list` **ya no repiten los flows** de las copias de trabajo de los agentes (git worktrees dentro de un repo enlazado en el workspace) — [08](https://github.com/jks90/hilvana-public/blob/main/docs/manual/08-paneles.md#carpetas-enlazadas-y-copias-de-los-agentes--5194) |
 | **5.19.0–5.19.3** | ✅ **Asserts de errores esperados**: un assert de status `404`/`4xx` deja el nodo en verde si se cumple, y los asserts aceptan `{{variables}}` ([02](https://github.com/jks90/hilvana-public/blob/main/docs/manual/02-nodo-request.md#errores-esperados-y-variables--519)). Plugin Agentes: recibe lo que estás viendo, panel de Ajustes propio y escucha por voz; `flow_open` recarga del disco y `flow_save` no pisa cambios ajenos |
-| **5.18.0** | 🧩 **Plugins** (Config ▸ Plugins) con **AgentOffice** como primero: una oficina de agentes de IA que trabaja en tus repos, embebida en Hilvana (Pro). El workspace **sigue enlaces simbólicos**: una carpeta de proyecto puede reunir los `flows/` de varios repos — [08](https://github.com/jks90/hilvana-public/blob/main/docs/manual/08-paneles.md#plugins-y-agentoffice--518) |
-| **5.17.0** | 🔔 **Vigilancia en el servidor**: al monitor programado se le añaden **reglas** sobre los datos que extrae el flow (`precio > 2700`, `senal cambia`, `estado contiene ERROR`…). El servidor lo ejecuta cada N min **sin navegador** y avisa por webhook (Slack, Telegram, ntfy, n8n…) **solo cuando una regla se dispara o se recupera**; `notifyUrl` admite `{{secret:X}}`; tool MCP `flow_monitor` (39 tools) — [08](https://github.com/jks90/hilvana-public/blob/main/docs/manual/08-paneles.md) |
 
-Las versiones anteriores (5.12 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
+Las versiones anteriores (5.18 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.7.0
+docker pull juankanh/hilvana:6.7.1
 ```
 
 ## Documentación

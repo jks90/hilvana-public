@@ -6,6 +6,9 @@ AgentOffice es la **oficina de agentes de IA** (Claude Code y Codex) de la suite
 
 **Instalar desde Config ▸ Plugins.** Activa el plugin AgentOffice y pulsa **Instalar** en su tarjeta: la guía ofrece **💻 En este PC (recomendado)** —copias una orden `curl … | sh` y la pegas en una terminal de este PC (Linux)— o **🖥 En un servidor (Docker)** —botón **Instalar con un clic**, o el `docker run` para copiar si Hilvana no ve Docker—. Si este Hilvana aún no está vinculado a tu cuenta, el botón es **Vincular cuenta e instalar**: te lleva a Config ▸ Licencia y, al volver ya vinculado, la instalación en Docker continúa sola. Una vez «● En marcha», **Abrir** carga esta pantalla; AgentOffice se actualiza solo y la tarjeta avisa con «⬆ actualización». El detalle campo a campo está en el [capítulo 8 · Paneles](08-paneles.md).
 
+<a id="actualizar-agentoffice-en-docker"></a>
+**Actualizar AgentOffice en Docker (6.7.1).** Cuando la tarjeta avisa con «⬆ actualización», **Actualizar** descarga la versión nueva y recrea el contenedor **conservando lo que tuviera de más**: variables (la voz, la centralita de voz o el ejecutor del host), carpetas montadas, puertos y hosts. Sirve también si el contenedor `hilvana-agentoffice` lo creaste tú a mano con la imagen oficial: Hilvana lo adopta en vez de pedirte que lo borres. La versión anterior queda parada como `hilvana-agentoffice-anterior` y, si la nueva no responde, Hilvana vuelve a ella sola. La tarjeta muestra la versión que corre de verdad. Desde AgentOffice **0.3.26** la imagen trae la **voz de serie** (Piper para hablar y Whisper para entenderte, en el propio contenedor: no hay que montar nada del PC) y por defecto queda accesible en `127.0.0.1:7420` del equipo.
+
 ![Instalar AgentOffice en este PC](assets/hilvana-447-plugins-instalar-en-este-pc.png)
 
 ![Vincular cuenta e instalar](assets/hilvana-449-plugins-instalar-docker-vincular.png)
