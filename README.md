@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.7.1
+  juankanh/hilvana:6.8.0
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -63,7 +63,8 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 
 | Versión | Qué trae |
 |---------|----------|
-| **6.7.1** (recomendada) | 🤖 **Actualizar AgentOffice sin perder nada**: en Docker, «⬆ Actualizar» conserva lo que tu contenedor tuviera de más (voz, centralita, ejecutor del host, carpetas, puertos), también si lo creaste a mano; si la versión nueva no arranca vuelve sola a la anterior. Con AgentOffice 0.3.26 la voz (Piper y Whisper) viene de serie en Docker — [manual 15](docs/manual/15-agentoffice.md#actualizar-agentoffice-en-docker) |
+| **6.8.0** (recomendada) | 🖥 **Hilvana de escritorio**: app para Linux (AppImage y .deb) y Windows (instalador por usuario) que lleva Hilvana y AgentOffice dentro, sin Docker; PDF y captura con el Chromium de Electron, cierre ordenado y aviso Pro en «Agentes» durante la prueba. La imagen Docker no cambia. |
+| **6.7.1** | 🤖 **Actualizar AgentOffice sin perder nada**: en Docker, «⬆ Actualizar» conserva lo que tu contenedor tuviera de más (voz, centralita, ejecutor del host, carpetas, puertos), también si lo creaste a mano; si la versión nueva no arranca vuelve sola a la anterior. Con AgentOffice 0.3.26 la voz (Piper y Whisper) viene de serie en Docker — [manual 15](docs/manual/15-agentoffice.md#actualizar-agentoffice-en-docker) |
 | **6.7.0** | 🔊 **Escuchar las notas**: botón para que Hilvana lea una nota en voz alta (Escuchar/Pausar/Reanudar/Detener; también en pantalla completa y en la vista móvil), con la voz del navegador. Sin cambios en el flow. |
 | **6.6.0** | 🧭 Versión con la épica de imágenes adjuntas de la Guía de AgentOffice al día en el manual (sin cambios en la app; ver 6.5.0) — [manual 15](docs/manual/15-agentoffice.md) |
 | **6.5.0** | 🧭 **La Guía de AgentOffice lee las imágenes que adjuntas** (sin cambios en la app): PNG, JPG, WebP y GIF, hasta 4 por mensaje y 5 MB cada una, y puede describir capturas subidas — [manual 15](docs/manual/15-agentoffice.md) |
@@ -115,7 +116,7 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 Las versiones anteriores (5.18 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.7.1
+docker pull juankanh/hilvana:6.8.0
 ```
 
 ## Documentación

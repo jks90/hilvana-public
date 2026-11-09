@@ -1,15 +1,29 @@
 # 🐳 11 · Docker y despliegue
 
-> Revisado para Hilvana **6.7.1** · capturas: [117](assets/hilvana-117-config-actualizaciones.png).
+> Revisado para Hilvana **6.8.0** · capturas: [117](assets/hilvana-117-config-actualizaciones.png).
 
 ## Ejecutar
 
 ```bash
 docker run -d --add-host=host.docker.internal:host-gateway \
-  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.7.1
+  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.8.0
 # web + API + MCP en http://localhost:9998 · 1025 = SMTP de prueba (Config ▸ Correo, 4.36)
 ```
 
+
+<a id="hilvana-de-escritorio"></a>
+
+## Hilvana de escritorio, sin Docker 🆕 (6.8.0)
+
+Además de la imagen Docker, Hilvana se puede instalar como **app de escritorio** en Linux (AppImage y `.deb`) y Windows (instalador por usuario, sin permisos de administrador). Lleva dentro Hilvana y AgentOffice: no hace falta Docker ni Node.
+
+- **Local y privada:** el servidor escucha solo en `127.0.0.1` con puertos libres elegidos en cada arranque; la ventana carga esa dirección.
+- **Tus datos:** en Linux `~/.local/share/hilvana`, en Windows `%APPDATA%\Hilvana` (`flows/`, logs y datos de AgentOffice). Desinstalar conserva la carpeta de datos en Windows.
+- **Arranque:** la app espera a que AgentOffice responda (unos segundos la primera vez) antes de abrirse. Si Hilvana no arranca, muestra una pantalla de error que cita su log.
+- **PDF y capturas:** se hacen con el Chromium de la propia app, sin instalar Chrome.
+- **Cierre ordenado:** al salir se cierra primero AgentOffice, así no se pierde lo pendiente (p. ej. una tarea aprobada justo antes); en Windows se avisa a los procesos por un canal interno. Si abres la app mientras se cierra, se vuelve a abrir al terminar.
+- **Periodo de prueba:** el botón «Agentes» muestra el aviso de plan Pro en lugar de un error.
+- **Límites:** el instalador no está firmado y no se actualiza solo; la autoactualización por Docker y los instaladores de AgentOffice de Plugins no se usan.
 
 ## Desde el móvil
 
@@ -135,7 +149,7 @@ docker run -d … \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e FLOW_SELF_UPDATE=on \
   -v /ruta/a/tus/flows:/app/flows \
-  juankanh/hilvana:6.7.1
+  juankanh/hilvana:6.8.0
 ```
 
 - Descarga la versión nueva y **recrea el contenedor con la misma configuración** (puertos, carpetas, variables, redes y reinicio). Tus flows y ajustes no se tocan.
@@ -163,7 +177,8 @@ docker run -d … \
 | 4.23.0 | Scripts JS de las notas ejecutados al Run Flow (web, MCP y CLI; `--skip-info-scripts`), 📌 fijar cajas, Variables usadas en cada caja, tool MCP `tab_close` |
 | 4.24.0 | **Pizarra** estilo Excalidraw sobre el lienzo (`drawings` en el flow), barra lateral de iconos con un panel a la vez, **Guía de nodos**, Ocultar conectores, Maximizar Mermaid, tool MCP `node_add_info` (20 tools) |
 | **5.15.1** | 🛡️ **Sandbox de los scripts de nota en el navegador** + flows de confianza (pregunta antes de ejecutar, chip 🔒/🛡️ en la barra) — [04](04-notas-mermaid-capturas.md#sandbox-y-flows-de-confianza--515); imagen con parches de Alpine y sin `npm` |
-| **6.7.1** (recomendada) | 🤖 **Actualizar AgentOffice sin perder nada**: en Docker, «⬆ Actualizar» conserva lo que tu contenedor tuviera de más (voz, centralita, ejecutor del host, carpetas, puertos), también si lo creaste a mano; si la versión nueva no arranca vuelve sola a la anterior. Con AgentOffice 0.3.26 la voz (Piper y Whisper) viene de serie en Docker — [manual 15](15-agentoffice.md#actualizar-agentoffice-en-docker) |
+| **6.8.0** (recomendada) | 🖥 **Hilvana de escritorio**: app para Linux (AppImage y .deb) y Windows (instalador por usuario) que lleva Hilvana y AgentOffice dentro, sin Docker; PDF y captura con el Chromium de Electron, cierre ordenado y aviso Pro en «Agentes» durante la prueba. La imagen Docker no cambia. |
+| **6.7.1** | 🤖 **Actualizar AgentOffice sin perder nada**: en Docker, «⬆ Actualizar» conserva lo que tu contenedor tuviera de más (voz, centralita, ejecutor del host, carpetas, puertos), también si lo creaste a mano; si la versión nueva no arranca vuelve sola a la anterior. Con AgentOffice 0.3.26 la voz (Piper y Whisper) viene de serie en Docker — [manual 15](15-agentoffice.md#actualizar-agentoffice-en-docker) |
 | **6.7.0** | 🔊 **Escuchar las notas**: botón para que Hilvana lea una nota en voz alta (Escuchar/Pausar/Reanudar/Detener; también en pantalla completa y en la vista móvil), con la voz del navegador. Sin cambios en el flow. |
 | **6.6.0** | 🧭 Versión con las imágenes adjuntas de la Guía de AgentOffice al día en el manual (sin cambios en la app; ver 6.5.0) — [15](15-agentoffice.md) |
 | **6.6.0** · AgentOffice 0.3.24 | 📘 Manual al día: la Guía del móvil como la web, dos equipos sin pisarse (sincronización de repos y memorias) y voz con respuestas largas — [15](15-agentoffice.md) |
