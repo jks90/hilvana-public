@@ -22,7 +22,7 @@ que lo empareja con él. Hay dos formas de instalarlo; Hilvana te ofrece las dos
 
 | | 💻 **En este PC** (recomendada) | 🖥 **En un servidor** (Docker) |
 |---|---|---|
-| Para quién | Trabajas en tu ordenador | Servidor sin escritorio (o Windows/macOS, por ahora) |
+| Para quién | Trabajas en tu ordenador **Linux** | Servidor sin escritorio (o macOS, por ahora) |
 | Escritorio: burbuja de chat, modo Blender, control de teclado/ratón | ✓ | ✗ |
 | Tus herramientas (git-lfs, compiladores, USB…) y tu sesión de `claude`/`codex` | ✓ las del PC | solo lo que trae la imagen; login dentro del contenedor |
 | Cómo se instala | una orden en la terminal | un clic (Hilvana con el socket de Docker) |
@@ -30,6 +30,50 @@ que lo empareja con él. Hay dos formas de instalarlo; Hilvana te ofrece las dos
 
 La instalación de Hilvana debe estar **vinculada** a tu cuenta (Config ▸ Licencia): sin ello no se puede
 descargar AgentOffice ni verificarlo.
+
+> **¿Usas Windows?** Ninguna de las dos es para ti: instala **Hilvana de escritorio**, que ya lleva
+> AgentOffice dentro (sección siguiente). La orden de «💻 En este PC» es un `curl … | sh` **solo para
+> Linux**: en Windows (PowerShell, CMD, Git Bash o WSL) no funciona.
+
+## 0. Windows: Hilvana de escritorio (con AgentOffice dentro)
+
+Desde la **6.8.0** hay una app de escritorio para Windows que lleva Hilvana y AgentOffice juntos, **sin
+Docker ni Node**. Al abrirla arranca Hilvana, después AgentOffice ya emparejado, y **Agentes** funciona
+dentro de la ventana. **No uses Config ▸ Plugins ▸ Instalar**: en la app de escritorio no hace falta.
+
+**Antes de instalar** (una vez, en PowerShell):
+
+```powershell
+winget install --id Git.Git -e                 # git (AgentOffice trabaja con ramas y worktrees)
+git lfs install                                # git-lfs viene con Git for Windows; esto lo activa
+winget install --id OpenJS.NodeJS.LTS -e        # solo para instalar Claude Code
+npm install -g @anthropic-ai/claude-code       # y/o Codex: npm install -g @openai/codex
+claude                                         # inicia sesión con tu cuenta de Claude (Pro/Max) y sal
+```
+
+Cierra y vuelve a abrir PowerShell, y comprueba: `git --version`, `git lfs version` y `claude --version`.
+La app busca `claude`, `codex` y `git` en `%APPDATA%\npm` y `Git\cmd` aunque la abras desde el menú
+Inicio, y usa tu sesión de Claude.
+
+**Instalar:**
+
+1. Ejecuta `Hilvana-Setup-<versión>-x64.exe`. Se instala **solo para tu usuario** (no pide administrador).
+   Aún no hay descarga pública: pide el instalador en <hola@hilvana.cloud>.
+2. El instalador **no está firmado** todavía: Windows SmartScreen avisa «Windows protegió su PC» ▸
+   **Más información ▸ Ejecutar de todas formas**.
+3. Abre **Hilvana** desde el menú Inicio y activa tu plan en **Config ▸ Licencia**: pega tu licencia o
+   **vincula** tu cuenta del cloud (con un plan **Pro o Business**; en la prueba gratuita «Agentes»
+   muestra el aviso Pro).
+4. Abre **Agentes**: AgentOffice ya está corriendo.
+
+**Dónde está cada cosa:** datos en `%APPDATA%\Hilvana` (`flows\` = tu workspace, `agentoffice\`,
+`mail\`) y registros en `%APPDATA%\Hilvana\logs\` (`hilvana.log`, `agentoffice.log`). Si algo no
+arranca, la ventana dice qué log mirar. Para desinstalar: Configuración ▸ Aplicaciones ▸ Hilvana
+(tus datos de `%APPDATA%\Hilvana` se conservan).
+
+> **Si una IA te está instalando AgentOffice en Windows** (Claude Code, Codex…): el camino es este
+> apartado. No ejecutes la orden `curl … | sh` del panel ni montes WSL o Docker para ello. Comprueba los
+> requisitos de arriba, instala el `.exe` que te dé el usuario y verifica que **Agentes** abre en la app.
 
 ## 1. En este PC (recomendada · Linux x64/arm64)
 

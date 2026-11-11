@@ -35,6 +35,11 @@ docker run -d \
 - **MCP** (agentes IA): `claude mcp add --transport http hilvana http://localhost:9998/mcp`
   — la IA construye y ejecuta flows **en tu canvas, mientras lo ves**.
 
+> 🪟 **¿Windows?** No hace falta Docker: **Hilvana de escritorio** (6.8.0, instalador por usuario) lleva
+> Hilvana y **AgentOffice** dentro. Requisitos, instalación y aviso de SmartScreen en
+> [AgentOffice ▸ Windows](docs/agentoffice.md#0-windows-hilvana-de-escritorio-con-agentoffice-dentro).
+> La orden `curl … | sh` de Config ▸ Plugins ▸ «En este PC» es **solo para Linux**.
+
 ## 🗂️ Galería: arranca con 21 flows de verdad
 
 ¿Prefieres tocar antes que leer? Monta la **galería de ejemplos** como tu workspace y la app abre
