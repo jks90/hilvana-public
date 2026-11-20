@@ -22,6 +22,7 @@ Manual completo de **Hilvana**: la herramienta visual para componer, ejecutar y 
 13. [13 El asistente de IA](13-asistente-ia.md) — el chat que construye y arregla flows en tu canvas con tu clave de Claude u OpenAI
 14. [14 Reportar un problema](14-reportar-problemas.md) — errores, ideas y preguntas al equipo desde la app, con captura y datos técnicos 🆕
 15. [15 AgentOffice](15-agentoffice.md) — la oficina de agentes pantalla a pantalla: Mesa de trabajo (seguimiento en vivo), tareas, equipo, ajustes, revisión, burbuja del agente, modos de desarrollo y móvil 🆕
+16. [16 AgentOffice en la nube](16-agentoffice-nube.md) — AgentOffice alojado para organizaciones Business: activarlo desde la cuenta, token de IA y tokens de repo con permisos mínimos 🆕
 
 ## Arrancar la aplicación
 
