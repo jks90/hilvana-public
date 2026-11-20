@@ -1,6 +1,6 @@
 # 16 · AgentOffice en la nube (Business)
 
-> Revisado para Hilvana **6.8.0** · Texto de la página de tu cuenta ▸ **🏢 AgentOffice en la nube**. Sin capturas: la página de la cuenta no forma parte de la aplicación local.
+> Revisado para Hilvana **6.9.0** · Texto de la página de tu cuenta ▸ **🏢 AgentOffice en la nube**. Sin capturas: la página de la cuenta no forma parte de la aplicación local.
 
 <a id="que-es"></a>
 ## Qué es y para quién
