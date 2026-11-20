@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.9.0
+  juankanh/hilvana:6.9.1
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -68,7 +68,8 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 
 | Versión | Qué trae |
 |---------|----------|
-| **6.9.0** (recomendada) | ☁ **AgentOffice en la nube (Business)**: el Hilvana de tu organización usa el AgentOffice que gestiona Hilvana cloud, sin instalar ni actualizar (panel «Gestionado por Hilvana cloud», aviso si no tienes Business); se activa desde Cuenta ▸ «🏢 AgentOffice en la nube» con tu IA y tus repos cifrados. Con AgentOffice 0.3.31 — [manual 16](docs/manual/16-agentoffice-nube.md) |
+| **6.9.1** (recomendada) | 🔧 Corrección: el AgentOffice alojado en la nube ya arranca desbloqueado: el Hilvana de tu organización le pide la verificación de licencia a Hilvana cloud por la red interna (antes se quedaba en «pago requerido»). |
+| **6.9.0** | ☁ **AgentOffice en la nube (Business)**: el Hilvana de tu organización usa el AgentOffice que gestiona Hilvana cloud, sin instalar ni actualizar (panel «Gestionado por Hilvana cloud», aviso si no tienes Business); se activa desde Cuenta ▸ «🏢 AgentOffice en la nube» con tu IA y tus repos cifrados. Con AgentOffice 0.3.31 — [manual 16](docs/manual/16-agentoffice-nube.md) |
 | **6.8.0** | 🖥 **Hilvana de escritorio**: app para Linux (AppImage y .deb) y Windows (instalador por usuario) que lleva Hilvana y AgentOffice dentro, sin Docker; PDF y captura con el Chromium de Electron, cierre ordenado y aviso Pro en «Agentes» durante la prueba. La imagen Docker no cambia. |
 | **6.7.1** | 🤖 **Actualizar AgentOffice sin perder nada**: en Docker, «⬆ Actualizar» conserva lo que tu contenedor tuviera de más (voz, centralita, ejecutor del host, carpetas, puertos), también si lo creaste a mano; si la versión nueva no arranca vuelve sola a la anterior. Con AgentOffice 0.3.26 la voz (Piper y Whisper) viene de serie en Docker — [manual 15](docs/manual/15-agentoffice.md#actualizar-agentoffice-en-docker) |
 | **6.7.0** | 🔊 **Escuchar las notas**: botón para que Hilvana lea una nota en voz alta (Escuchar/Pausar/Reanudar/Detener; también en pantalla completa y en la vista móvil), con la voz del navegador. Sin cambios en el flow. |
@@ -122,7 +123,7 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 Las versiones anteriores (5.18 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.9.0
+docker pull juankanh/hilvana:6.9.1
 ```
 
 ## Documentación
