@@ -52,7 +52,6 @@ El **tablero** tiene seis columnas: *Backlog · Por hacer · En curso · Revisi�
 |---|---|
 | 🎯 **Objetivo para el PO** + **Encargar al PO** | Escribes (o dictas con 🎤) *qué* quieres; el PO (product owner) decide quién lo hace y **crea la tarea** — es la «creación con IA» de alto nivel. Enter encarga, Shift+Enter salta de línea |
 | **＋ Tarea a mano** | Abre «Nueva tarea» (abajo) |
-<!-- HI-496 -->
 | 🧩 **Épica y origen** | **Encargar al PO** crea siempre, además del plan «Planificar: …», una **tarea épica** en Backlog con tu objetivo como título. La épica muestra «🧩 n/N partes hechas», no se puede pasar a «Por hacer» y se cierra sola cuando sus partes están hechas o descartadas. Cada parte lleva en su tarjeta «🧩 código de la épica» (las rondas de seguimiento, «↻ código»); también en la ficha («Viene de …») y en el móvil. Pulsa esa etiqueta, o «ver solo estas» en la franja de la épica, para ver solo la épica, su plan y sus partes; la barra muestra «🧩 solo X ✕» para quitar el filtro (no se guarda entre sesiones) |
 | **⏰ Programadas** | Plantillas de tareas automáticas (abajo) |
 | **🔗 Conectar tablero…** | Enlaza GitHub, Trello o Jira (Ajustes ▸ Tablero online) |
