@@ -76,7 +76,7 @@ El Hilvana de tu organización (el que crea el cloud) muestra en el panel de age
 
 - **La organización no es Business vigente**: no se puede activar; mejora el plan o renueva.
 - **Cupo de AgentOffice despiertos alcanzado**: el servicio tiene un límite global de oficinas despiertas a la vez; reintenta más tarde.
-- **Red de la organización inexistente**: el Hilvana de la org aún no está provisionado; el mensaje se muestra tal cual y se resuelve al terminar su aprovisionamiento.
+- **Error de Docker «No such network» (la red de la organización no existe)**: el Hilvana de la org aún no está provisionado; el mensaje se muestra tal cual y se resuelve al terminar su aprovisionamiento.
 - **No ves la sección**: no eres owner/admin de la organización.
 
 <a id="desactivar"></a>
