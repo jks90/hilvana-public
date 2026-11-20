@@ -83,3 +83,50 @@ El Hilvana de tu organización (el que crea el cloud) muestra en el panel de age
 ## Desactivar y dejar Business
 
 Al desactivar, al dejar el plan Business o al caducar, el AgentOffice se **para** y sus datos se **conservan 30 días**; si no vuelves a activarlo en ese plazo, se borran.
+
+<a id="limites"></a>
+## Límites
+
+Cada organización tiene su propio AgentOffice con estos valores por defecto del servicio:
+
+| Límite | Valor por defecto | Qué significa |
+|---|---|---|
+| Memoria (RAM) | **2 GB** | Tope del contenedor; es la cifra de **RAM** que ves en la página cuando está despierto. |
+| CPUs | **1** | Un procesador por AgentOffice. |
+| Mesas | **3** | Máximo de mesas de trabajo (tareas de agentes) a la vez en tu organización. |
+| Cupo de despiertos | **2** | Máximo de AgentOffice **despiertos a la vez en todo el servicio**, no por organización. |
+
+- **Cupo superado.** Si ya hay el máximo de AgentOffice despiertos, al activar o despertar el tuyo la página muestra un aviso (error 409): «Cupo de AgentOffice agotado: ya hay N despiertos (máximo M)…». No es un fallo de tu cuenta: espera a que otro duerma y reintenta.
+- **Dormir solo.** Tras **30 minutos** sin actividad, el AgentOffice se duerme; vuelve a despertar cuando lo usas. **No se duerme mientras tenga una tarea en curso** (si no se puede comprobar, tampoco se duerme y se reintenta).
+- **Al dejar Business** (o caducar el plan) se **para** y empieza la cuenta atrás de borrado ([más abajo](#borrado)).
+
+Los valores pueden ser distintos en una instalación propia del servicio; los de arriba son los de serie.
+
+<a id="datos"></a>
+## Qué datos se guardan
+
+- **Credenciales** (token o clave de IA y tokens de repo): **cifradas con AES-256-GCM**. La API de la cuenta nunca las devuelve (solo «configurado ✓») y no se escriben en los registros.
+- **Volumen de datos de tu AgentOffice**: una carpeta propia de tu organización con tus **clones de repos, las copias de trabajo (worktrees) de cada tarea**, tareas, equipo y ajustes. Persiste aunque el AgentOffice duerma.
+
+<a id="borrado"></a>
+## Cómo se borran
+
+- **Al dejar Business o caducar**: el AgentOffice se para y los datos se conservan **30 días**. Si vuelves a Business en ese plazo, se reactiva con todo. Pasados los 30 días se borran el contenedor y los datos.
+- **Desactivar a mano** (interruptor **AgentOffice activado**) para el AgentOffice pero no borra el volumen.
+- **Borrado anticipado**: la cuenta no tiene un botón para ello; pídelo al soporte de Hilvana indicando tu organización.
+- Quitar una clave de IA o un repo (**Quitar**) elimina esa credencial guardada.
+
+<a id="faq"></a>
+## Preguntas frecuentes
+
+**¿Quién paga la IA?** Tu empresa: los agentes usan tu token o clave, así que el consumo va a tu suscripción de Claude o a tu cuenta de API. Hilvana no lo cobra ni lo reembolsa.
+
+**¿Qué pasa si caduca o se revoca el token de IA?** Los agentes dejan de poder trabajar y las tareas fallan. Genera uno nuevo (`claude setup-token` o una clave de API), pégalo en **🔑 IA del AgentOffice** y pulsa **Guardar**: sustituye al anterior.
+
+**¿Las ramas que crean los agentes llegan a mi repositorio?** Trabajan en una rama por tarea y, con un token con permiso de escritura, **empujan esa rama al remoto**; la fusión pasa por tu revisión. Sin permiso de escritura no podrán subirla.
+
+**¿Hay escritorio o captura de pantalla en el modo nube?** No: el AgentOffice en la nube no tiene escritorio, así que no hay ventanas de escritorio ni capturas de pantalla reales; trabajan con el código y la terminal.
+
+**¿Cómo roto un token de repo?** Crea uno nuevo en GitHub o GitLab con los mismos permisos mínimos, en **📦 Repos** añade de nuevo la URL con el token nuevo (**Añadir**; si hay dos del mismo servidor se usa el más reciente), quita el antiguo con **Quitar** y revoca el viejo en el proveedor.
+
+**¿Por qué no puedo activarlo?** Mira [Errores típicos](#errores): plan no Business, cupo agotado o no eres owner/admin.
