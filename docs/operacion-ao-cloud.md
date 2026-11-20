@@ -94,7 +94,11 @@ cd /opt/hilvana && docker compose -f /opt/hilvana/docker-compose.yml up -d hilva
 Solo si la clave antigua **se ha perdido** (Camino A imposible) o está comprometida y se quiere invalidar lo guardado:
 
 1. Cambia `AO_SECRETS_KEY` en el `.env` y reinicia accounts (§1).
-2. Los `AO_TOKEN` guardados dejan de descifrarse. Para cada org con AO: `docker rm -f hilvana-ao-<slug>` en el host y vacía su token (`UPDATE org_agentoffice SET token_enc=NULL WHERE slug='<slug>'` en la BD): accounts genera uno nuevo con `ensureToken` al volver a crearlo (§3, pasos de recreación, que lo piden a `GET …/token`). El `data` del volumen se conserva.
+2. Los `AO_TOKEN` guardados dejan de descifrarse. Para cada org con AO: `docker rm -f hilvana-ao-<slug>` en el host y vacía su token (`UPDATE org_agentoffice SET token_enc=NULL WHERE slug='<slug>'` en la BD). Accounts **no** lo regenera solo (`ensureToken` solo corre al levantar una fila sin contenedor), y sin token `GET …/token` da 404. Genera uno nuevo a mano (debe imprimir `true`):
+   ```bash
+   docker exec -w /app hilvana-accounts node --input-type=module -e "const {pool}=await import('./lib/db.js');const a=await import('./lib/org-agentoffice.js');const [r]=await pool.query('SELECT org_id FROM org_agentoffice WHERE slug=?',['<slug>']);console.log(await a.ensureToken(r[0].org_id));await pool.end()"
+   ```
+   Después recrea el contenedor con los pasos del §3 (que piden el token a `GET …/token`). El `data` del volumen se conserva. (HI-552)
 3. Las credenciales de IA y de repos (`org_ao_ai`, `org_ao_repos`) no se pueden recuperar: borra las filas (`DELETE FROM org_ao_ai; DELETE FROM org_ao_repos;`) y avisa a los clientes para que las vuelvan a introducir en su cuenta (`PUT /api/orgs/:slug/ao/ai`, `POST /api/orgs/:slug/ao/repos`); al guardarlas se vuelven a entregar al volumen.
 
 ## 3. Actualizar la imagen del AgentOffice
