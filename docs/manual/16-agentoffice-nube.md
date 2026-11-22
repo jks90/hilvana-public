@@ -37,6 +37,8 @@ El estado se refresca cada 10 s y muestra:
 
 Además verás **RAM**, **Última actividad** y **Mesas en curso**. El estado solo cambia cuando el servidor confirma la operación, así que tras activar o desactivar puede tardar unos segundos.
 
+**Qué pasa en tu Hilvana al activar o desactivar.** Cuando el servidor confirma la operación, el Hilvana de tu organización se **recrea** para conectarse (o desconectarse) de su AgentOffice. Durante esos pocos segundos la aplicación puede recargarse o no responder un instante; **tus flows y datos se conservan intactos**. Al terminar, el panel Agentes pasa solo a «☁ Gestionado por Hilvana cloud» (al activar) o vuelve al modo normal de instalación (al desactivar). Repetir la confirmación no duplica nada. Si no ves el cambio, recarga la página.
+
 <a id="token-ia"></a>
 ## La IA del AgentOffice (🔑)
 
