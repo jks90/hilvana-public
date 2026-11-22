@@ -2,6 +2,8 @@
 
 Documento para el admin del cloud. Qué variables gobiernan los AgentOffice por org, cómo guardar y rotar `AO_SECRETS_KEY` y cómo actualizar la imagen. Los nombres, tablas y rutas están verificados contra `hilvana-accounts` (`lib/ao-orchestrator.js`, `lib/secrets.js`, `lib/ao-credentials.js`, `lib/org-agentoffice.js`, `scripts/orchestrator.mjs`). Qué hace cada pieza (contenedor, red, cupo, ciclo de vida) está en `flows/hilvana/README-HI-498.md` del repo hilvana y en el README de accounts («Orquestador de AgentOffice por org» y «Cola de operaciones»); aquí no se repite.
 
+> **Versión 6.10.0 (HI-572):** esta guía aplica a la entrega completa del AgentOffice en la nube (AgentOffice 0.3.31); lo que ve el cliente está en `docs/manual/16-agentoffice-nube.md`.
+
 > Esta guía solo describe; no ejecuta nada. Los comandos son para el VPS (`ssh` del admin) y para nadie más. Nunca pegues valores reales de claves en tickets, chats ni logs.
 
 ## 1. Variables

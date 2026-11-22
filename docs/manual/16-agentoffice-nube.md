@@ -1,6 +1,8 @@
 # 16 · AgentOffice en la nube (Business)
 
-> Revisado para Hilvana **6.9.1** · Texto de la página de tu cuenta ▸ **🏢 AgentOffice en la nube**. Sin capturas: la página de la cuenta no forma parte de la aplicación local.
+> **Novedad 6.10.0:** esta versión cierra la entrega completa del AgentOffice en la nube: se activa desde tu cuenta, guarda cifradas tu credencial de IA y tus credenciales de repos git (https), trabaja sobre repos remotos (clona, sube las ramas de las tareas y la fusión aprobada), tiene un panel de administración para el equipo de Hilvana cloud, se duerme solo sin tareas y se detiene si la organización deja de ser Business. Al activarlo o desactivarlo, el Hilvana de tu organización se recrea conservando tus flows.
+
+> Revisado para Hilvana **6.10.0** · Texto de la página de tu cuenta ▸ **🏢 AgentOffice en la nube**. Sin capturas: la página de la cuenta no forma parte de la aplicación local.
 
 <a id="que-es"></a>
 ## Qué es y para quién
