@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.9.1
+  juankanh/hilvana:6.10.0
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -123,7 +123,7 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 Las versiones anteriores (5.18 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.9.1
+docker pull juankanh/hilvana:6.10.0
 ```
 
 ## Documentación

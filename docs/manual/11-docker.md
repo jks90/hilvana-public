@@ -6,7 +6,7 @@
 
 ```bash
 docker run -d --add-host=host.docker.internal:host-gateway \
-  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.9.1
+  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.10.0
 # web + API + MCP en http://localhost:9998 · 1025 = SMTP de prueba (Config ▸ Correo, 4.36)
 ```
 
@@ -149,7 +149,7 @@ docker run -d … \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e FLOW_SELF_UPDATE=on \
   -v /ruta/a/tus/flows:/app/flows \
-  juankanh/hilvana:6.9.1
+  juankanh/hilvana:6.10.0
 ```
 
 - Descarga la versión nueva y **recrea el contenedor con la misma configuración** (puertos, carpetas, variables, redes y reinicio). Tus flows y ajustes no se tocan.
