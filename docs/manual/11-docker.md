@@ -6,7 +6,7 @@
 
 ```bash
 docker run -d --add-host=host.docker.internal:host-gateway \
-  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.10.0
+  -p 9998:3001 -p 1025:1025 --name hilvana juankanh/hilvana:6.11.0
 # web + API + MCP en http://localhost:9998 · 1025 = SMTP de prueba (Config ▸ Correo, 4.36)
 ```
 
@@ -149,7 +149,7 @@ docker run -d … \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e FLOW_SELF_UPDATE=on \
   -v /ruta/a/tus/flows:/app/flows \
-  juankanh/hilvana:6.10.0
+  juankanh/hilvana:6.11.0
 ```
 
 - Descarga la versión nueva y **recrea el contenedor con la misma configuración** (puertos, carpetas, variables, redes y reinicio). Tus flows y ajustes no se tocan.
@@ -177,7 +177,8 @@ docker run -d … \
 | 4.23.0 | Scripts JS de las notas ejecutados al Run Flow (web, MCP y CLI; `--skip-info-scripts`), 📌 fijar cajas, Variables usadas en cada caja, tool MCP `tab_close` |
 | 4.24.0 | **Pizarra** estilo Excalidraw sobre el lienzo (`drawings` en el flow), barra lateral de iconos con un panel a la vez, **Guía de nodos**, Ocultar conectores, Maximizar Mermaid, tool MCP `node_add_info` (20 tools) |
 | **5.15.1** | 🛡️ **Sandbox de los scripts de nota en el navegador** + flows de confianza (pregunta antes de ejecutar, chip 🔒/🛡️ en la barra) — [04](04-notas-mermaid-capturas.md#sandbox-y-flows-de-confianza--515); imagen con parches de Alpine y sin `npm` |
-| **6.10.0** (recomendada) | AgentOffice en la nube para organizaciones Business, entrega completa: activación desde la cuenta, credenciales de IA y de git cifradas, repos remotos y panel de administración (capítulo «AgentOffice en la nube»). |
+| **6.11.0** (recomendada) | Sin cambios en la app: documenta la entrega completa del AgentOffice en la nube (capítulo «AgentOffice en la nube») con AgentOffice 0.3.32. |
+| **6.10.0** | AgentOffice en la nube para organizaciones Business, entrega completa: activación desde la cuenta, credenciales de IA y de git cifradas, repos remotos y panel de administración (capítulo «AgentOffice en la nube»). |
 | **6.9.1** | Corrección: el Hilvana de una organización del cloud ya puede validar su AgentOffice alojado, que antes quedaba bloqueado al arrancar. |
 | **6.9.0** | ☁ **AgentOffice gestionado por Hilvana cloud** (plan Business): en el Hilvana de tu organización el panel Agentes muestra «Gestionado por Hilvana cloud» y no ofrece instalar ni actualizar; se activa desde tu cuenta — [manual 16](16-agentoffice-nube.md). Con otro plan aparece el aviso «Los agentes gestionados son una función Business». Con AgentOffice 0.3.31. |
 | **6.8.0** | 🖥 **Hilvana de escritorio**: app para Linux (AppImage y .deb) y Windows (instalador por usuario) que lleva Hilvana y AgentOffice dentro, sin Docker; PDF y captura con el Chromium de Electron, cierre ordenado y aviso Pro en «Agentes» durante la prueba. La imagen Docker no cambia. |
