@@ -26,7 +26,7 @@ docker run -d \
   -p 9998:3001 \
   -p 1025:1025 \
   --name hilvana \
-  juankanh/hilvana:6.10.0
+  juankanh/hilvana:6.11.0
 ```
 
 - **Web**: http://localhost:9998 — el canvas visual.
@@ -68,7 +68,8 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 
 | Versión | Qué trae |
 |---------|----------|
-| **6.10.0** (recomendada) | ☁ AgentOffice en la nube para organizaciones Business, entrega completa (sin cambios en la app respecto a 6.9.1): se activa desde Cuenta ▸ «🏢 AgentOffice en la nube», con tu token de IA y tus credenciales de repos git (https) guardados cifrados, repos remotos y panel de administración; se duerme sin tareas y se detiene al dejar el plan Business. Guía: [`docs/manual/16-agentoffice-nube.md`](docs/manual/16-agentoffice-nube.md). |
+| **6.11.0** (recomendada) | Sin cambios en la app: documenta la entrega completa del AgentOffice en la nube, con AgentOffice 0.3.32 (HI-596). Guía: [`docs/manual/16-agentoffice-nube.md`](docs/manual/16-agentoffice-nube.md). |
+| **6.10.0** | ☁ AgentOffice en la nube para organizaciones Business, entrega completa (sin cambios en la app respecto a 6.9.1): se activa desde Cuenta ▸ «🏢 AgentOffice en la nube», con tu token de IA y tus credenciales de repos git (https) guardados cifrados, repos remotos y panel de administración; se duerme sin tareas y se detiene al dejar el plan Business. Guía: [`docs/manual/16-agentoffice-nube.md`](docs/manual/16-agentoffice-nube.md). |
 | **6.9.1** | 🔧 Corrección: el AgentOffice alojado en la nube ya arranca desbloqueado: el Hilvana de tu organización le pide la verificación de licencia a Hilvana cloud por la red interna (antes se quedaba en «pago requerido»). |
 | **6.9.0** | ☁ **AgentOffice en la nube (Business)**: el Hilvana de tu organización usa el AgentOffice que gestiona Hilvana cloud, sin instalar ni actualizar (panel «Gestionado por Hilvana cloud», aviso si no tienes Business); se activa desde Cuenta ▸ «🏢 AgentOffice en la nube» con tu IA y tus repos cifrados. Con AgentOffice 0.3.31 — [manual 16](docs/manual/16-agentoffice-nube.md) |
 | **6.8.0** | 🖥 **Hilvana de escritorio**: app para Linux (AppImage y .deb) y Windows (instalador por usuario) que lleva Hilvana y AgentOffice dentro, sin Docker; PDF y captura con el Chromium de Electron, cierre ordenado y aviso Pro en «Agentes» durante la prueba. La imagen Docker no cambia. |
@@ -120,7 +121,7 @@ Detalle en [examples/README.md](examples/README.md). *(El tour en .md se abre de
 Las versiones anteriores (5.20.2 y antes, desde la 4.x) están en la [tabla completa del manual](docs/manual/11-docker.md#versiones).
 
 ```bash
-docker pull juankanh/hilvana:6.10.0
+docker pull juankanh/hilvana:6.11.0
 ```
 
 ## Documentación

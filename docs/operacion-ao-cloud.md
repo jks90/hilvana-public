@@ -2,7 +2,7 @@
 
 Documento para el admin del cloud. Qué variables gobiernan los AgentOffice por org, cómo guardar y rotar `AO_SECRETS_KEY` y cómo actualizar la imagen. Los nombres, tablas y rutas están verificados contra `hilvana-accounts` (`lib/ao-orchestrator.js`, `lib/secrets.js`, `lib/ao-credentials.js`, `lib/org-agentoffice.js`, `scripts/orchestrator.mjs`). Qué hace cada pieza (contenedor, red, cupo, ciclo de vida) está en `flows/hilvana/README-HI-498.md` del repo hilvana y en el README de accounts («Orquestador de AgentOffice por org» y «Cola de operaciones»); aquí no se repite.
 
-> **Versión 6.10.0 (HI-572):** esta guía aplica a la entrega completa del AgentOffice en la nube (AgentOffice 0.3.31); lo que ve el cliente está en `docs/manual/16-agentoffice-nube.md`.
+> **Versión 6.11.0 (HI-596):** esta guía aplica a la entrega completa del AgentOffice en la nube con AgentOffice 0.3.32 (Hilvana 6.11.0 no cambia la app); lo que ve el cliente está en `docs/manual/16-agentoffice-nube.md`.
 
 > Esta guía solo describe; no ejecuta nada. Los comandos son para el VPS (`ssh` del admin) y para nadie más. Nunca pegues valores reales de claves en tickets, chats ni logs.
 
@@ -154,3 +154,17 @@ dmesg -T | grep -i 'out of memory' | tail                                       
 ```
 
 - Si la memoria disponible baja de ~1 GB de forma sostenida: duerme o para el AO de menos uso (`POST /api/admin/agentoffice/<slug>/stop`, **no** `delete`), baja `AO_CLOUD_MAX_ACTIVE` a 1 o `AO_CLOUD_MEM` a `1g` (este último solo afecta a los AO que se creen después), y reinicia accounts.
+
+## 5. Ejecución en el host y recreación del Hilvana (6.11.0 · HI-596)
+
+El servidor `hilvana-accounts` **no habla con Docker**: cada operación (crear, despertar, parar, borrar) se encola en la tabla `ao_ops` y la ejecuta el **orquestador del host** (`scripts/orchestrator.mjs`, servicio aparte; sondea cada `ORCHESTRATE_EVERY_MS`, 15 s por defecto, contra `FLOW_ACCOUNTS_URL`).
+
+- **Token del AO:** el orquestador lo pide con `GET /api/admin/agentoffice/<slug>/token`, que solo responde a llamadas desde el propio host (`127.0.0.1` o `AO_HOST_CALLER_IPS`; 403 en otro caso) y no se cachea. Se entrega al contenedor por entorno.
+- **Confirmación:** al terminar, el orquestador llama a `POST /api/admin/agentoffice/<slug>/result` con `{status, message}`. El estado de la página de cuenta solo cambia con esta confirmación; repetirla no duplica nada.
+- **Recreación del Hilvana de la org:** al confirmarse `running` o `stopped`, accounts recrea el Hilvana de la organización conservando sus flows: con `AGENTOFFICE_MANAGED=cloud`, `AGENTOFFICE_URL` y `AGENTOFFICE_TOKEN` si el AO queda en marcha, sin ellas si se para. El cliente lo nota como una recarga de unos segundos.
+- **Ciclo de vida:** activo salvo `AO_LIFECYCLE=0`; solo encola operaciones (duerme sin tareas `doing`, para al dejar Business, purga a los 30 días).
+- **Si un AO no cambia de estado:** mira primero que el servicio del orquestador esté en marcha (`09-health` lo vigila como `hilvana-orchestrator`) y que la cola `ao_ops` no tenga operaciones atascadas; después los registros del orquestador. Los contenedores salen como `hilvana-ao-<slug>`.
+
+## 6. Puerta de entrega de AgentOffice 0.3.32
+
+La imagen del AO que fija `ORG_AO_IMAGE` debe ser la 0.3.32 para que los clientes tengan la puerta de entrega (ver «Cuándo una tarea se considera hecha» en el cap. 16): una tarea de código sin cambios ni resumen vuelve una vez a «Por hacer» y la segunda llega a Revisión como «No está hecha»; el agente cierra con `ENTREGA: COMPLETA|PARCIAL|NO HECHA` y las dos últimas nunca se aprueban solas. Los contenedores ya creados no cambian al cambiar `ORG_AO_IMAGE`: sigue la recreación de la §3.

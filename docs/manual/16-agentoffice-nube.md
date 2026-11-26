@@ -1,8 +1,10 @@
 # 16 · AgentOffice en la nube (Business)
 
-> **Novedad 6.10.0:** esta versión cierra la entrega completa del AgentOffice en la nube: se activa desde tu cuenta, guarda cifradas tu credencial de IA y tus credenciales de repos git (https), trabaja sobre repos remotos (clona, sube las ramas de las tareas y la fusión aprobada), tiene un panel de administración para el equipo de Hilvana cloud, se duerme solo sin tareas y se detiene si la organización deja de ser Business. Al activarlo o desactivarlo, el Hilvana de tu organización se recrea conservando tus flows.
+> **Novedad 6.11.0:** la app no cambia; el AgentOffice en la nube pasa a la **0.3.32**, que añade la **puerta de entrega** (ver [Cuándo una tarea se considera hecha](#puerta-de-entrega)), y el capítulo reúne la entrega completa: activar, dormir y detener el AgentOffice de la organización; IA con tu token y repos remotos con credenciales cifradas; modo gestionado; pantallas de cuenta y de administración; y contenedor propio ejecutado en el servidor, con recreación del Hilvana de la organización al activarlo o desactivarlo.
+>
+> **6.10.0:** esta versión cierra la entrega completa del AgentOffice en la nube: se activa desde tu cuenta, guarda cifradas tu credencial de IA y tus credenciales de repos git (https), trabaja sobre repos remotos (clona, sube las ramas de las tareas y la fusión aprobada), tiene un panel de administración para el equipo de Hilvana cloud, se duerme solo sin tareas y se detiene si la organización deja de ser Business. Al activarlo o desactivarlo, el Hilvana de tu organización se recrea conservando tus flows.
 
-> Revisado para Hilvana **6.10.0** · Texto de la página de tu cuenta ▸ **🏢 AgentOffice en la nube**. Sin capturas: la página de la cuenta no forma parte de la aplicación local.
+> Revisado para Hilvana **6.11.0** · Texto de la página de tu cuenta ▸ **🏢 AgentOffice en la nube**.
 
 <a id="que-es"></a>
 ## Qué es y para quién
@@ -74,6 +76,13 @@ Crea siempre un token **solo para esto**, con el mínimo imprescindible y con ca
 ## Qué verás en Hilvana
 
 El Hilvana de tu organización (el que crea el cloud) muestra en el panel de agentes **☁ Gestionado por Hilvana cloud**: no hay botones de instalar ni actualizar, porque se gestiona desde la cuenta. Si ese Hilvana no tiene plan Business, aparece «Los agentes gestionados son una función Business» con el botón **Ir a mi cuenta**.
+
+<a id="puerta-de-entrega"></a>
+## Cuándo una tarea se considera hecha (AgentOffice 0.3.32)
+
+- Una tarea de código que termina **sin cambios ni resumen** no pasa a Revisión a la primera: vuelve una vez a **Por hacer**; si la segunda vez ocurre lo mismo, llega a **Revisión** marcada como «No está hecha».
+- Al cerrar, el agente declara una de tres entregas: **`ENTREGA: COMPLETA`**, **`ENTREGA: PARCIAL`** o **`ENTREGA: NO HECHA`**. Una entrega PARCIAL o NO HECHA **nunca se aprueba sola**: espera tu decisión en Revisión.
+- El revisor automático es más estricto, y los agentes nuevos usan de serie la escalera de modelos sonnet → opus.
 
 <a id="errores"></a>
 ## Errores típicos
