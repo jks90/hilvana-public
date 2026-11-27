@@ -87,6 +87,10 @@ El Hilvana de tu organización (el que crea el cloud) muestra en el panel de age
 <a id="errores"></a>
 ## Errores típicos
 
+- **«AgentOffice lo gestiona el cloud: no se instala, actualiza ni desinstala desde aquí» (error 409).** Aparece en el Hilvana de tu organización cuando intentas instalar, actualizar o desinstalar el AgentOffice desde el panel de agentes. No es un fallo: en una organización con AgentOffice en la nube esas acciones no existen en la app, porque el servicio lo mantiene por ti. Para encenderlo o apagarlo usa el interruptor de **🏢 AgentOffice en la nube** en tu cuenta.
+- **«Los agentes gestionados por el cloud son del plan Business: sube tu organización a Business para usarlos» (error 402).** Tu Hilvana está conectado al AgentOffice del cloud, pero la organización ya no tiene un plan Business vigente (lo dejaste o caducó). El aviso trae un enlace a tu cuenta: renueva o mejora el plan allí y vuelve a activar el AgentOffice. Mientras tanto el AgentOffice permanece parado y sus datos se conservan 30 días.
+- **Se duerme solo.** Tras 30 minutos sin actividad y sin tareas en curso, el AgentOffice se duerme y despierta cuando lo vuelves a usar; no pierdes nada. Si lo desactivas o la organización deja Business, se detiene y, pasados 30 días sin reactivarlo, se purgan sus datos (clones de repos, tareas y credenciales).
+
 - **La organización no es Business vigente**: no se puede activar; mejora el plan o renueva.
 - **Cupo de AgentOffice despiertos alcanzado**: el servicio tiene un límite global de oficinas despiertas a la vez; reintenta más tarde.
 - **Error de Docker «No such network» (la red de la organización no existe)**: el Hilvana de la org aún no está provisionado; el mensaje se muestra tal cual y se resuelve al terminar su aprovisionamiento.
