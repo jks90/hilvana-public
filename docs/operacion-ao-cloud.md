@@ -168,3 +168,11 @@ El servidor `hilvana-accounts` **no habla con Docker**: cada operación (crear, 
 ## 6. Puerta de entrega de AgentOffice 0.3.32
 
 La imagen del AO que fija `ORG_AO_IMAGE` debe ser la 0.3.32 para que los clientes tengan la puerta de entrega (ver «Cuándo una tarea se considera hecha» en el cap. 16): una tarea de código sin cambios ni resumen vuelve una vez a «Por hacer» y la segunda llega a Revisión como «No está hecha»; el agente cierra con `ENTREGA: COMPLETA|PARCIAL|NO HECHA` y las dos últimas nunca se aprueban solas. Los contenedores ya creados no cambian al cambiar `ORG_AO_IMAGE`: sigue la recreación de la §3.
+
+## 7. Resumen del recorrido del cliente (HI-603)
+
+1. **Activar:** Cuenta ▸ «🏢 AgentOffice en la nube» (solo organizaciones Business vigentes). El servidor encola la creación de `hilvana-ao-<slug>` y el estado cambia cuando el orquestador del host lo confirma (§5).
+2. **Credenciales de IA:** el cliente guarda su token de IA en la misma pantalla (`PUT /api/orgs/:slug/ao/ai`); se cifra con `AO_SECRETS_KEY` y se entrega al volumen del AO como fichero (nunca por entorno).
+3. **Repos y credenciales git:** repos https con su token por host (`POST /api/orgs/:slug/ao/repos`); el AO los usa con un credential helper limitado a `/data`.
+4. **Dormir:** sin tareas `doing` el AO se duerme solo y despierta al hacer falta; el volumen se conserva.
+5. **Parar y purgar:** si la org deja Business o se desactiva, el AO se para; a los 30 días se purga `/data`.
